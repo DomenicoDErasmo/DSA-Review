@@ -1,19 +1,20 @@
-#include "test_manager.hpp"
-#include "data_structures/linked_list_tests.hpp"
 #include <iostream>
+#include "test_manager.hpp"
 
 void TestManager::runTests() {
-    int passed = 0, failed = 0;
-    for (size_t i = 0; i < tests.size(); i++) {
-        std::cout << "Running test: " << tests[i].getDescription() << "... ";
-        if ((*tests[i].getTestFunction())()) {
-            std::cout << "Passed!" << std::endl;
+    std::cout << "Running tests" << std::endl;
+    int passed = 0, failed = 0, num_tests = tests.size();
+    for (size_t i = 0; i < num_tests; i++) {
+        std::cout << "Testing " << tests[i].name << "... ";
+        if (tests[i].function()) {
+            std::cout << "Passed! [" << i + 1 << "/" << num_tests << "]" << std::endl;
             passed++;
         } else {
-            std::cout << "Failed!" << std::endl;
+            std::cout << "Failed! [" << i + 1 << "/" << num_tests << "]" << std::endl;
             failed++;
         }
     }
-    std::cout << "Passed: " << passed << "/" << tests.size() << std::endl;
-    std::cout << "Failed: " << failed << "/" << tests.size() << std::endl;
+    std::cout << "Total tests ran: " << num_tests << std::endl;
+    std::cout << "Tests passed: " << passed << "/" << num_tests << std::endl;
+    std::cout << "Tests failed: " << failed << "/" << num_tests << std::endl;
 }

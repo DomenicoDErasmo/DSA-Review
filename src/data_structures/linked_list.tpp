@@ -1,191 +1,85 @@
-#ifndef LINKEDLIST_TPP
-#define LINKEDLIST_TPP
+#ifndef LINKED_LIST_TPP
+#define LINKED_LIST_TPP
 
-#include <iostream>
 #include <string>
-#include <set>
-
-template <typename T>
-class ListNode {
-public:
-    // Constructors
-    ListNode(): data(T()), next(nullptr) {}
-    ListNode(T in_data): data(in_data), next(nullptr) {}
-    ListNode(T in_data, ListNode* in_next): data(in_data), next(in_next) {}
-    ListNode(ListNode<T>& original): data(original.getData()), next(original.getNext()) {}
-
-    // Destructor
-    ~ListNode() {
-        if (next) {
-            delete next;
-        }
-    }
-
-    // Getters
-    T getData() {return data;};
-    ListNode* getNext() {return next;}
-
-    // Setters
-    void setData(T in_data) {data = in_data;}
-    void setNext(ListNode* in_next) {next = in_next;}
-
-    // Utility Functions
-    bool operator == (const ListNode<T>& rhs) const {return data = rhs.getData();}
-    bool operator != (const ListNode<T>& rhs) const {return data != rhs.getData();}
-    
-private:
-    T data;
-    ListNode* next;
-};
-
 template <typename T>
 class LinkedList {
 public:
     // Constructors
-    LinkedList(): head() {}
-    LinkedList(T data): head(new ListNode<T>(data)) {}
-    LinkedList(LinkedList<T>& list): head(list.getHead()) {}
+    LinkedList(): data(T()), next(nullptr) {}
+    LinkedList(T in_data): data(in_data), next(nullptr) {}
+    LinkedList(T in_data, LinkedList* in_next): data(in_data), next(in_next) {}
+    LinkedList(const LinkedList& other): data(other.data), next(other.next) {}
 
-    // Destructor
-    ~LinkedList() {
-        if (head) {
-            delete head;
-        }
-    }
+    // Destructors
+    ~LinkedList() {if (next) delete next;}
 
     // Getters
-    ListNode<T>* getHead() {return head;}
+    T getData() {return data;}
+    LinkedList* getNext() {return next;}
 
     // Setters
-    void setHead(ListNode<T>* in_head) {head = in_head;}
+    void setData(T in_data) {data = in_data;}
+    void setNext(LinkedList<T>* in_next) {next = in_next;}
 
-    // Utility functions
-
-    /**
-     * @brief Adds a value to the list. Only have the data as an argument, becuase it
-     * doesn't make sense to add a ListNode to a list when we have to set the new head's
-     * link to point to the rest of the list. 
-     * 
-     * @param data The data to enter.
-     */
-    void insertAtHead(T data) {
-        ListNode<T>* node = new ListNode<T>(data, head);
-        head = node;
+    // Utility Functions
+    std::string toString() {
+        std::string result = std::to_string(data);
+        if (next) {result += (", " + next->toString());}
+        return result;
     }
 
-    /**
-     * @brief Inserts a node at the tail of the list. Takes O(N) time, unlike O(1) time for head insertion.
-     * 
-     * @tparam T The list's data type.
-     * @param data The data to insert into the list.
-     */
-    void insertAtTail(T data) {
-        ListNode<T>* temp = head;
-        while (temp->getNext()) {
-            temp = temp->getNext();
-        }
-        temp->setNext(new ListNode<T>(data));
+    friend std::ostream& operator << (std::ostream& out, LinkedList& list) {
+        out << list.toString();
+        return out;
     }
-
-    /**
-     * @brief Gets the length of the list, i.e. the number of ListNodes present.
-     * 
-     * @return int The length of the list.
-     */
-    int length() {
-        int length = 0;
-        ListNode<T>* temp = head;
-        while (temp) {
-            temp = temp->getNext();
-            length++;
-        }
-        return length;
-    }
-
-    bool operator == (LinkedList<T>& second) {return internalCompare(head, second.getHead());}
-    bool operator != (LinkedList<T>& second) {return !internalCompare(head, second.getHead());}
-
+    
 private:
-    ListNode<T>* head;
-
-    /**
-     * @brief Recursively compares the given ListNodes. Used to determine if two linked lists are equal.
-     * NOTE: because we use the inequality operator, floats/doubles may not work well with this method.
-     * 
-     * @param lhs A node from the first list.
-     * @param rhs A node from the second list.
-     * @return true if the nodes and all subsequent values are equal, otherwise false.
-     */
-    bool internalCompare(ListNode<T>* lhs, ListNode<T>* rhs) {
-        if (!lhs and !rhs) {
-            return true;
-        } else if (lhs and !rhs or !lhs and rhs) {
-            return false;
-        } else if (lhs->getData() != rhs->getData()) {
-            return false;
-        } else {
-            return internalCompare(lhs->getNext(), rhs->getNext());
-        }
-    }
+    T data;
+    LinkedList<T>* next;
 };
 
-/**
- * @brief Reverses the list.
- * 
- * @tparam T The data type that the list contains.
- * @param list The list to reverse.
- */
 template <typename T>
-void reverseList(LinkedList<T>* list) {
-    if (list->length() < 2) {
-        return;
-    }
-    ListNode<T> *prev = nullptr, *temp = list->getHead(), *next = temp->getNext();
-    while (temp) {
-        next = temp->getNext();
-        temp->setNext(prev);
-        prev = temp;
-        temp = next;
-    }
-    list->setHead(prev);
+void linkedListInsertAtHead(LinkedList<T>*& head, T in_data) {
+    LinkedList<T>* new_head = new LinkedList<T>(in_data, head);
+    head = new_head;
 }
 
-/**
- * @brief Removes the given node. Assumes that previous_node is not null,
- * so we probably shouldn't use on the start of the list.
- * 
- * @tparam T The list's data type.
- * @param previous_node The previous node in the list.
- * @param to_delete The node to delete.
- */
 template <typename T>
-void removeNode(ListNode<T>* previous_node, ListNode<T>* to_delete) {
-    previous_node->setNext(to_delete->getNext());
-    to_delete->setNext(nullptr);
-    delete to_delete;
-}
-
-/**
- * @brief Removes duplicate nodes from the list.
- * 
- * @tparam T The list's data type.
- * @param list The list to remove duplicates from.
- */
-template <typename T>
-void removeDuplicates(LinkedList<T>* list) {
-    if (list->length() < 2) {
-        return;
-    }
-    ListNode<T>* temp = list->getHead();
-    std::set<T> unique_elements {temp->getData()};
+void linkedListInsertAtTail(LinkedList<T>*& head, T in_data) {
+    LinkedList<T>* new_tail = new LinkedList<T>(in_data);
+    LinkedList<T>* temp = head;
     while (temp->getNext()) {
-        if (unique_elements.count(temp->getNext()->getData())) {
-            removeNode(temp, temp->getNext());
-        } else {
-            unique_elements.insert(temp->getNext()->getData());
-            temp = temp->getNext();
-        }
+        temp = temp->getNext();
     }
+    temp->setNext(new_tail);
+}
+
+template <typename T>
+int linkedListGetSize(LinkedList<T>*& head) {
+    int result = 0;
+    LinkedList<T>* temp = head;
+    while (temp) {
+        temp = temp->getNext();
+        result++;
+    }
+    return result;
+}
+
+template <typename T>
+/**
+ * @brief Returns the data from the middle value of the list
+ * 
+ * @param head A reference to a linked list pointer. Assumed that head is not null 
+ * @return T The data from the middle node of the list
+ */
+T linkedListGetMiddle(LinkedList<T>*& head) {
+    int middle = linkedListGetSize(head) / 2;
+    LinkedList<T>* temp = head;
+    for (size_t i = 0; i < middle; i++) {
+        temp = temp->getNext();
+    }
+    return temp->getData();
 }
 
 #endif

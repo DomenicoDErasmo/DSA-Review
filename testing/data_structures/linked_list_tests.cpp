@@ -1,177 +1,155 @@
 #include "linked_list_tests.hpp"
 
-/**
- * @brief Tests if the equality operator works between the two lists.
- * 
- * @return true if all tests succeed, otherwise false.
- */
-bool testListEquality() {
+#include <data_structures/linked_list.tpp>
+#include <iostream>
+#include <sstream>
+
+bool testDefaultConstructor() {
     bool result = true;
 
-    LinkedList<char> base_list('a');
-    base_list.insertAtHead('c');
-
-    // first inequality case: first list is longer
-    LinkedList<char> smaller_list('c');
-    result &= (base_list != smaller_list);
-
-    // second inequality case: second list is longer
-    LinkedList<char> larger_list('b');
-    larger_list.insertAtHead('a');
-    larger_list.insertAtHead('c');
-    result &= (base_list != larger_list);
-
-    // third inequailty case: we have a different value somewhere in the lists
-    LinkedList<char> different_value_list('b');
-    different_value_list.insertAtHead('c');
-    result &= (base_list != different_value_list);
-
-    // equality case: same size and all values match
-    LinkedList<char> equal_list('a');
-    equal_list.insertAtHead('c');
-    result &= (base_list == equal_list);
+    LinkedList<int> list;
+    result &= (list.getData() == 0);
+    result &= (!list.getNext());
 
     return result;
 }
 
-/**
- * @brief Tests that we can add nodes to the linked list.
- * 
- * @return true if all tests succeed, otherwise false.
- */
+bool testDataConstructor() {
+    bool result = true;
+
+    LinkedList<int> list(4);
+    result &= (list.getData() == 4);
+    result &= (!list.getNext());
+
+    return result;
+}
+
+bool testFullConstructor() {
+    bool result = true;
+
+    LinkedList<int> next(5);
+    LinkedList<int> list(4, &next);
+
+    result &= (list.getData() == 4);
+    result &= (list.getNext() == &next);
+
+    return result;
+}
+
+bool testCopyConstructor() {
+    bool result = true;
+
+    LinkedList<int> next(7);
+    LinkedList<int> original(5, &next);
+    LinkedList<int> list(original);
+
+    result &= (list.getData() == original.getData());
+    result &= (list.getNext() == original.getNext());
+
+    return result;
+}
+
+bool testDestructor() {
+    try {
+        LinkedList<int>* head = new LinkedList<int>(4);
+        head->setNext(new LinkedList<int>(4));
+        delete head;
+        return true;
+    } catch (...) {
+        return false;
+    }
+}
+
+bool testToString() {
+    bool result = true;
+
+    LinkedList<int>* head = new LinkedList<int>(4);
+    head->setNext(new LinkedList<int>(6));
+    result &= (head->toString() == "4, 6");
+    delete head;
+
+    return result;
+}
+
+bool testOstreamOperator() {
+    bool result = true;
+
+    LinkedList<int>* head = new LinkedList<int>(4);
+    head->setNext(new LinkedList<int>(6));
+
+    std::stringstream out;
+    out << *head;
+    result &= (out.str() == "4, 6");
+    delete head;
+
+    return result;
+}
+
 bool testInsertAtHead() {
     bool result = true;
 
-    LinkedList<int> list(10);
-    list.insertAtHead(5);
-    result &= (list.getHead()->getData() == 5);
+    LinkedList<int>* head = new LinkedList<int>(4);
+    result &= (head->getData() == 4);
+    linkedListInsertAtHead(head, 5);
+    result &= (head->getData() == 5);
 
-    list.insertAtHead(-4);
-    result &= (list.getHead()->getData() == -4);
-
-    list.insertAtHead(6);
-    result &= (list.getHead()->getData() == 6);
-
+    delete head;
     return result;
 }
 
-/**
- * @brief Tests that we can return the linked list length.
- * 
- * @return true if all tests succeed, otherwise false.
- */
-bool testLength() {
-    bool result = true;
-
-    LinkedList<char> list('r');
-    result &= (list.length() == 1);
-
-    list.insertAtHead('t');
-    result &= (list.length() == 2);
-
-    list.insertAtHead('n');
-    result &= (list.length() == 3);
-
-    return result;
-}
-
-/**
- * @brief Tests that we can reverse the linked list.
- * 
- * @return true if all tests succeed, otherwise false.
- */
-bool testReverseList() {
-    bool result = true;
-
-    LinkedList<std::string> list("hello");              // "hello"
-    list.insertAtHead("world");                         // "world, hello"
-
-    reverseList(&list);                                 // "hello, world"
-    LinkedList<std::string> expected_list("world");
-    expected_list.insertAtHead("hello");
-    result &= (list == expected_list);
-
-    return result;
-}
-
-/**
- * @brief Tests that we can remove the specified node from the list.
- * 
- * @return true if all tests succed, otherwise false.
- */
-bool testRemoveNode() {
-    bool result = true;
-
-    // init
-    LinkedList<int> list(1);
-    list.insertAtHead(2);
-    list.insertAtHead(3);
-
-    removeNode(list.getHead(), list.getHead()->getNext());
-    LinkedList<int> expected_list(1);
-    expected_list.insertAtHead(3);
-    result &= (list == expected_list);
-
-    return result;
-}
-
-/**
- * @brief Tests that we can remove duplicate values from the list.
- * 
- * @return true if all tests succeed, otherwise false.
- */
-bool testRemoveDuplicates() {
-    bool result = true;
-
-    LinkedList<char> list ('a');
-    list.insertAtHead('b');
-    list.insertAtHead('b');
-    list.insertAtHead('c');
-    list.insertAtHead('b');
-    list.insertAtHead('d');
-
-    removeDuplicates(&list);
-
-    LinkedList<char> expected_list('a');
-    expected_list.insertAtHead('c');
-    expected_list.insertAtHead('b');
-    expected_list.insertAtHead('d');
-
-    result &= (list == expected_list);
-
-    return result;
-}
-
-/**
- * @brief Tests that we can insert nodes at the tail of the list.
- * 
- * @return true if all tests succeed, otherwise false.
- */
 bool testInsertAtTail() {
     bool result = true;
 
-    LinkedList<std::string> list("hello");
-    list.insertAtTail(std::string("world"));
+    LinkedList<int>* head = new LinkedList<int>(4);
+    result &= (head->getData() == 4);
+    linkedListInsertAtTail(head, 6);
+    result &= (head->getNext()->getData() == 6);
 
-    LinkedList<std::string> expected_list("world");
-    expected_list.insertAtHead("hello");
-
-    result &= (list == expected_list);
-
+    delete head;
     return result;
 }
 
-/**
- * @brief Adds all tests defined in this file to the provided test manager
- * 
- * @param test_manager The test manager that will run all tests
- */
+bool testGetSize() {
+    bool result = true;
+
+    LinkedList<int>* empty = nullptr;
+    result &= (linkedListGetSize(empty) == 0);
+
+    LinkedList<int>* head = new LinkedList<int>(4);
+    linkedListInsertAtHead(head, 3);
+    linkedListInsertAtHead(head, 2);
+    result &= (linkedListGetSize(head) == 3);
+
+    delete head;
+    return result;
+}
+
+bool testGetMiddle() {
+    bool result = true;
+
+    LinkedList<int>* odd_size_list = new LinkedList<int>(4);
+    for (int i = 3; i > 1; i--) {
+        linkedListInsertAtHead(odd_size_list, i);
+    }
+    result &= (linkedListGetMiddle(odd_size_list) == 3);
+    
+    LinkedList<int>* even_size_list = new LinkedList<int>(1, odd_size_list);
+    result &= (linkedListGetMiddle(even_size_list) == 3);
+
+    delete even_size_list;
+    return result;
+}
+
 void registerLinkedListTests(TestManager& test_manager) {
-    test_manager.addTest(Test(testListEquality, "Test list equality"));
-    test_manager.addTest(Test(testInsertAtHead, "Test insert at head"));
-    test_manager.addTest(Test(testLength, "Test length"));
-    test_manager.addTest(Test(testReverseList, "Test reverse list"));
-    test_manager.addTest(Test(testRemoveNode, "Test remove node"));
-    test_manager.addTest(Test(testRemoveDuplicates, "Test remove duplicates"));
-    test_manager.addTest(Test(testInsertAtTail, "Test insert at tail"));
+    test_manager.addTest(UnitTest(testDefaultConstructor, "default constructor"));
+    test_manager.addTest(UnitTest(testDataConstructor, "data constructor"));
+    test_manager.addTest(UnitTest(testFullConstructor, "full constructor"));
+    test_manager.addTest(UnitTest(testCopyConstructor, "copy constructor"));
+    test_manager.addTest(UnitTest(testDestructor, "destructor"));
+    test_manager.addTest(UnitTest(testToString, "to string"));
+    test_manager.addTest(UnitTest(testOstreamOperator, "ostream operator"));
+    test_manager.addTest(UnitTest(testInsertAtHead, "insert at head"));
+    test_manager.addTest(UnitTest(testInsertAtTail, "insert at tail"));
+    test_manager.addTest(UnitTest(testGetSize, "get size"));
+    test_manager.addTest(UnitTest(testGetMiddle, "get middle"));
 }
