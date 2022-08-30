@@ -48,6 +48,7 @@
         "set": "cpp",
         "functional": "cpp",
         "xtree": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "sstream": "cpp"
     }
 }

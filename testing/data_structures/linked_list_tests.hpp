@@ -3,6 +3,6 @@
 
 #include "test_manager.hpp"
 
-void registerLinkedListTests(TestManager& test_manager);
+TestGroup registerLinkedListTests();
 
 #endif

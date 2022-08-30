@@ -4,62 +4,6 @@
 #include <iostream>
 #include <sstream>
 
-bool testDefaultConstructor() {
-    bool result = true;
-
-    LinkedList<int> list;
-    result &= (list.getData() == 0);
-    result &= (!list.getNext());
-
-    return result;
-}
-
-bool testDataConstructor() {
-    bool result = true;
-
-    LinkedList<int> list(4);
-    result &= (list.getData() == 4);
-    result &= (!list.getNext());
-
-    return result;
-}
-
-bool testFullConstructor() {
-    bool result = true;
-
-    LinkedList<int> next(5);
-    LinkedList<int> list(4, &next);
-
-    result &= (list.getData() == 4);
-    result &= (list.getNext() == &next);
-
-    return result;
-}
-
-bool testCopyConstructor() {
-    bool result = true;
-
-    LinkedList<int> next(7);
-    LinkedList<int> original(5, &next);
-    LinkedList<int> list(original);
-
-    result &= (list.getData() == original.getData());
-    result &= (list.getNext() == original.getNext());
-
-    return result;
-}
-
-bool testDestructor() {
-    try {
-        LinkedList<int>* head = new LinkedList<int>(4);
-        head->setNext(new LinkedList<int>(4));
-        delete head;
-        return true;
-    } catch (...) {
-        return false;
-    }
-}
-
 bool testToString() {
     bool result = true;
 
@@ -82,6 +26,43 @@ bool testOstreamOperator() {
     result &= (out.str() == "4, 6");
     delete head;
 
+    return result;
+}
+
+bool testEqualityOperator() {
+    bool result = true;
+
+    LinkedList<int>* rhs = new LinkedList<int>(0);
+    for (int i = 1; i < 3; i++) {
+        linkedListInsertAtTail(rhs, i);
+    }
+
+    LinkedList<int>* too_small = new LinkedList<int>(0);
+    result &= (too_small != rhs);
+
+    LinkedList<int>* too_big = new LinkedList<int>(0);
+    for (int i = 1; i < 4; i++) {
+        linkedListInsertAtTail(too_big, i);
+    }
+    result &= (too_big != rhs);
+
+    LinkedList<int>* unequal_value = new LinkedList<int>(0);
+    linkedListInsertAtTail(unequal_value, 1);
+    linkedListInsertAtTail(unequal_value, 2);
+    linkedListInsertAtTail(unequal_value, 1);
+    result &= (unequal_value != rhs);
+
+    LinkedList<int>* equals = new LinkedList<int>(0);
+    for (int i = 1; i < 3; i++) {
+        linkedListInsertAtTail(rhs, i);
+    }
+    result &= (equals == rhs);
+
+    delete equals;
+    delete unequal_value;
+    delete too_big;
+    delete too_small;
+    delete rhs;
     return result;
 }
 
@@ -140,16 +121,106 @@ bool testGetMiddle() {
     return result;
 }
 
-void registerLinkedListTests(TestManager& test_manager) {
-    test_manager.addTest(UnitTest(testDefaultConstructor, "default constructor"));
-    test_manager.addTest(UnitTest(testDataConstructor, "data constructor"));
-    test_manager.addTest(UnitTest(testFullConstructor, "full constructor"));
-    test_manager.addTest(UnitTest(testCopyConstructor, "copy constructor"));
-    test_manager.addTest(UnitTest(testDestructor, "destructor"));
-    test_manager.addTest(UnitTest(testToString, "to string"));
-    test_manager.addTest(UnitTest(testOstreamOperator, "ostream operator"));
-    test_manager.addTest(UnitTest(testInsertAtHead, "insert at head"));
-    test_manager.addTest(UnitTest(testInsertAtTail, "insert at tail"));
-    test_manager.addTest(UnitTest(testGetSize, "get size"));
-    test_manager.addTest(UnitTest(testGetMiddle, "get middle"));
+bool testGetNodeAtIndex() {
+    bool result = true;
+
+    LinkedList<int>* head = new LinkedList<int>(0);
+    for (int i = 1; i < 4; i++) {
+        linkedListInsertAtTail(head, i);
+    }
+
+    LinkedList<int>* node_index_1 = linkedListGetNodeAtIndex(head, 1);
+    result &= (node_index_1 == head->getNext());
+    
+    LinkedList<int>* out_of_bounds = linkedListGetNodeAtIndex(head, 5);
+    result &= (!out_of_bounds);
+
+    delete head;
+    return result;
+}
+
+bool testFindNthOccurrence() {
+    bool result = true;
+
+    LinkedList<int>* not_in_list = new LinkedList<int>(0);
+    result &= (linkedListFindNthOccurrence(not_in_list, 1, 1) == -1);
+
+    LinkedList<int>* not_enough_found = new LinkedList<int>(2);
+    linkedListInsertAtHead(not_enough_found, 4);
+    linkedListInsertAtHead(not_enough_found, 3);
+    linkedListInsertAtHead(not_enough_found, 4);
+    result &= (linkedListFindNthOccurrence(not_enough_found, 4, 3) == -1);
+
+    LinkedList<int>* found = new LinkedList<int>(4);
+    linkedListInsertAtHead(found, 2);
+    linkedListInsertAtHead(found, 3);
+    linkedListInsertAtHead(found, 4);
+    result &= (linkedListFindNthOccurrence(found, 4, 2) == 3);
+
+    delete not_in_list;
+    delete not_enough_found;
+    delete found;
+    return result;
+}
+
+bool testDeleteNodeAtIndex() {
+    bool result = true;
+
+    LinkedList<int>* delete_index_1 = new LinkedList<int>(0);
+    for (int i = 1; i < 4; i++) {
+        linkedListInsertAtTail(delete_index_1, i);
+    }
+    LinkedList<int>* secondNode = delete_index_1->getNext()->getNext();
+    linkedListDeleteNodeAtIndex(delete_index_1, 1);
+    result &= (delete_index_1->getNext() == secondNode);
+
+    delete delete_index_1;
+    return result;
+}
+
+bool testDeleteNthOccurrence() {
+    bool result = true;
+
+    LinkedList<int>* not_in_list = new LinkedList<int>(0);
+    linkedListInsertAtHead(not_in_list, 2);
+    int original_size = linkedListGetSize(not_in_list);
+    linkedListDeleteNthOccurrence(not_in_list, 2, 1);
+    result &= (linkedListGetSize(not_in_list) == original_size);
+
+    LinkedList<int>* not_enough_found = new LinkedList<int>(2);
+    linkedListInsertAtHead(not_enough_found, 4);
+    linkedListInsertAtHead(not_enough_found, 3);
+    linkedListInsertAtHead(not_enough_found, 4);
+    original_size = linkedListGetSize(not_enough_found);
+    linkedListDeleteNthOccurrence(not_enough_found, 4, 3);
+    result &= (linkedListGetSize(not_enough_found) == original_size);
+
+    LinkedList<int>* found = new LinkedList<int>(4);
+    linkedListInsertAtHead(found, 2);
+    linkedListInsertAtHead(found, 3);
+    linkedListInsertAtHead(found, 4);
+    original_size = linkedListGetSize(found);
+    linkedListDeleteNthOccurrence(found, 4, 2);
+    result &= (linkedListGetSize(found) == original_size - 1);
+
+    delete not_in_list;
+    delete not_enough_found;
+    delete found;
+    return result;
+}
+
+TestGroup registerLinkedListTests() {
+    TestGroup test_group("linked lists");
+    test_group.addTest(UnitTest(testToString, "to string"));
+    test_group.addTest(UnitTest(testOstreamOperator, "ostream operator"));
+    test_group.addTest(UnitTest(testEqualityOperator, "equality operator"));
+    test_group.addTest(UnitTest(testInsertAtHead, "insert at head"));
+    test_group.addTest(UnitTest(testInsertAtTail, "insert at tail"));
+    test_group.addTest(UnitTest(testGetSize, "get size"));
+    test_group.addTest(UnitTest(testGetMiddle, "get middle"));
+    test_group.addTest(UnitTest(testGetNodeAtIndex, "get node at index"));
+    test_group.addTest(UnitTest(testFindNthOccurrence, "find nth occurrence"));
+    test_group.addTest(UnitTest(testDeleteNodeAtIndex, "delete node at index"));
+    test_group.addTest(UnitTest(testDeleteNthOccurrence, "delete nth occurrence"));
+    return test_group;
 }

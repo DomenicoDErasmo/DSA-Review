@@ -4,7 +4,7 @@
 
 int main() {
     TestManager test_manager;
-    registerLinkedListTests(test_manager);
+    test_manager.addTestGroup(registerLinkedListTests());
     test_manager.runTests();
     return 0;
 }
