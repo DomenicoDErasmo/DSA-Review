@@ -209,6 +209,26 @@ bool testDeleteNthOccurrence() {
     return result;
 }
 
+bool testReverse() {
+    bool result = true;
+
+    LinkedList<int>* head = new LinkedList<int>(0);
+    for (int i = 1; i < 4; i++) {
+        linkedListInsertAtTail(head, i);
+    }
+    linkedListReverse(head);
+
+    LinkedList<int>* reverse = new LinkedList<int>(3);
+    for (int i = 2; i >= 0; i--) {
+        linkedListInsertAtTail(head, i);
+    }
+
+    linkedListReverse(head);
+    result &= (head == reverse);
+
+    return true;
+}
+
 TestGroup registerLinkedListTests() {
     TestGroup test_group("linked lists");
     test_group.addTest(UnitTest(testToString, "to string"));
@@ -222,5 +242,6 @@ TestGroup registerLinkedListTests() {
     test_group.addTest(UnitTest(testFindNthOccurrence, "find nth occurrence"));
     test_group.addTest(UnitTest(testDeleteNodeAtIndex, "delete node at index"));
     test_group.addTest(UnitTest(testDeleteNthOccurrence, "delete nth occurrence"));
+    test_group.addTest(UnitTest(testReverse, "reverse"));
     return test_group;
 }

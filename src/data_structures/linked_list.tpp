@@ -182,4 +182,20 @@ void linkedListDeleteNthOccurrence(LinkedList<T>*& head, T to_delete, int n) {
     }
 }
 
+template <typename T>
+/**
+ * @brief Reverses the linked list
+ * 
+ * @param head A reference to a pointer to a linked list
+ */
+void linkedListReverse(LinkedList<T>*& head) {
+    LinkedList<T> *temp = head, *prev = nullptr, *curr = temp;
+    while (temp) {
+        curr->setNext(prev);
+        temp = temp->getNext();
+        prev = curr;
+        curr = temp;
+    }
+}
+
 #endif
