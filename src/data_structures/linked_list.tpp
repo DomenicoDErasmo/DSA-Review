@@ -15,30 +15,34 @@ public:
     ~LinkedList() {delete next;}
 
     // Getters
-    T getData() {return data;}
-    LinkedList* getNext() {return next;}
+    T getData() const {return data;}
+    LinkedList* getNext() const {return next;}
 
     // Setters
     void setData(T in_data) {data = in_data;}
     void setNext(LinkedList<T>* in_next) {next = in_next;}
 
     // Utility Functions
-    std::string toString() {
+    std::string toString() const {
         std::string result = std::to_string(data);
         if (next) {result += (", " + next->toString());}
         return result;
     }
 
-    friend std::ostream& operator << (std::ostream& out, LinkedList& list) {
+    friend std::ostream& operator << (std::ostream& out, const LinkedList& list) {
         out << list.toString();
         return out;
     }
 
     const bool operator == (const LinkedList& rhs) {
-        if (!this and !rhs) {return true;}
-        if ((!this and rhs) or (this and !rhs)) {return false;}
-        if (this->getData() != rhs->getData()) {return false;}
-        if (this->getData() == rhs->getData()) {return *(this->getNext()) == *(rhs->getNext());}
+        if (!this->getNext() and !rhs.getNext()) {return this->getData() == rhs.getData();}
+        if (!this->getNext() and rhs.getNext() or this->getNext() and !rhs.getNext()) {return false;}
+        if (this->getData() != rhs.getData()) {return false;}
+        return *(this->getNext()) == *(rhs.getNext());
+    }
+
+    const bool operator != (const LinkedList& rhs) {
+        return !(*this == rhs);
     }
     
 private:
@@ -56,10 +60,7 @@ template <typename T>
 void linkedListInsertAtTail(LinkedList<T>*& head, T in_data) {
     LinkedList<T>* new_tail = new LinkedList<T>(in_data);
     LinkedList<T>* temp = head;
-        std::cout << "temp:" << temp->getData() << std::endl;
-        std::cout << "temp next address:" << temp->getNext() << std::endl;
     while (temp->getNext()) {
-        std::cout << "temp:" << temp->getData() << std::endl;
         temp = temp->getNext();
     }
     temp->setNext(new_tail);

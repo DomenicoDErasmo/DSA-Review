@@ -38,25 +38,25 @@ bool testEqualityOperator() {
     }
 
     LinkedList<int>* too_small = new LinkedList<int>(0);
-    result &= (too_small != rhs);
+    result &= (*too_small != *rhs);
 
     LinkedList<int>* too_big = new LinkedList<int>(0);
     for (int i = 1; i < 4; i++) {
         linkedListInsertAtTail(too_big, i);
     }
-    result &= (too_big != rhs);
+    result &= (*too_big != *rhs);
 
     LinkedList<int>* unequal_value = new LinkedList<int>(0);
     linkedListInsertAtTail(unequal_value, 1);
     linkedListInsertAtTail(unequal_value, 2);
     linkedListInsertAtTail(unequal_value, 1);
-    result &= (unequal_value != rhs);
+    result &= (*unequal_value != *rhs);
 
     LinkedList<int>* equals = new LinkedList<int>(0);
     for (int i = 1; i < 3; i++) {
-        linkedListInsertAtTail(rhs, i);
+        linkedListInsertAtTail(equals, i);
     }
-    result &= (equals == rhs);
+    result &= (*equals == *rhs);
 
     delete equals;
     delete unequal_value;
