@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-bool testToString() {
+bool linkedListTestToString() {
     bool result = true;
 
     LinkedList<int>* head = new LinkedList<int>(4);
@@ -15,7 +15,7 @@ bool testToString() {
     return result;
 }
 
-bool testOstreamOperator() {
+bool linkedListTestOstreamOperator() {
     bool result = true;
 
     LinkedList<int>* head = new LinkedList<int>(4);
@@ -29,7 +29,7 @@ bool testOstreamOperator() {
     return result;
 }
 
-bool testEqualityOperator() {
+bool linkedListTestEqualityOperator() {
     bool result = true;
 
     LinkedList<int>* rhs = new LinkedList<int>(0);
@@ -66,7 +66,7 @@ bool testEqualityOperator() {
     return result;
 }
 
-bool testInsertAtHead() {
+bool linkedListTestInsertAtHead() {
     bool result = true;
 
     LinkedList<int>* head = new LinkedList<int>(4);
@@ -78,7 +78,7 @@ bool testInsertAtHead() {
     return result;
 }
 
-bool testInsertAtTail() {
+bool linkedListTestInsertAtTail() {
     bool result = true;
 
     LinkedList<int>* head = new LinkedList<int>(4);
@@ -90,7 +90,7 @@ bool testInsertAtTail() {
     return result;
 }
 
-bool testGetSize() {
+bool linkedListTestGetSize() {
     bool result = true;
 
     LinkedList<int>* empty = nullptr;
@@ -105,7 +105,7 @@ bool testGetSize() {
     return result;
 }
 
-bool testGetMiddle() {
+bool linkedListTestGetMiddle() {
     bool result = true;
 
     LinkedList<int>* odd_size_list = new LinkedList<int>(4);
@@ -231,13 +231,13 @@ bool testReverse() {
 
 TestGroup registerLinkedListTests() {
     TestGroup test_group("linked lists");
-    test_group.addTest(UnitTest(testToString, "to string"));
-    test_group.addTest(UnitTest(testOstreamOperator, "ostream operator"));
-    test_group.addTest(UnitTest(testEqualityOperator, "equality operator"));
-    test_group.addTest(UnitTest(testInsertAtHead, "insert at head"));
-    test_group.addTest(UnitTest(testInsertAtTail, "insert at tail"));
-    test_group.addTest(UnitTest(testGetSize, "get size"));
-    test_group.addTest(UnitTest(testGetMiddle, "get middle"));
+    test_group.addTest(UnitTest(linkedListTestToString, "to string"));
+    test_group.addTest(UnitTest(linkedListTestOstreamOperator, "ostream operator"));
+    test_group.addTest(UnitTest(linkedListTestEqualityOperator, "equality operator"));
+    test_group.addTest(UnitTest(linkedListTestInsertAtHead, "insert at head"));
+    test_group.addTest(UnitTest(linkedListTestInsertAtTail, "insert at tail"));
+    test_group.addTest(UnitTest(linkedListTestGetSize, "get size"));
+    test_group.addTest(UnitTest(linkedListTestGetMiddle, "get middle"));
     test_group.addTest(UnitTest(testGetNodeAtIndex, "get node at index"));
     test_group.addTest(UnitTest(testFindNthOccurrence, "find nth occurrence"));
     test_group.addTest(UnitTest(testDeleteNodeAtIndex, "delete node at index"));
