@@ -31,7 +31,7 @@ $(OBJ)/%.$(SRC_EXTENSION).o: %.$(SRC_EXTENSION) # compile .cpp to .cpp.o object
 
 .PHONY: link
 link: $(OBJ_FILES)
-	$(COMPILER) $(OBJ_FILES) -o $(BIN)/$(SRC).exe
+	@$(COMPILER) $(OBJ_FILES) -o $(BIN)/$(SRC).exe
 
 .PHONY: clean
 clean:

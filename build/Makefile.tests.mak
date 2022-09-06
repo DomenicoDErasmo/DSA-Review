@@ -32,7 +32,7 @@ $(OBJ)/%.$(FILE_EXTENSION).o: %.$(FILE_EXTENSION) # compile .cpp to .cpp.o objec
 
 .PHONY: link
 link: $(OBJ_FILES)
-	$(COMPILER) $(OBJ_FILES) -o $(BIN)/$(TESTING).exe
+	@$(COMPILER) $(OBJ_FILES) -o $(BIN)/$(TESTING).exe
 
 .PHONY: clean
 clean:
