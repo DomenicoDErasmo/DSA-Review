@@ -386,6 +386,204 @@ bool binaryTreeTestEqualityOperator() {
     return result;
 }
 
+bool binaryTreeTestPrefixOrder() {
+    bool result = true;
+
+    BinaryTree<int>* single_root = new BinaryTree<int>(6);
+    LinkedList<int>* single_root_prefix = nullptr;
+    binaryTreePrefixOrder(single_root, single_root_prefix);
+    result &= (single_root_prefix->toString() == "6");
+    delete single_root;
+    delete single_root_prefix;
+
+    BinaryTree<int>* duplicate_root = new BinaryTree<int>(6);
+    binaryTreeInsertNode(duplicate_root, 6);
+    LinkedList<int>* duplicate_root_prefix = nullptr;
+    binaryTreePrefixOrder(duplicate_root, duplicate_root_prefix);
+    result &= (duplicate_root_prefix->toString() == "6, 6");
+    delete duplicate_root;
+    delete duplicate_root_prefix;
+
+    BinaryTree<int>* has_left = new BinaryTree<int>(6);
+    binaryTreeInsertNode(has_left, 4);
+    LinkedList<int>* has_left_prefix = nullptr;
+    binaryTreePrefixOrder(has_left, has_left_prefix);
+    result &= (has_left_prefix->toString() == "6, 4");
+    delete has_left;
+    delete has_left_prefix;
+
+    BinaryTree<int>* has_right = new BinaryTree<int>(6);
+    binaryTreeInsertNode(has_right, 8);
+    LinkedList<int>* has_right_prefix = nullptr;
+    binaryTreePrefixOrder(has_right, has_right_prefix);
+    result &= (has_right_prefix->toString() == "6, 8");
+    delete has_right;
+    delete has_right_prefix;
+
+    BinaryTree<int>* has_left_and_right = new BinaryTree<int>(6);
+    binaryTreeInsertNode(has_left_and_right, 4);
+    binaryTreeInsertNode(has_left_and_right, 8);
+    LinkedList<int>* has_left_and_right_prefix = nullptr;
+    binaryTreePrefixOrder(has_left_and_right, has_left_and_right_prefix);
+    result &= (has_left_and_right_prefix->toString() == "6, 4, 8");
+    delete has_left_and_right;
+    delete has_left_and_right_prefix;
+
+    BinaryTree<int>* root_and_left_duplicate = new BinaryTree<int>(6);
+    binaryTreeInsertNode(root_and_left_duplicate, 6);
+    binaryTreeInsertNode(root_and_left_duplicate, 4);
+    binaryTreeInsertNode(root_and_left_duplicate, 4);
+    LinkedList<int>* root_and_left_duplicate_prefix = nullptr;
+    binaryTreePrefixOrder(root_and_left_duplicate, root_and_left_duplicate_prefix);
+    result &= (root_and_left_duplicate_prefix->toString() == "6, 6, 4, 4");
+    delete root_and_left_duplicate;
+    delete root_and_left_duplicate_prefix;
+
+    BinaryTree<int>* root_and_right_duplicate = new BinaryTree<int>(6);
+    binaryTreeInsertNode(root_and_right_duplicate, 6);
+    binaryTreeInsertNode(root_and_right_duplicate, 8);
+    binaryTreeInsertNode(root_and_right_duplicate, 8);
+    LinkedList<int>* root_and_right_duplicate_prefix = nullptr;
+    binaryTreePrefixOrder(root_and_right_duplicate, root_and_right_duplicate_prefix);
+    result &= (root_and_right_duplicate_prefix->toString() == "6, 6, 8, 8");
+    delete root_and_right_duplicate;
+    delete root_and_right_duplicate_prefix;
+
+    return result;
+}
+
+bool binaryTreeTestInfixOrder() {
+    bool result = true;
+
+    BinaryTree<int>* single_root = new BinaryTree<int>(6);
+    LinkedList<int>* single_root_prefix = nullptr;
+    binaryTreeInfixOrder(single_root, single_root_prefix);
+    result &= (single_root_prefix->toString() == "6");
+    delete single_root;
+    delete single_root_prefix;
+
+    BinaryTree<int>* duplicate_root = new BinaryTree<int>(6);
+    binaryTreeInsertNode(duplicate_root, 6);
+    LinkedList<int>* duplicate_root_prefix = nullptr;
+    binaryTreeInfixOrder(duplicate_root, duplicate_root_prefix);
+    result &= (duplicate_root_prefix->toString() == "6, 6");
+    delete duplicate_root;
+    delete duplicate_root_prefix;
+
+    BinaryTree<int>* has_left = new BinaryTree<int>(6);
+    binaryTreeInsertNode(has_left, 4);
+    LinkedList<int>* has_left_prefix = nullptr;
+    binaryTreeInfixOrder(has_left, has_left_prefix);
+    result &= (has_left_prefix->toString() == "4, 6");
+    delete has_left;
+    delete has_left_prefix;
+
+    BinaryTree<int>* has_right = new BinaryTree<int>(6);
+    binaryTreeInsertNode(has_right, 8);
+    LinkedList<int>* has_right_prefix = nullptr;
+    binaryTreeInfixOrder(has_right, has_right_prefix);
+    result &= (has_right_prefix->toString() == "6, 8");
+    delete has_right;
+    delete has_right_prefix;
+
+    BinaryTree<int>* has_left_and_right = new BinaryTree<int>(6);
+    binaryTreeInsertNode(has_left_and_right, 4);
+    binaryTreeInsertNode(has_left_and_right, 8);
+    LinkedList<int>* has_left_and_right_prefix = nullptr;
+    binaryTreeInfixOrder(has_left_and_right, has_left_and_right_prefix);
+    result &= (has_left_and_right_prefix->toString() == "4, 6, 8");
+    delete has_left_and_right;
+    delete has_left_and_right_prefix;
+
+    BinaryTree<int>* root_and_left_duplicate = new BinaryTree<int>(6);
+    binaryTreeInsertNode(root_and_left_duplicate, 6);
+    binaryTreeInsertNode(root_and_left_duplicate, 4);
+    binaryTreeInsertNode(root_and_left_duplicate, 4);
+    LinkedList<int>* root_and_left_duplicate_prefix = nullptr;
+    binaryTreeInfixOrder(root_and_left_duplicate, root_and_left_duplicate_prefix);
+    result &= (root_and_left_duplicate_prefix->toString() == "4, 4, 6, 6");
+    delete root_and_left_duplicate;
+    delete root_and_left_duplicate_prefix;
+
+    BinaryTree<int>* root_and_right_duplicate = new BinaryTree<int>(6);
+    binaryTreeInsertNode(root_and_right_duplicate, 6);
+    binaryTreeInsertNode(root_and_right_duplicate, 8);
+    binaryTreeInsertNode(root_and_right_duplicate, 8);
+    LinkedList<int>* root_and_right_duplicate_prefix = nullptr;
+    binaryTreeInfixOrder(root_and_right_duplicate, root_and_right_duplicate_prefix);
+    result &= (root_and_right_duplicate_prefix->toString() == "6, 6, 8, 8");
+    delete root_and_right_duplicate;
+    delete root_and_right_duplicate_prefix;
+
+    return result;
+}
+
+bool binaryTreeTestPostfixOrder() {
+    bool result = true;
+
+    BinaryTree<int>* single_root = new BinaryTree<int>(6);
+    LinkedList<int>* single_root_prefix = nullptr;
+    binaryTreePostfixOrder(single_root, single_root_prefix);
+    result &= (single_root_prefix->toString() == "6");
+    delete single_root;
+    delete single_root_prefix;
+
+    BinaryTree<int>* duplicate_root = new BinaryTree<int>(6);
+    binaryTreeInsertNode(duplicate_root, 6);
+    LinkedList<int>* duplicate_root_prefix = nullptr;
+    binaryTreePostfixOrder(duplicate_root, duplicate_root_prefix);
+    result &= (duplicate_root_prefix->toString() == "6, 6");
+    delete duplicate_root;
+    delete duplicate_root_prefix;
+
+    BinaryTree<int>* has_left = new BinaryTree<int>(6);
+    binaryTreeInsertNode(has_left, 4);
+    LinkedList<int>* has_left_prefix = nullptr;
+    binaryTreePostfixOrder(has_left, has_left_prefix);
+    result &= (has_left_prefix->toString() == "4, 6");
+    delete has_left;
+    delete has_left_prefix;
+
+    BinaryTree<int>* has_right = new BinaryTree<int>(6);
+    binaryTreeInsertNode(has_right, 8);
+    LinkedList<int>* has_right_prefix = nullptr;
+    binaryTreePostfixOrder(has_right, has_right_prefix);
+    result &= (has_right_prefix->toString() == "8, 6");
+    delete has_right;
+    delete has_right_prefix;
+
+    BinaryTree<int>* has_left_and_right = new BinaryTree<int>(6);
+    binaryTreeInsertNode(has_left_and_right, 4);
+    binaryTreeInsertNode(has_left_and_right, 8);
+    LinkedList<int>* has_left_and_right_prefix = nullptr;
+    binaryTreePostfixOrder(has_left_and_right, has_left_and_right_prefix);
+    result &= (has_left_and_right_prefix->toString() == "4, 8, 6");
+    delete has_left_and_right;
+    delete has_left_and_right_prefix;
+
+    BinaryTree<int>* root_and_left_duplicate = new BinaryTree<int>(6);
+    binaryTreeInsertNode(root_and_left_duplicate, 6);
+    binaryTreeInsertNode(root_and_left_duplicate, 4);
+    binaryTreeInsertNode(root_and_left_duplicate, 4);
+    LinkedList<int>* root_and_left_duplicate_prefix = nullptr;
+    binaryTreePostfixOrder(root_and_left_duplicate, root_and_left_duplicate_prefix);
+    result &= (root_and_left_duplicate_prefix->toString() == "4, 4, 6, 6");
+    delete root_and_left_duplicate;
+    delete root_and_left_duplicate_prefix;
+
+    BinaryTree<int>* root_and_right_duplicate = new BinaryTree<int>(6);
+    binaryTreeInsertNode(root_and_right_duplicate, 6);
+    binaryTreeInsertNode(root_and_right_duplicate, 8);
+    binaryTreeInsertNode(root_and_right_duplicate, 8);
+    LinkedList<int>* root_and_right_duplicate_prefix = nullptr;
+    binaryTreePostfixOrder(root_and_right_duplicate, root_and_right_duplicate_prefix);
+    result &= (root_and_right_duplicate_prefix->toString() == "8, 8, 6, 6");
+    delete root_and_right_duplicate;
+    delete root_and_right_duplicate_prefix;
+
+    return result;
+}
+
 TestGroup binaryTreeRegisterTests() {
     TestGroup test_group("binary trees");
     test_group.addTest(UnitTest(binaryTreeTestDefaultConstructor, "default constructor"));
@@ -403,5 +601,8 @@ TestGroup binaryTreeRegisterTests() {
     test_group.addTest(UnitTest(binaryTreeTestOstreamOperator, "ostream operator"));
     test_group.addTest(UnitTest(binaryTreeTestDifferentChildren, "different children"));
     test_group.addTest(UnitTest(binaryTreeTestEqualityOperator, "equality operator"));
+    test_group.addTest(UnitTest(binaryTreeTestPrefixOrder, "prefix order"));
+    test_group.addTest(UnitTest(binaryTreeTestInfixOrder, "infix order"));
+    test_group.addTest(UnitTest(binaryTreeTestPostfixOrder, "postfix order"));
     return test_group;
 }

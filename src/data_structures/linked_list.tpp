@@ -52,13 +52,30 @@ private:
 
 template <typename T>
 void linkedListInsertAtHead(LinkedList<T>*& head, T in_data) {
+    if (!head) {
+        head = new LinkedList<T>(in_data);
+        return;
+    }
     LinkedList<T>* new_head = new LinkedList<T>(in_data, head);
     head = new_head;
 }
 
 template <typename T>
 void linkedListInsertAtTail(LinkedList<T>*& head, T in_data) {
+    if (!head) {
+        head = new LinkedList<T>(in_data);
+        return;
+    }
     LinkedList<T>* new_tail = new LinkedList<T>(in_data);
+    LinkedList<T>* temp = head;
+    while (temp->getNext()) {
+        temp = temp->getNext();
+    }
+    temp->setNext(new_tail);
+}
+
+template <typename T>
+void linkedListInsertNodeAtTail(LinkedList<T>*& head, LinkedList<T>* new_tail) {
     LinkedList<T>* temp = head;
     while (temp->getNext()) {
         temp = temp->getNext();

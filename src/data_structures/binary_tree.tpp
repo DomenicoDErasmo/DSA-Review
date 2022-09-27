@@ -2,6 +2,7 @@
 #define BINARY_TREE_TPP
 
 #include <iostream>
+#include "linked_list.tpp"
 
 template <typename T>
 class BinaryTree {
@@ -284,4 +285,46 @@ void binaryTreeDeleteNode(BinaryTree<T>*& root, T data_to_delete) {
     }
 }
 
+template <typename T>
+void binaryTreePrefixOrder(BinaryTree<T>* root, LinkedList<T>*& list) {
+    // Prefix order: root, left, right
+    for (size_t i = 0; i < root->getCount(); i++) {
+        linkedListInsertAtTail(list, root->getData());
+    }
+    if (root->getLeft()) {
+        binaryTreePrefixOrder(root->getLeft(), list);
+    }
+    if (root->getRight()) {
+        binaryTreePrefixOrder(root->getRight(), list);
+    }
+}
+
+template <typename T>
+void  binaryTreeInfixOrder(BinaryTree<T>* root, LinkedList<T>*& list) {
+    // Infix order: left, root, right
+    if (root->getLeft()) {
+        binaryTreeInfixOrder(root->getLeft(), list);
+    }
+    for (size_t i = 0; i < root->getCount(); i++) {
+        linkedListInsertAtTail(list, root->getData());
+    }
+    if (root->getRight()) {
+        binaryTreeInfixOrder(root->getRight(), list);
+    }
+}
+
+template <typename T>
+void  binaryTreePostfixOrder(BinaryTree<T>* root, LinkedList<T>*& list) {
+    // Infix order: left, right, root
+    if (root->getLeft()) {
+        binaryTreePostfixOrder(root->getLeft(), list);
+    }
+    if (root->getRight()) {
+        binaryTreePostfixOrder(root->getRight(), list);
+    }
+    for (size_t i = 0; i < root->getCount(); i++) {
+        linkedListInsertAtTail(list, root->getData());
+    }
+}
+ 
 #endif
