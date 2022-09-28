@@ -163,18 +163,12 @@ bool testFindNthOccurrence() {
     return result;
 }
 
+// TODO: make new test case: delete head, delete head next, delete something in middle, delete last
 bool testDeleteNodeAtIndex() {
     bool result = true;
 
-    LinkedList<int>* delete_index_1 = new LinkedList<int>(0);
-    for (int i = 1; i < 4; i++) {
-        linkedListInsertAtTail(delete_index_1, i);
-    }
-    LinkedList<int>* secondNode = delete_index_1->next->next;
-    linkedListDeleteNodeAtIndex(delete_index_1, 1);
-    result &= (delete_index_1->next == secondNode);
+    
 
-    delete delete_index_1;
     return result;
 }
 
@@ -229,7 +223,7 @@ bool testReverse() {
     return true;
 }
 
-TestGroup registerLinkedListTests() {
+TestGroup linkedListRegisterTests() {
     TestGroup test_group("linked lists");
     test_group.addTest(UnitTest(linkedListTestToString, "to string"));
     test_group.addTest(UnitTest(linkedListTestOstreamOperator, "ostream operator"));

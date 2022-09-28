@@ -148,16 +148,9 @@ template <typename T>
  * @param head A reference to a pointer to a linked list
  * @param pos The index of the list whose node we want to delete
  */
+// TODO: fix delete node at index
 void linkedListDeleteNodeAtIndex(LinkedList<T>*& head, int pos) {
-    LinkedList<T>* temp = head;
-    for (size_t i = 0; i < pos - 1; i++) {
-        if (!temp) {return;}
-        temp = temp->next;
-    }
-    LinkedList<T>* to_delete = temp->next;
-    temp->next = to_delete->next;
-    to_delete->next = nullptr;
-    delete to_delete;
+    
 }
 
 template <typename T>
