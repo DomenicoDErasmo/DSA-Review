@@ -3,7 +3,7 @@
 
 #include <string>
 template <typename T>
-class LinkedList {
+struct LinkedList {
 public:
     // Constructors
     LinkedList(): data(T()), next(nullptr) {}
@@ -13,14 +13,6 @@ public:
 
     // Destructors
     ~LinkedList() {delete next;}
-
-    // Getters
-    T getData() const {return data;}
-    LinkedList* getNext() const {return next;}
-
-    // Setters
-    void setData(T in_data) {data = in_data;}
-    void setNext(LinkedList<T>* in_next) {next = in_next;}
 
     // Utility Functions
     std::string toString() const {
@@ -35,17 +27,16 @@ public:
     }
 
     const bool operator == (const LinkedList& rhs) {
-        if (!this->getNext() and !rhs.getNext()) {return this->getData() == rhs.getData();}
-        if (!this->getNext() and rhs.getNext() or this->getNext() and !rhs.getNext()) {return false;}
-        if (this->getData() != rhs.getData()) {return false;}
-        return *(this->getNext()) == *(rhs.getNext());
+        if (!this->next and !rhs.next) {return this->data == rhs.data;}
+        if (!this->next and rhs.next or this->next and !rhs.next) {return false;}
+        if (this->data != rhs.data) {return false;}
+        return *(this->next) == *(rhs.next);
     }
 
     const bool operator != (const LinkedList& rhs) {
         return !(*this == rhs);
     }
     
-private:
     T data;
     LinkedList<T>* next;
 };
@@ -61,26 +52,22 @@ void linkedListInsertAtHead(LinkedList<T>*& head, T in_data) {
 }
 
 template <typename T>
+void linkedListInsertNodeAtTail(LinkedList<T>*& head, LinkedList<T>* new_tail) {
+    LinkedList<T>* temp = head;
+    while (temp->next) {
+        temp = temp->next;
+    }
+    temp->next = new_tail;
+}
+
+template <typename T>
 void linkedListInsertAtTail(LinkedList<T>*& head, T in_data) {
     if (!head) {
         head = new LinkedList<T>(in_data);
         return;
     }
     LinkedList<T>* new_tail = new LinkedList<T>(in_data);
-    LinkedList<T>* temp = head;
-    while (temp->getNext()) {
-        temp = temp->getNext();
-    }
-    temp->setNext(new_tail);
-}
-
-template <typename T>
-void linkedListInsertNodeAtTail(LinkedList<T>*& head, LinkedList<T>* new_tail) {
-    LinkedList<T>* temp = head;
-    while (temp->getNext()) {
-        temp = temp->getNext();
-    }
-    temp->setNext(new_tail);
+    linkedListInsertNodeAtTail(head, new_tail);
 }
 
 template <typename T>
@@ -88,7 +75,7 @@ int linkedListGetSize(LinkedList<T>*& head) {
     int result = 0;
     LinkedList<T>* temp = head;
     while (temp) {
-        temp = temp->getNext();
+        temp = temp->next;
         result++;
     }
     return result;
@@ -105,9 +92,9 @@ T linkedListGetMiddle(LinkedList<T>*& head) {
     int middle = linkedListGetSize(head) / 2;
     LinkedList<T>* temp = head;
     for (size_t i = 0; i < middle; i++) {
-        temp = temp->getNext();
+        temp = temp->next;
     }
-    return temp->getData();
+    return temp->data;
 }
 
 template <typename T>
@@ -122,7 +109,7 @@ LinkedList<T>* linkedListGetNodeAtIndex(LinkedList<T>* head, int pos) {
     LinkedList<T>* temp = head;
     for (size_t i = 0; i < pos; i++) {
         if (!temp) {return nullptr;}
-        temp = temp->getNext();
+        temp = temp->next;
     }
     return temp;
 }
@@ -141,10 +128,10 @@ int linkedListFindNthOccurrence(LinkedList<T>* head, T to_find, int n) {
     int times_found = 0, current_position = -1;
     LinkedList<T>* temp = head;
     while (times_found < n and temp) {
-        if (temp->getData() == to_find) {
+        if (temp->data == to_find) {
             times_found++;
         }
-        temp = temp->getNext();
+        temp = temp->next;
         current_position++;
     }
     if (times_found == n) {
@@ -165,11 +152,11 @@ void linkedListDeleteNodeAtIndex(LinkedList<T>*& head, int pos) {
     LinkedList<T>* temp = head;
     for (size_t i = 0; i < pos - 1; i++) {
         if (!temp) {return;}
-        temp = temp->getNext();
+        temp = temp->next;
     }
-    LinkedList<T>* to_delete = temp->getNext();
-    temp->setNext(to_delete->getNext());
-    to_delete->setNext(nullptr);
+    LinkedList<T>* to_delete = temp->next;
+    temp->next = to_delete->next;
+    to_delete->next = nullptr;
     delete to_delete;
 }
 
@@ -186,10 +173,10 @@ void linkedListDeleteNthOccurrence(LinkedList<T>*& head, T to_delete, int n) {
     int times_found = 0, current_position = -1;
     LinkedList<T>* temp = head;
     while (times_found < n and temp) {
-        if (temp->getData() == to_delete) {
+        if (temp->data == to_delete) {
             times_found++;
         }
-        temp = temp->getNext();
+        temp = temp->next;
         current_position++;
     }
     if (times_found == n) {
@@ -208,8 +195,8 @@ template <typename T>
 void linkedListReverse(LinkedList<T>*& head) {
     LinkedList<T> *temp = head, *prev = nullptr, *curr = temp;
     while (temp) {
-        curr->setNext(prev);
-        temp = temp->getNext();
+        curr->next = prev;
+        temp = temp->next;
         prev = curr;
         curr = temp;
     }

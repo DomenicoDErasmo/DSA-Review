@@ -9,9 +9,9 @@ bool binaryTreeTestDefaultConstructor() {
     bool result = true;
 
     BinaryTree<int>* root = new BinaryTree<int>();
-    result &= (root->getData() == 0);
-    result &= (root->getLeft() == nullptr);
-    result &= (root->getRight() == nullptr);
+    result &= (root->data == 0);
+    result &= (root->left == nullptr);
+    result &= (root->right == nullptr);
 
     delete root;
     return result;
@@ -21,9 +21,9 @@ bool binaryTreeTestDataConstructor() {
     bool result = true;
 
     BinaryTree<int>* root = new BinaryTree<int>(5);
-    result &= (root->getData() == 5);
-    result &= (root->getLeft() == nullptr);
-    result &= (root->getRight() == nullptr);
+    result &= (root->data == 5);
+    result &= (root->left == nullptr);
+    result &= (root->right == nullptr);
 
     delete root;
     return result;
@@ -35,9 +35,9 @@ bool binaryTreeTestAllParamConstructor() {
     BinaryTree<int>* left = new BinaryTree<int>(3);
     BinaryTree<int>* right = new BinaryTree<int>(5);
     BinaryTree<int>* root = new BinaryTree<int>(4, left, right);
-    result &= (root->getData() == 4);
-    result &= (root->getLeft() == left);
-    result &= (root->getRight() == right);
+    result &= (root->data == 4);
+    result &= (root->left == left);
+    result &= (root->right == right);
 
     delete root;
     return result;
@@ -50,9 +50,9 @@ bool binaryTreeTestCopyConstructor() {
     BinaryTree<int>* right = new BinaryTree<int>(5);
     BinaryTree<int>* other = new BinaryTree<int>(4, left, right);
     BinaryTree<int>* root = new BinaryTree<int>(*other);
-    result &= (root->getData() == 4);
-    result &= (root->getLeft() == left);
-    result &= (root->getRight() == right);
+    result &= (root->data == 4);
+    result &= (root->left == left);
+    result &= (root->right == right);
 
     return result;
 }
@@ -100,19 +100,19 @@ bool binaryTreeTestInsert() {
 
     BinaryTree<int>* root = new BinaryTree<int>(5);
     binaryTreeInsertNode(root, 2);
-    result &= (root->getLeft()->getData() == 2);
+    result &= (root->left->data == 2);
     binaryTreeInsertNode(root, 1);
-    result &= (root->getLeft()->getLeft()->getData() == 1);
+    result &= (root->left->left->data == 1);
     binaryTreeInsertNode(root, 4);
-    result &= (root->getLeft()->getRight()->getData() == 4);
+    result &= (root->left->right->data == 4);
     binaryTreeInsertNode(root, 8);
-    result &= (root->getRight()->getData() == 8);
+    result &= (root->right->data == 8);
     binaryTreeInsertNode(root, 6);
-    result &= (root->getRight()->getLeft()->getData() == 6);
+    result &= (root->right->left->data == 6);
     binaryTreeInsertNode(root, 9);
-    result &= (root->getRight()->getRight()->getData() == 9);
+    result &= (root->right->right->data == 9);
     binaryTreeInsertNode(root, 5);
-    result &= (root->getCount() == 2);
+    result &= (root->count == 2);
 
     return result;
 }
@@ -128,7 +128,7 @@ bool binaryTreeTestGetPreOrderPredecessor() {
     binaryTreeInsertNode(left_children, 3);
     binaryTreeInsertNode(left_children, 2);
     binaryTreeInsertNode(left_children, 4);
-    result &= (binaryTreeGetPreOrderPredecessor(left_children) == left_children->getLeft()->getRight());
+    result &= (binaryTreeGetPreOrderPredecessor(left_children) == left_children->left->right);
     delete left_children;
 
     return true;
@@ -145,7 +145,7 @@ bool binaryTreeTestGetPreOrderSuccessor() {
     binaryTreeInsertNode(right_children, 7);
     binaryTreeInsertNode(right_children, 6);
     binaryTreeInsertNode(right_children, 8);
-    result &= (binaryTreeGetPreOrderSuccessor(right_children) == right_children->getRight()->getLeft());
+    result &= (binaryTreeGetPreOrderSuccessor(right_children) == right_children->right->left);
     delete right_children;
 
     return true;
@@ -157,14 +157,14 @@ bool binaryTreeTestAssignmentOperator() {
     BinaryTree<int>* root = new BinaryTree<int>(3,
         new BinaryTree<int>(-5),
         new BinaryTree<int>(6));
-    root->setCount(6);
+    root->count = 6;
     BinaryTree<int>* test = new BinaryTree<int>();
     *test = *root;
 
-    result &= (test->getData() == root->getData());
-    result &= (test->getCount() == root->getCount());
-    result &= (test->getLeft()->getData() == root->getLeft()->getData());
-    result &= (test->getRight()->getData() == root->getRight()->getData());
+    result &= (test->data == root->data);
+    result &= (test->count == root->count);
+    result &= (test->left->data == root->left->data);
+    result &= (test->right->data == root->right->data);
     delete root;
     delete test;
 
@@ -177,56 +177,56 @@ bool binaryTreeTestDelete() {
     BinaryTree<int>* root_count_above_one = new BinaryTree<int>(12);
     binaryTreeInsertNode(root_count_above_one, 12);
     binaryTreeDeleteNode(root_count_above_one, 12);
-    result &= (root_count_above_one->getCount() == 1);
+    result &= (root_count_above_one->count == 1);
     delete root_count_above_one;
 
     BinaryTree<int>* left_count_above_one = new BinaryTree<int>(12);
     binaryTreeInsertNode(left_count_above_one, 8);
     binaryTreeInsertNode(left_count_above_one, 8);
     binaryTreeDeleteNode(left_count_above_one, 8);
-    result &= (left_count_above_one->getCount() == 1);
+    result &= (left_count_above_one->count == 1);
     delete left_count_above_one;
 
     BinaryTree<int>* right_count_above_one = new BinaryTree<int>(12);
     binaryTreeInsertNode(right_count_above_one, 15);
     binaryTreeInsertNode(right_count_above_one, 15);
     binaryTreeDeleteNode(right_count_above_one, 15);
-    result &= (right_count_above_one->getCount() == 1);
+    result &= (right_count_above_one->count == 1);
     delete right_count_above_one;
 
     BinaryTree<int>* delete_root_no_children = new BinaryTree<int>(6);
     binaryTreeDeleteNode(delete_root_no_children, 6);
-    result &= (delete_root_no_children->getCount() == 0);
+    result &= (delete_root_no_children->count == 0);
     delete delete_root_no_children;
 
     BinaryTree<int>* delete_root_with_left_child = new BinaryTree<int>(10);
     binaryTreeInsertNode(delete_root_with_left_child, 5);
     binaryTreeInsertNode(delete_root_with_left_child, 5);
     binaryTreeDeleteNode(delete_root_with_left_child, 10);
-    result &= (delete_root_with_left_child->getData() == 5);
-    result &= (delete_root_with_left_child->getCount() == 2);
-    result &= !delete_root_with_left_child->getLeft();
+    result &= (delete_root_with_left_child->data == 5);
+    result &= (delete_root_with_left_child->count == 2);
+    result &= !delete_root_with_left_child->left;
     delete delete_root_with_left_child;
 
     BinaryTree<int>* delete_root_with_right_child = new BinaryTree<int>(10);
     binaryTreeInsertNode(delete_root_with_right_child, 12);
     binaryTreeInsertNode(delete_root_with_right_child, 12);
     binaryTreeDeleteNode(delete_root_with_right_child, 10);
-    result &= (delete_root_with_right_child->getData() == 12);
-    result &= (delete_root_with_right_child->getCount() == 2);
-    result &= !delete_root_with_right_child->getLeft();
+    result &= (delete_root_with_right_child->data == 12);
+    result &= (delete_root_with_right_child->count == 2);
+    result &= !delete_root_with_right_child->left;
     delete delete_root_with_right_child;
 
     BinaryTree<int>* delete_left_child = new BinaryTree<int>(10);
     binaryTreeInsertNode(delete_left_child, 5);
     binaryTreeDeleteNode(delete_left_child, 5);
-    result &= !delete_left_child->getLeft();
+    result &= !delete_left_child->left;
     delete delete_left_child;
 
     BinaryTree<int>* delete_right_child = new BinaryTree<int>(10);
     binaryTreeInsertNode(delete_right_child, 12);
     binaryTreeDeleteNode(delete_right_child, 12);
-    result &= !delete_right_child->getRight();
+    result &= !delete_right_child->right;
     delete delete_right_child;
 
     return result;
@@ -266,14 +266,14 @@ bool binaryTreeTestGetParentValueOf() {
             new BinaryTree<int>(2),
             new BinaryTree<int>(4)),
         nullptr);
-    result &= (binaryTreeGetParentValueOf(found_in_left_half, 2) == found_in_left_half->getLeft());
+    result &= (binaryTreeGetParentValueOf(found_in_left_half, 2) == found_in_left_half->left);
     delete found_in_left_half;
     BinaryTree<int>* found_in_right_half = new BinaryTree<int>(10,
         nullptr,
         new BinaryTree<int>(12, 
             new BinaryTree<int>(11),
             new BinaryTree<int>(13)));
-    result &= (binaryTreeGetParentValueOf(found_in_right_half, 11) == found_in_right_half->getRight());
+    result &= (binaryTreeGetParentValueOf(found_in_right_half, 11) == found_in_right_half->right);
     delete found_in_right_half;
 
     return result;

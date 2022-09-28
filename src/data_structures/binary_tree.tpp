@@ -5,7 +5,7 @@
 #include "linked_list.tpp"
 
 template <typename T>
-class BinaryTree {
+struct BinaryTree {
 public:
     // Constructors
     BinaryTree(): data(T()), left(nullptr), right(nullptr), count(1) {}
@@ -16,17 +16,6 @@ public:
         delete left;
         delete right;
     }
-    // Getters
-    T getData() const {return data;}
-    BinaryTree* getLeft() const {return left;}
-    BinaryTree* getRight() const {return right;}
-    int getCount() const {return count;}
-
-    // Setters
-    void setData(T in_data) {data = in_data;}
-    void setLeft(BinaryTree* in_left) {left = in_left;}
-    void setRight(BinaryTree* in_right) {right = in_right;}
-    void setCount(int in_count) {count = in_count;}
 
     // Utility Functions
     std::string toString() const {
@@ -42,33 +31,33 @@ public:
     }
 
     bool diffrentChildren(const BinaryTree<T>& other) {
-        return (left and !other.getLeft()) 
-        or (!left and other.getLeft()) 
-        or (right and !other.getRight()) 
-        or (!right and other.getRight());
+        return (left and !other.left) 
+        or (!left and other.left) 
+        or (right and !other.right) 
+        or (!right and other.right);
     }
 
     void operator = (const BinaryTree<T>& rhs) {
-        data = rhs.getData();
-        count = rhs.getCount();
+        data = rhs.data;
+        count = rhs.count;
         if (left) {delete left;}
-        left = new BinaryTree<T>(*rhs.getLeft());
+        left = new BinaryTree<T>(*rhs.left);
         if (right) {delete right;}
-        right = new BinaryTree<T>(*rhs.getRight());
+        right = new BinaryTree<T>(*rhs.right);
     }
 
     const bool operator == (const BinaryTree<T>& other) {
-        if (data != other.getData() or diffrentChildren(other)) {
+        if (data != other.data or diffrentChildren(other)) {
             return false;
-        } else if (!left and !right and !other.getLeft() and !other.getRight()) {
-            return data == other.getData();
+        } else if (!left and !right and !other.left and !other.right) {
+            return data == other.data;
         } else {
             bool result = true;
-            if (left and other.getLeft()) {
-                result &= (*left == *other.getLeft());
+            if (left and other.left) {
+                result &= (*left == *other.left);
             }
-            if (right and other.getRight()) {
-                result &= (*right == *other.getRight());
+            if (right and other.right) {
+                result &= (*right == *other.right);
             }
             return result;
         }
@@ -77,8 +66,6 @@ public:
     const bool operator != (const BinaryTree<T>& other) {
         return !(*this == other);
     }
-
-private:
     T data;
     BinaryTree<T>* left;
     BinaryTree<T>* right;
@@ -94,30 +81,30 @@ template <typename T>
  */
 void binaryTreeInsertNode(BinaryTree<T>*& root, T data_to_insert) {
     // We should only hit this if the tree was empty from a previous deletion
-    if (!root->getLeft() and !root->getRight() and root->getCount() == 0) {
-        root->setData(data_to_insert);
-        root->setCount(1);
+    if (!root->left and !root->right and root->count == 0) {
+        root->data = data_to_insert;
+        root->count = 1;
         return;
     }
 
     BinaryTree<T>* temp = root;
     while(true) {
-        if (data_to_insert < temp->getData()) {
-            if (!temp->getLeft()) {
-                temp->setLeft(new BinaryTree<T>(data_to_insert));
+        if (data_to_insert < temp->data) {
+            if (!temp->left) {
+                temp->left = new BinaryTree<T>(data_to_insert);
                 return;
             } else {
-                temp = temp->getLeft();
+                temp = temp->left;
             }
-        } else if (data_to_insert == temp->getData()) {
-            temp->setCount(temp->getCount() + 1);
+        } else if (data_to_insert == temp->data) {
+            temp->count++;
             return;
         } else {
-            if (!temp->getRight()) {
-                temp->setRight(new BinaryTree<T>(data_to_insert));
+            if (!temp->right) {
+                temp->right = new BinaryTree<T>(data_to_insert);
                 return;
             } else {
-                temp = temp->getRight();
+                temp = temp->right;
             }
         }
     }
@@ -131,10 +118,10 @@ template <typename T>
  * @return BinaryTree<T>* A pointer to the preorder predecessor
  */
 BinaryTree<T>* binaryTreeGetPreOrderPredecessor(BinaryTree<T>* root) {
-    if (!root->getLeft()) {return nullptr;}
-    BinaryTree<T>* temp = root->getLeft();
-    while(temp->getRight()) {
-        temp = temp->getRight();
+    if (!root->left) {return nullptr;}
+    BinaryTree<T>* temp = root->left;
+    while(temp->right) {
+        temp = temp->right;
     }
     return temp;
 }
@@ -147,10 +134,10 @@ template <typename T>
  * @return BinaryTree<T>* A pointer to the postorder predecessor
  */
 BinaryTree<T>* binaryTreeGetPreOrderSuccessor(BinaryTree<T>* root) {
-    if (!root->getRight()) {return nullptr;}
-    BinaryTree<T>* temp = root->getRight();
-    while(temp->getLeft()) {
-        temp = temp->getLeft();
+    if (!root->right) {return nullptr;}
+    BinaryTree<T>* temp = root->right;
+    while(temp->left) {
+        temp = temp->left;
     }
     return temp;
 }
@@ -164,14 +151,14 @@ template <typename T>
  * @return BinaryTree<T>* A pointer to a tree node, or nullptr if the value isn't in the tree
  */
 BinaryTree<T>* binaryTreeGetParentValueOf(BinaryTree<T>* root, T data) {
-    if (!root or root->getData() == data) {return nullptr;}
+    if (!root or root->data == data) {return nullptr;}
 
     BinaryTree<T>* temp = root;
     while(temp) {
-        BinaryTree<T> *left = temp->getLeft(), *right = temp->getRight();
-        if ((left and left->getData() == data) or (right and right->getData() == data)) {
+        BinaryTree<T> *left = temp->left, *right = temp->right;
+        if ((left and left->data == data) or (right and right->data == data)) {
             return temp;
-        } else if (data < temp->getData()) {
+        } else if (data < temp->data) {
             temp = left;
         } else {
             temp = right;
@@ -190,16 +177,16 @@ template <typename T>
  */
 BinaryTree<T>* binaryTreeFindNode(BinaryTree<T>* root, T data) {
     BinaryTree<T>* temp = root;
-    while(data != temp->getData()) {
-        if (data < temp->getData()) {
-            if (temp->getLeft()) {
-                temp = temp->getLeft();
+    while(data != temp->data) {
+        if (data < temp->data) {
+            if (temp->left) {
+                temp = temp->left;
             } else {
                 return nullptr;
             }
-        } else if (data > temp->getData()) {
-            if (temp->getRight()) {
-                temp = temp->getRight();
+        } else if (data > temp->data) {
+            if (temp->right) {
+                temp = temp->right;
             } else {
                 return nullptr;
             }
@@ -227,60 +214,60 @@ void binaryTreeDeleteNode(BinaryTree<T>*& root, T data_to_delete) {
     // Set the oppostie child as a child that was promoted
     // Delete the node
     BinaryTree<T>* temp = binaryTreeFindNode(root, data_to_delete);
-    temp->setCount(temp->getCount() - 1);
-    if (temp->getCount() > 0) {return;}
-    if (temp == root and !temp->getLeft() and !temp->getRight()) {return;}
+    temp->count--;
+    if (temp->count > 0) {return;}
+    if (temp == root and !temp->left and !temp->right) {return;}
 
-    if (temp->getLeft()) {
+    if (temp->left) {
         // Set new head to data from the rightmost left element
         BinaryTree<T>* new_parent_info = binaryTreeGetPreOrderPredecessor(temp);
-        BinaryTree<T>* parent_of_new_parent_info = binaryTreeGetParentValueOf(root, new_parent_info->getData());
-        temp->setData(new_parent_info->getData());
-        temp->setCount(new_parent_info->getCount());
+        BinaryTree<T>* parent_of_new_parent_info = binaryTreeGetParentValueOf(root, new_parent_info->data);
+        temp->data = new_parent_info->data;
+        temp->count = new_parent_info->count;
 
-        if (new_parent_info->getLeft()) {
+        if (new_parent_info->left) {
             // If the rightmost node has a child, which has to be a left child,
             // set its contents to the rightmost node and delete the left child
-            BinaryTree<T>* to_delete = new_parent_info->getLeft();
+            BinaryTree<T>* to_delete = new_parent_info->left;
             *new_parent_info = *to_delete;
 
-            to_delete->setLeft(nullptr);
-            to_delete->setRight(nullptr);
+            to_delete->left = nullptr;
+            to_delete->right = nullptr;
             delete to_delete;
         } else {
             // The rightmost node has no children, so we can safely delete
-            delete parent_of_new_parent_info->getLeft();
-            parent_of_new_parent_info->setLeft(nullptr);
+            delete parent_of_new_parent_info->left;
+            parent_of_new_parent_info->left = nullptr;
         }
-    } else if (temp->getRight()) {
+    } else if (temp->right) {
         // Set new head to data from the leftmost right element
         BinaryTree<T>* new_parent_info = binaryTreeGetPreOrderSuccessor(temp);
-        BinaryTree<T>* parent_of_new_parent_info = binaryTreeGetParentValueOf(root, new_parent_info->getData());
-        temp->setData(new_parent_info->getData());
-        temp->setCount(new_parent_info->getCount());
+        BinaryTree<T>* parent_of_new_parent_info = binaryTreeGetParentValueOf(root, new_parent_info->data);
+        temp->data = new_parent_info->data;
+        temp->count = new_parent_info->count;
 
-        if (new_parent_info->getRight()) {
+        if (new_parent_info->right) {
             // If the leftmost node has a child, which has to be a right child,
             // set its contents to the leftmost node and delete the right child
-            BinaryTree<T>* to_delete = new_parent_info->getRight();
+            BinaryTree<T>* to_delete = new_parent_info->right;
             *new_parent_info = *to_delete;
 
-            to_delete->setLeft(nullptr);
-            to_delete->setRight(nullptr);
+            to_delete->left = nullptr;
+            to_delete->right = nullptr;
             delete to_delete;
         } else {
             // The rightmost node has no children, so we can safely delete
-            delete parent_of_new_parent_info->getRight();
-            parent_of_new_parent_info->setRight(nullptr);
+            delete parent_of_new_parent_info->right;
+            parent_of_new_parent_info->right = nullptr;
         }
     } else {
-        BinaryTree<T>* parent = binaryTreeGetParentValueOf(root, temp->getData());
-        if (temp->getData() < parent->getData()) {
-            delete parent->getLeft();
-            parent->setLeft(nullptr);
+        BinaryTree<T>* parent = binaryTreeGetParentValueOf(root, temp->data);
+        if (temp->data < parent->data) {
+            delete parent->left;
+            parent->left = nullptr;
         } else {
-            delete parent->getRight();
-            parent->setRight(nullptr);
+            delete parent->right;
+            parent->right = nullptr;
         }
     }
 }
@@ -288,43 +275,53 @@ void binaryTreeDeleteNode(BinaryTree<T>*& root, T data_to_delete) {
 template <typename T>
 void binaryTreePrefixOrder(BinaryTree<T>* root, LinkedList<T>*& list) {
     // Prefix order: root, left, right
-    for (size_t i = 0; i < root->getCount(); i++) {
-        linkedListInsertAtTail(list, root->getData());
+    for (size_t i = 0; i < root->count; i++) {
+        linkedListInsertAtTail(list, root->data);
     }
-    if (root->getLeft()) {
-        binaryTreePrefixOrder(root->getLeft(), list);
+    if (root->left) {
+        binaryTreePrefixOrder(root->left, list);
     }
-    if (root->getRight()) {
-        binaryTreePrefixOrder(root->getRight(), list);
+    if (root->right) {
+        binaryTreePrefixOrder(root->right, list);
     }
 }
 
 template <typename T>
 void  binaryTreeInfixOrder(BinaryTree<T>* root, LinkedList<T>*& list) {
     // Infix order: left, root, right
-    if (root->getLeft()) {
-        binaryTreeInfixOrder(root->getLeft(), list);
+    if (root->left) {
+        binaryTreeInfixOrder(root->left, list);
     }
-    for (size_t i = 0; i < root->getCount(); i++) {
-        linkedListInsertAtTail(list, root->getData());
+    for (size_t i = 0; i < root->count; i++) {
+        linkedListInsertAtTail(list, root->data);
     }
-    if (root->getRight()) {
-        binaryTreeInfixOrder(root->getRight(), list);
+    if (root->right) {
+        binaryTreeInfixOrder(root->right, list);
     }
 }
 
 template <typename T>
 void  binaryTreePostfixOrder(BinaryTree<T>* root, LinkedList<T>*& list) {
     // Infix order: left, right, root
-    if (root->getLeft()) {
-        binaryTreePostfixOrder(root->getLeft(), list);
+    if (root->left) {
+        binaryTreePostfixOrder(root->left, list);
     }
-    if (root->getRight()) {
-        binaryTreePostfixOrder(root->getRight(), list);
+    if (root->right) {
+        binaryTreePostfixOrder(root->right, list);
     }
-    for (size_t i = 0; i < root->getCount(); i++) {
-        linkedListInsertAtTail(list, root->getData());
+    for (size_t i = 0; i < root->count; i++) {
+        linkedListInsertAtTail(list, root->data);
     }
+}
+
+template <typename T>
+void binaryTreeBreadthFirstTraversal(BinaryTree<T>* root, LinkedList<T>*& list) {
+    // TODO: use queue
+}
+
+template <typename T>
+void binaryTreeDepthFirstTraversal(BinaryTree<T>* root, LinkedList<T>*& list) {
+    // TODO: use stack
 }
  
 #endif

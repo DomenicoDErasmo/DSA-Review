@@ -8,7 +8,7 @@ bool linkedListTestToString() {
     bool result = true;
 
     LinkedList<int>* head = new LinkedList<int>(4);
-    head->setNext(new LinkedList<int>(6));
+    head->next = new LinkedList<int>(6);
     result &= (head->toString() == "4, 6");
     delete head;
 
@@ -19,7 +19,7 @@ bool linkedListTestOstreamOperator() {
     bool result = true;
 
     LinkedList<int>* head = new LinkedList<int>(4);
-    head->setNext(new LinkedList<int>(6));
+    head->next = new LinkedList<int>(6);
 
     std::stringstream out;
     out << *head;
@@ -70,9 +70,9 @@ bool linkedListTestInsertAtHead() {
     bool result = true;
 
     LinkedList<int>* head = new LinkedList<int>(4);
-    result &= (head->getData() == 4);
+    result &= (head->data == 4);
     linkedListInsertAtHead(head, 5);
-    result &= (head->getData() == 5);
+    result &= (head->data == 5);
 
     delete head;
     return result;
@@ -82,9 +82,9 @@ bool linkedListTestInsertAtTail() {
     bool result = true;
 
     LinkedList<int>* head = new LinkedList<int>(4);
-    result &= (head->getData() == 4);
+    result &= (head->data == 4);
     linkedListInsertAtTail(head, 6);
-    result &= (head->getNext()->getData() == 6);
+    result &= (head->next->data == 6);
 
     delete head;
     return result;
@@ -130,7 +130,7 @@ bool testGetNodeAtIndex() {
     }
 
     LinkedList<int>* node_index_1 = linkedListGetNodeAtIndex(head, 1);
-    result &= (node_index_1 == head->getNext());
+    result &= (node_index_1 == head->next);
     
     LinkedList<int>* out_of_bounds = linkedListGetNodeAtIndex(head, 5);
     result &= (!out_of_bounds);
@@ -170,9 +170,9 @@ bool testDeleteNodeAtIndex() {
     for (int i = 1; i < 4; i++) {
         linkedListInsertAtTail(delete_index_1, i);
     }
-    LinkedList<int>* secondNode = delete_index_1->getNext()->getNext();
+    LinkedList<int>* secondNode = delete_index_1->next->next;
     linkedListDeleteNodeAtIndex(delete_index_1, 1);
-    result &= (delete_index_1->getNext() == secondNode);
+    result &= (delete_index_1->next == secondNode);
 
     delete delete_index_1;
     return result;
