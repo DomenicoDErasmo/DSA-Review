@@ -1,6 +1,7 @@
 #ifndef LINKED_LIST_TPP
 #define LINKED_LIST_TPP
 
+#include <iostream>
 #include <string>
 template <typename T>
 struct LinkedList {
@@ -8,10 +9,10 @@ public:
     // Constructors
     LinkedList(): data(T()), next(nullptr) {}
     LinkedList(T in_data): data(in_data), next(nullptr) {}
-    LinkedList(T in_data, LinkedList* in_next): data(in_data), next(in_next) {}
-    LinkedList(const LinkedList& other): data(other.data), next(other.next) {}
+    LinkedList(T in_data, LinkedList<T>* in_next): data(in_data), next(in_next) {}
+    LinkedList(const LinkedList<T>& other): data(other.data), next(other.next) {}
 
-    // Destructors
+    // Destructor
     ~LinkedList() {delete next;}
 
     // Utility Functions
@@ -21,22 +22,24 @@ public:
         return result;
     }
 
-    friend std::ostream& operator << (std::ostream& out, const LinkedList& list) {
+    // Operators
+    friend std::ostream& operator << (std::ostream& out, const LinkedList<T>& list) {
         out << list.toString();
         return out;
     }
 
-    const bool operator == (const LinkedList& rhs) {
+    const bool operator == (const LinkedList<T>& rhs) {
         if (!this->next and !rhs.next) {return this->data == rhs.data;}
         if (!this->next and rhs.next or this->next and !rhs.next) {return false;}
         if (this->data != rhs.data) {return false;}
         return *(this->next) == *(rhs.next);
     }
 
-    const bool operator != (const LinkedList& rhs) {
+    const bool operator != (const LinkedList<T>& rhs) {
         return !(*this == rhs);
     }
     
+    // Data Members
     T data;
     LinkedList<T>* next;
 };
@@ -150,7 +153,22 @@ template <typename T>
  */
 // TODO: fix delete node at index
 void linkedListDeleteNodeAtIndex(LinkedList<T>*& head, int pos) {
-    
+    if (linkedListGetSize(head) < pos || !head) {return;}
+    if (pos == 0) {
+        LinkedList<T>* to_delete = head;
+        head = head->next;
+        to_delete->next = nullptr;
+        delete to_delete;
+        return;
+    }
+    LinkedList<T> *prev = nullptr, *temp = head;
+    for (size_t i = 0; i < pos and temp; i++) {
+        prev = temp;
+        temp = temp->next;
+    }
+    prev->next = temp->next;
+    temp->next = nullptr;
+    delete temp;
 }
 
 template <typename T>

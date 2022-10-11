@@ -25,6 +25,7 @@ public:
         return result + "]";
     }
 
+    // Operators
     friend std::ostream& operator << (std::ostream& out, const BinaryTree<int>& root) {
         out << root.toString();
         return out;
@@ -66,6 +67,8 @@ public:
     const bool operator != (const BinaryTree<T>& other) {
         return !(*this == other);
     }
+
+    // Data Members
     T data;
     BinaryTree<T>* left;
     BinaryTree<T>* right;

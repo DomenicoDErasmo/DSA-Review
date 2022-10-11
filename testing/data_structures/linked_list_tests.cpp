@@ -167,7 +167,22 @@ bool testFindNthOccurrence() {
 bool testDeleteNodeAtIndex() {
     bool result = true;
 
-    
+    LinkedList<int>* empty = nullptr;
+    linkedListDeleteNodeAtIndex(empty, 1);
+    result &= !empty;
+
+    LinkedList<int>* delete_first = new LinkedList<int>(4);
+    linkedListInsertAtTail(delete_first, 5);
+    linkedListDeleteNodeAtIndex(delete_first, 0);
+    result &= (delete_first->data == 5);
+
+    LinkedList<int>* delete_second = new LinkedList<int>(4);
+    linkedListInsertAtTail(delete_second, 5);
+    linkedListInsertAtTail(delete_second, 6);
+    linkedListDeleteNodeAtIndex(delete_second, 1);
+    result &= (delete_second->data == 4);
+    result &= (delete_second->next->data == 6);
+
 
     return result;
 }
@@ -178,7 +193,7 @@ bool testDeleteNthOccurrence() {
     LinkedList<int>* not_in_list = new LinkedList<int>(0);
     linkedListInsertAtHead(not_in_list, 2);
     int original_size = linkedListGetSize(not_in_list);
-    linkedListDeleteNthOccurrence(not_in_list, 2, 1);
+    linkedListDeleteNthOccurrence(not_in_list, 3, 1);
     result &= (linkedListGetSize(not_in_list) == original_size);
 
     LinkedList<int>* not_enough_found = new LinkedList<int>(2);

@@ -9,6 +9,7 @@ struct Stack {
     Stack(T data): head(new LinkedList<T>(data)) {}
     ~Stack() {delete head;}
 
+    // Data Members
     LinkedList<T>* head;
 };
 
