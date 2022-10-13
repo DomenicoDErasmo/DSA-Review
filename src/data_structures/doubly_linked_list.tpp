@@ -4,11 +4,6 @@
 #include <iostream>
 #include <string>
 
-enum SearchDirection {
-    SEARCH_DIRECTION_PREV,
-    SEARCH_DIRECTION_NEXT
-};
-
 template <typename T>
 struct DoublyLinkedList {
     // Constructors
@@ -46,15 +41,12 @@ struct DoublyLinkedList {
         return !(*this == rhs);
     }
 
-    // Getters
-    DoublyLinkedList<T>* getPrev() {return prev;}
-    DoublyLinkedList<T>* getNext() {return next;}
-
     // Data Members
     T data;
     DoublyLinkedList<T>* prev;
     DoublyLinkedList<T>* next;
 };
+
 
 template <typename T>
 void doublyLinkedListInsertPrev(DoublyLinkedList<T>*& head, T in_data) {
@@ -62,8 +54,8 @@ void doublyLinkedListInsertPrev(DoublyLinkedList<T>*& head, T in_data) {
         head = new DoublyLinkedList<T>(in_data);
         return;
     }
-    DoublyLinkedList<T>* new_node = new DoublyLinkedList(in_data, head->prev, head);
-    head->prev->next = new_node;
+    DoublyLinkedList<T>* new_node = new DoublyLinkedList<T>(in_data, head->prev, head);
+    if (new_node->prev) {new_node->prev->next = new_node;}
     head->prev = new_node;
 }
 
@@ -73,15 +65,22 @@ void doublyLinkedListInsertNext(DoublyLinkedList<T>*& head, T in_data) {
         head = new DoublyLinkedList<T>(in_data);
         return;
     }
-    DoublyLinkedList<T>* new_node = new DoublyLinkedList(in_data, head, head->next);
-    head->next->prev = new_node;
+    DoublyLinkedList<T>* new_node = new DoublyLinkedList<T>(in_data, head, head->next);
+    if (new_node->next) {new_node->next->prev = new_node;}
     head->next = new_node;
 }
 
 template <typename T>
-void doublyLinkedListGetSize(const DoublyLinkedList<T>*& head, SearchDirection direction) {
-    int result = 0;
-
+void doublyLinkedListDeleteNode(DoublyLinkedList<T>*& node) {
+    if (node->prev) {
+        node->prev->next = node->next;
+    }
+    if (node->next) {
+        node->next->prev = node->prev;
+    }
+    node->prev = nullptr;
+    node->next = nullptr;
+    delete node;
 }
 
 
