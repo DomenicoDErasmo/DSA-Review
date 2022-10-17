@@ -1,7 +1,8 @@
 #include <iostream>
-#include "data_structures/doubly_linked_list.tpp"
+#include "data_structures/queue.tpp"
 
 int main() {
-    // Init
+    Queue<int> queue(5);
+    std::cout << queue.head << ", " << queue.tail << std::endl;
     return 0;
 }

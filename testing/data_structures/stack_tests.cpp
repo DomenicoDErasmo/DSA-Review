@@ -39,10 +39,23 @@ bool stackTestPop() {
     return result;
 }
 
+bool stackTestEmpty() {
+    bool result = true;
+
+    Stack<int> empty;
+    result &= (stackIsEmpty(empty));
+
+    Stack<int> not_empty(4);
+    result &= (!stackIsEmpty(not_empty));
+
+    return result;
+}
+
 TestGroup stackRegisterTests() {
     TestGroup test_group("stacks");
     test_group.addTest(UnitTest(stackTestTop, "top"));
     test_group.addTest(UnitTest(stackTestPush, "push"));
     test_group.addTest(UnitTest(stackTestPop, "pop"));
+    test_group.addTest(UnitTest(stackTestEmpty, "empty"));
     return test_group;
 }

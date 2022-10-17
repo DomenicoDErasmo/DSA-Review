@@ -71,16 +71,25 @@ void doublyLinkedListInsertNext(DoublyLinkedList<T>*& head, T in_data) {
 }
 
 template <typename T>
-void doublyLinkedListDeleteNode(DoublyLinkedList<T>*& node) {
-    if (node->prev) {
-        node->prev->next = node->next;
+void doublyLinkedListDeleteNode(DoublyLinkedList<T>*& head, DoublyLinkedList<T>* to_delete) {
+    if (!head) {return;}
+    
+    if (to_delete == head) {
+        head = head->next;
+        to_delete->next = nullptr;
+        delete to_delete;
+        return;
     }
-    if (node->next) {
-        node->next->prev = node->prev;
+    DoublyLinkedList<T>* temp = head;
+    while (temp != to_delete && temp) {
+        temp = temp->next;
     }
-    node->prev = nullptr;
-    node->next = nullptr;
-    delete node;
+    if (temp) {
+        DoublyLinkedList<T>* temp2 = temp->prev;
+        temp2->next = temp->next;
+        temp->next = nullptr;
+        delete temp;
+    }
 }
 
 
