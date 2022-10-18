@@ -199,12 +199,6 @@ BinaryTree<T>* binaryTreeFindNode(BinaryTree<T>* root, T data) {
 }
 
 template <typename T>
-struct TreeAccessors {
-    T (*getter)();
-    void (*setter)(T param);
-};
-
-template <typename T>
 /**
  * @brief Searches for a node in the tree and deletes it if found
  * 
