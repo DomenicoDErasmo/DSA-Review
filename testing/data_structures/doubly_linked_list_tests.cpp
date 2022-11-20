@@ -1,6 +1,6 @@
 #include "doubly_linked_list_tests.hpp"
 
-#include <data_structures/doubly_linked_list.tpp>
+#include <data_structures/doubly_linked_list.cpp>
 #include <sstream>
 
 bool doublyLinkedListTestInsertPrev() {

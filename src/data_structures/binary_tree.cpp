@@ -2,7 +2,7 @@
 #define BINARY_TREE_TPP
 
 #include <iostream>
-#include "linked_list.tpp"
+#include "linked_list.cpp"
 
 template <typename T>
 struct BinaryTree {

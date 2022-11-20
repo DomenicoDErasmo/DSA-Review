@@ -2,8 +2,8 @@
 #define GRAPH_TPP
 
 #include <iostream>
-#include "binary_tree.tpp"
-#include "linked_list.tpp"
+#include "binary_tree.cpp"
+#include "linked_list.cpp"
 
 template <typename T>
 struct Graph {

@@ -1,7 +1,7 @@
 #include "binary_tree_tests.hpp"
 
-#include <data_structures/binary_tree.tpp>
-#include <data_structures/linked_list.tpp>
+#include <data_structures/binary_tree.cpp>
+#include <data_structures/linked_list.cpp>
 #include <iostream>
 #include <sstream>
 

@@ -1,6 +1,6 @@
 #include "stack_tests.hpp"
 
-#include <data_structures/stack.tpp>
+#include <data_structures/stack.cpp>
 
 bool stackTestTop() {
     bool result = true;

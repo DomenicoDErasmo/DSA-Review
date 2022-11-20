@@ -21,8 +21,8 @@ test:
 .PHONY: scaffold
 scaffold:
 	@echo Scaffolding folder structure...
-	-@setlocal enableextensions enabledelayedexpansion && mkdir $(BIN) 2>NUL || cd .
 	-@setlocal enableextensions enabledelayedexpansion && mkdir $(addprefix $(OBJ), $(SRC_SUBDIRS)) 2>NUL || cd .
+	-@setlocal enableextensions enabledelayedexpansion && mkdir $(BIN) 2>NUL || cd .
 	@echo Done.
 
 $(OBJ)/%.$(SRC_EXTENSION).o: %.$(SRC_EXTENSION) # compile .cpp to .cpp.o object

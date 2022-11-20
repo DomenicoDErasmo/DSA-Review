@@ -1,7 +1,7 @@
 #ifndef STACK_TPP
 #define STACK_TPP
 
-#include "linked_list.tpp"
+#include "linked_list.cpp"
 
 template <typename T>
 struct Stack {

@@ -1,6 +1,6 @@
 #include "queue_tests.hpp"
 
-#include <data_structures/queue.tpp>
+#include <data_structures/queue.cpp>
 
 bool queueTestPush() {
     bool result = true;

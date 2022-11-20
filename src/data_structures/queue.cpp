@@ -1,7 +1,7 @@
 #ifndef QUEUE_TPP
 #define QUEUE_TPP
 
-#include "doubly_linked_list.tpp"
+#include "doubly_linked_list.cpp"
 
 template <typename T>
 struct Queue {
