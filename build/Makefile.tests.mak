@@ -3,7 +3,7 @@ CURRENT_DIR		:= $(subst /,\,${CURDIR})
 TESTING			:= testing
 FILE_EXTENSION	:= cpp
 INCLUDE_FLAGS 	:= -I src -I $(TESTING)
-COMPILER_FLAGS	:= -g
+COMPILER_FLAGS 	:= -g -MD -Wall -Werror -Wvla -Wgnu-folding-constant -Wno-missing-braces -fdeclspec
 SRC_SUBDIRS 	:= \$(TESTING) $(subst $(CURRENT_DIR),,$(shell dir $(TESTING) /S /AD /B | findstr /i $(TESTING)))
 
 # Make does not offer a recursive wildcard function, so here's one:
@@ -28,7 +28,7 @@ scaffold:
 
 $(OBJ)/%.$(FILE_EXTENSION).o: %.$(FILE_EXTENSION) # compile .cpp to .cpp.o object
 	@echo   $<...
-	$(COMPILER) $< $(COMPILER_FLAGS) -c -o $@ $(INCLUDE_FLAGS)
+	@$(COMPILER) $< $(COMPILER_FLAGS) -c -o $@ $(INCLUDE_FLAGS)
 
 .PHONY: link
 link: $(OBJ_FILES)

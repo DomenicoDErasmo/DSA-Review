@@ -59,7 +59,7 @@ bool doublyLinkedListTestToString() {
     result &= (head->to_string() == "4 <-> 2 <-> 6");
     delete head;
 
-    return true;
+    return result;
 }
 
 bool doublyLinkedListTestOstreamOperator() {

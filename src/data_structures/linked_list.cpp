@@ -30,7 +30,7 @@ public:
 
     const bool operator == (const LinkedList<T>& rhs) {
         if (!this->next and !rhs.next) {return this->data == rhs.data;}
-        if (!this->next and rhs.next or this->next and !rhs.next) {return false;}
+        if ((!this->next and rhs.next) or (this->next and !rhs.next)) {return false;}
         if (this->data != rhs.data) {return false;}
         return *(this->next) == *(rhs.next);
     }

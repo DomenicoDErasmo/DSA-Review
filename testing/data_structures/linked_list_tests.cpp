@@ -235,7 +235,7 @@ bool testReverse() {
     linkedListReverse(head);
     result &= (head == reverse);
 
-    return true;
+    return result;
 }
 
 TestGroup linkedListRegisterTests() {

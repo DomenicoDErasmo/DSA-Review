@@ -131,7 +131,7 @@ bool binaryTreeTestGetPreOrderPredecessor() {
     result &= (binaryTreeGetPreOrderPredecessor(left_children) == left_children->left->right);
     delete left_children;
 
-    return true;
+    return result;
 }
 
 bool binaryTreeTestGetPreOrderSuccessor() {
@@ -148,7 +148,7 @@ bool binaryTreeTestGetPreOrderSuccessor() {
     result &= (binaryTreeGetPreOrderSuccessor(right_children) == right_children->right->left);
     delete right_children;
 
-    return true;
+    return result;
 }
 
 bool binaryTreeTestAssignmentOperator() {
