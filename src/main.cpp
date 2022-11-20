@@ -1,12 +1,13 @@
 #include <iostream>
+#include <type_traits>
 #include "data_structures/graph.tpp"
 #include "data_structures/binary_tree.tpp"
 
 int main() {
     Graph<int>* graph = new Graph<int>();
     graphInsertEdge(graph, 4);
-    graphInsertNode(graph, 4, 5);
-    std::cout << graph->edges->data << std::endl;
+    std::cout << *graph << std::endl;
 
     delete graph;
+    return 0;
 }

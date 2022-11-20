@@ -224,6 +224,7 @@ void binaryTreeDeleteNode(BinaryTree<T>*& root, T data_to_delete) {
     // Promote one child to occupy the vacancy
     // Set the oppostie child as a child that was promoted
     // Delete the node
+
     BinaryTree<T>* temp = binaryTreeFindNode(root, data_to_delete);
     temp->count--;
     if (temp->count > 0) {return;}
