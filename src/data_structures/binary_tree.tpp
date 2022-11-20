@@ -92,8 +92,11 @@ template <typename T>
  * @param data_to_insert Data of some arbitrary type to be inserted
  */
 void binaryTreeInsertNode(BinaryTree<T>*& root, T data_to_insert) {
-    if (!root) root = new BinaryTree<T>(data_to_insert);
-
+    if (!root) {
+        root = new BinaryTree<T>(data_to_insert);
+        return;
+    }
+    
     // We should only hit this if the tree was empty from a previous deletion
     if (!root->left and !root->right and root->count == 0) {
         root->data = data_to_insert;
