@@ -18,20 +18,21 @@ public:
     }
 
     // Utility Functions
-    std::string toString() const {
+    std::string to_string() const {
+        // Only works for types in which the underlying data type works with to_string
         std::string result = "[" + std::to_string(data);
-        if (left) {result += (", " + left->toString());}
-        if (right) {result += (", " + right->toString());}
+        if (left) {result += (", " + left->to_string());}
+        if (right) {result += (", " + right->to_string());}
         return result + "]";
     }
 
     // Operators
-    friend std::ostream& operator << (std::ostream& out, const BinaryTree<int>& root) {
-        out << root.toString();
+    friend std::ostream& operator << (std::ostream& out, const BinaryTree<T>& root) {
+        out << root.to_string();
         return out;
     }
 
-    bool diffrentChildren(const BinaryTree<T>& other) {
+    bool differentChildren(const BinaryTree<T>& other) {
         return (left and !other.left) 
         or (!left and other.left) 
         or (right and !other.right) 
@@ -48,7 +49,7 @@ public:
     }
 
     const bool operator == (const BinaryTree<T>& other) {
-        if (data != other.data or diffrentChildren(other)) {
+        if (data != other.data or differentChildren(other)) {
             return false;
         } else if (!left and !right and !other.left and !other.right) {
             return data == other.data;
@@ -62,6 +63,14 @@ public:
             }
             return result;
         }
+    }
+
+    const bool operator < (const BinaryTree<T>& other) {
+        return data < other.data;
+    }
+
+    const bool operator > (const BinaryTree<T>& other) {
+        return data > other.data;
     }
 
     const bool operator != (const BinaryTree<T>& other) {
@@ -80,9 +89,11 @@ template <typename T>
  * @brief Creates a BinaryTree node and inserts it into the tree
  * 
  * @param root A reference to a pointer of the binary tree to insert into
- * @param data Data of some arbitrary type to be inserted
+ * @param data_to_insert Data of some arbitrary type to be inserted
  */
 void binaryTreeInsertNode(BinaryTree<T>*& root, T data_to_insert) {
+    if (!root) root = new BinaryTree<T>(data_to_insert);
+
     // We should only hit this if the tree was empty from a previous deletion
     if (!root->left and !root->right and root->count == 0) {
         root->data = data_to_insert;

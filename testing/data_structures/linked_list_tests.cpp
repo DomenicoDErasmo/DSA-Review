@@ -9,7 +9,7 @@ bool linkedListTestToString() {
 
     LinkedList<int>* head = new LinkedList<int>(4);
     head->next = new LinkedList<int>(6);
-    result &= (head->toString() == "4, 6");
+    result &= (head->to_string() == "4, 6");
     delete head;
 
     return result;

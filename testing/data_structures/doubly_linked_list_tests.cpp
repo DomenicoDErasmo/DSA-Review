@@ -56,7 +56,7 @@ bool doublyLinkedListTestToString() {
     DoublyLinkedList<int>* head = new DoublyLinkedList<int>(4);
     doublyLinkedListInsertNext(head, 6);
     doublyLinkedListInsertNext(head, 2);
-    result &= (head->toString() == "4 <-> 2 <-> 6");
+    result &= (head->to_string() == "4 <-> 2 <-> 6");
     delete head;
 
     return true;

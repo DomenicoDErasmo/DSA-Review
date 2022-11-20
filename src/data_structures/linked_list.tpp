@@ -16,15 +16,15 @@ public:
     ~LinkedList() {delete next;}
 
     // Utility Functions
-    std::string toString() const {
+    std::string to_string() const {
         std::string result = std::to_string(data);
-        if (next) {result += (", " + next->toString());}
+        if (next) {result += (", " + next->to_string());}
         return result;
     }
 
     // Operators
     friend std::ostream& operator << (std::ostream& out, const LinkedList<T>& list) {
-        out << list.toString();
+        out << list.to_string();
         return out;
     }
 

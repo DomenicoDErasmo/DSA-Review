@@ -1,8 +1,10 @@
 #include <iostream>
-#include "data_structures/queue.tpp"
+#include "data_structures/graph.tpp"
 
 int main() {
-    Queue<int> queue(5);
-    std::cout << queue.head << ", " << queue.tail << std::endl;
-    return 0;
+    Graph<int> graph;
+    graphAddEdge(&graph, 4);
+    std::cout << "graph.edges->data: " << graph.edges->data << std::endl;
+    graphAddNode(&graph, 4, 5);
+    std::cout << "graph.edges->data: " << graph.edges->right->data << std::endl;
 }
