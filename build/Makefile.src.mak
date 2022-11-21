@@ -4,6 +4,7 @@ SRC				:= src
 SRC_EXTENSION	:= cpp
 INCLUDE_FLAGS 	:= -I $(SRC)
 COMPILER_FLAGS 	:= -g -MD -Wall -Werror -Wvla -Wgnu-folding-constant -Wno-missing-braces -fdeclspec
+LINKER_FLAGS 	:= -g
 SRC_SUBDIRS 	:= \$(SRC) $(subst $(CURRENT_DIR),,$(shell dir $(SRC) /S /AD /B | findstr /i $(SRC)))
 
 # Make does not offer a recursive wildcard function, so here's one:
@@ -31,7 +32,7 @@ $(OBJ)/%.$(SRC_EXTENSION).o: %.$(SRC_EXTENSION) # compile .cpp to .cpp.o object
 
 .PHONY: link
 link: $(OBJ_FILES)
-	@$(COMPILER) $(OBJ_FILES) -o $(BIN)/$(SRC).exe
+	@$(COMPILER) $(OBJ_FILES) -o $(BIN)/$(SRC).exe $(LINKER_FLAGS)
 
 .PHONY: clean
 clean:

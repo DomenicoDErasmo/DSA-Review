@@ -4,6 +4,7 @@ TESTING			:= testing
 FILE_EXTENSION	:= cpp
 INCLUDE_FLAGS 	:= -I src -I $(TESTING)
 COMPILER_FLAGS 	:= -g -MD -Wall -Werror -Wvla -Wgnu-folding-constant -Wno-missing-braces -fdeclspec
+LINKER_FLAGS 	:= -g
 SRC_SUBDIRS 	:= \$(TESTING) $(subst $(CURRENT_DIR),,$(shell dir $(TESTING) /S /AD /B | findstr /i $(TESTING)))
 
 # Make does not offer a recursive wildcard function, so here's one:
@@ -22,8 +23,8 @@ test:
 .PHONY: scaffold
 scaffold:
 	@echo Scaffolding folder structure...
-	-@setlocal enableextensions enabledelayedexpansion && mkdir $(BIN) 2>NUL || cd .
 	-@setlocal enableextensions enabledelayedexpansion && mkdir $(addprefix $(OBJ), $(SRC_SUBDIRS)) 2>NUL || cd .
+	-@setlocal enableextensions enabledelayedexpansion && mkdir $(BIN) 2>NUL || cd .
 	@echo Done.
 
 $(OBJ)/%.$(FILE_EXTENSION).o: %.$(FILE_EXTENSION) # compile .cpp to .cpp.o object
@@ -32,7 +33,7 @@ $(OBJ)/%.$(FILE_EXTENSION).o: %.$(FILE_EXTENSION) # compile .cpp to .cpp.o objec
 
 .PHONY: link
 link: $(OBJ_FILES)
-	@$(COMPILER) $(OBJ_FILES) -o $(BIN)/$(TESTING).exe
+	@$(COMPILER) $(OBJ_FILES) -o $(BIN)/$(TESTING).exe $(LINKER_FLAGS)
 
 .PHONY: clean
 clean:
