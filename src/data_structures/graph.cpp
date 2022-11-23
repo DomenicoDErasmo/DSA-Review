@@ -19,6 +19,7 @@ public:
         LinkedList<BinaryTree<T>>* temp = inorder;
         std::string result = "[\n";
         while (temp) {
+            // in-order traversal of inner tree
             result += "    " + temp->data.to_string();
             temp = temp->next;
             result += "\n";
