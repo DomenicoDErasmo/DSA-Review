@@ -14,7 +14,7 @@ public:
     // Utility Functions
     std::string to_string() const {
         // in-order traversal of outer binary tree
-        LinkedList<BinaryTree<T>>* inorder;
+        LinkedList<BinaryTree<T>>* inorder = nullptr;
         binaryTreeInfixOrder(edges, inorder);
         LinkedList<BinaryTree<T>>* temp = inorder;
         std::string result = "[\n";
