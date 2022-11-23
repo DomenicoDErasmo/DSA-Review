@@ -193,23 +193,9 @@ template <typename T>
  * @return BinaryTree<T>* A pointer to a tree node or nullptr if not found
  */
 BinaryTree<T>* binaryTreeFindNode(BinaryTree<T>* root, T data) {
-    BinaryTree<T>* temp = root;
-    while(data != temp->data) {
-        if (data < temp->data) {
-            if (temp->left) {
-                temp = temp->left;
-            } else {
-                return nullptr;
-            }
-        } else if (data > temp->data) {
-            if (temp->right) {
-                temp = temp->right;
-            } else {
-                return nullptr;
-            }
-        }
-    }
-    return temp;
+    if (!root || root->data == data) return root;
+    if (data < root->data) return binaryTreeFindNode(root->left, data);
+    if (data > root->data) return binaryTreeFindNode(root->right, data);
 }
 
 template <typename T>
@@ -286,41 +272,35 @@ void binaryTreeDeleteNode(BinaryTree<T>*& root, T data_to_delete) {
 
 template <typename T>
 void binaryTreePrefixOrder(BinaryTree<T>* root, LinkedList<T>*& list) {
+    if (!root) return;
+
     // Prefix order: root, left, right
     for (size_t i = 0; i < root->count; i++) {
         linkedListInsertAtTail(list, root->data);
     }
-    if (root->left) {
-        binaryTreePrefixOrder(root->left, list);
-    }
-    if (root->right) {
-        binaryTreePrefixOrder(root->right, list);
-    }
+    binaryTreePrefixOrder(root->left, list);
+    binaryTreePrefixOrder(root->right, list);
 }
 
 template <typename T>
 void  binaryTreeInfixOrder(BinaryTree<T>* root, LinkedList<T>*& list) {
+    if (!root) return;
+
     // Infix order: left, root, right
-    if (root->left) {
-        binaryTreeInfixOrder(root->left, list);
-    }
+    binaryTreeInfixOrder(root->left, list);
     for (size_t i = 0; i < root->count; i++) {
         linkedListInsertAtTail(list, root->data);
     }
-    if (root->right) {
-        binaryTreeInfixOrder(root->right, list);
-    }
+    binaryTreeInfixOrder(root->right, list);
 }
 
 template <typename T>
 void  binaryTreePostfixOrder(BinaryTree<T>* root, LinkedList<T>*& list) {
+    if (!root) return;
+
     // Infix order: left, right, root
-    if (root->left) {
-        binaryTreePostfixOrder(root->left, list);
-    }
-    if (root->right) {
-        binaryTreePostfixOrder(root->right, list);
-    }
+    binaryTreePostfixOrder(root->left, list);
+    binaryTreePostfixOrder(root->right, list);
     for (size_t i = 0; i < root->count; i++) {
         linkedListInsertAtTail(list, root->data);
     }
