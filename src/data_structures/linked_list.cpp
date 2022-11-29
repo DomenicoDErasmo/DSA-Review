@@ -46,6 +46,13 @@ struct LinkedList {
     }
 
     // Utility Functions
+
+    /**
+     * @brief Swaps the provided linked lists
+     * 
+     * @param first The first linked list to swap
+     * @param second The second linked list to swap
+     */
     friend void swap(LinkedList<T>& first, LinkedList<T>& second) {
         // enables ADL - we could use namespaces to change functionality
         using std::swap;
@@ -55,6 +62,13 @@ struct LinkedList {
     }
 };
 
+/**
+ * @brief Inserts data at the tail of the linked list
+ * 
+ * @tparam T The type of the linked list
+ * @param head A double pointer to the head of the linked list
+ * @param data The data to insert
+ */
 template <typename T>
 void linkedListInsertAtTail(LinkedList<T>** head, const T& data) {
     if (!(*head)) {
@@ -70,12 +84,26 @@ void linkedListInsertAtTail(LinkedList<T>** head, const T& data) {
     temp->next = new LinkedList<T>(data);
 }
 
+/**
+ * @brief Inserts data at the head of the linked list
+ * 
+ * @tparam T The type of the linked list
+ * @param head A double pointer to the head of the linked list
+ * @param data The data to insert
+ */
 template <typename T>
 void linkedListInsertAtHead(LinkedList<T>** head, const T& data) {
     LinkedList<T>* temp = *head;
     *head = new LinkedList<T>(data, temp);
 }
 
+/**
+ * @brief Gets the length of the linked list
+ * 
+ * @tparam T The type of the linked list
+ * @param head A pointer to the head of the linked list
+ * @return int The length of the list
+ */
 template <typename T>
 int linkedListGetLength(LinkedList<T>*const& head) {
     LinkedList<T>* temp = head;
@@ -93,6 +121,7 @@ int linkedListGetLength(LinkedList<T>*const& head) {
  * Because the node comes from the list, it doesn't need to be deleted;
  * it gets deleted when the list's head is deleted.
  * 
+ * @tparam T The type of the linked list
  * @param head The head of the list to search
  * @param data The data to search for
  * @param n The occurrence of the data in the list
