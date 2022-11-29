@@ -4,7 +4,7 @@ FOLDER			:= src
 EXTENSION		:= cpp
 INCLUDE_FLAGS 	:= -I $(FOLDER)
 COMPILER_FLAGS 	:= -g -MD -Wall -Werror -Wvla -Wgnu-folding-constant -Wno-missing-braces -fdeclspec
-LINKER_FLAGS 	:= -g  # For debugging!
+LINKER_FLAGS 	:= -g # For debugging!
 SUBDIRS 		:= \$(FOLDER) $(subst $(CURRENT_DIR),,$(shell dir $(FOLDER) /S /AD /B | findstr /i $(FOLDER)))
 
 # Make does not offer a recursive wildcard function, so here's one:
@@ -18,6 +18,7 @@ EXECUTABLE		:= $(BIN)\$(FOLDER).exe
 
 build: scaffold link
 
+# Builds the bin and obj folders
 .PHONY: scaffold
 scaffold:
 	@echo Scaffolding folder structure...

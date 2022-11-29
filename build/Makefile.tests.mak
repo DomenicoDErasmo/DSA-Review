@@ -18,6 +18,7 @@ EXECUTABLE		:= $(BIN)\$(FOLDER).exe
 
 build: scaffold link
 
+# Builds the bin and obj folders
 .PHONY: scaffold
 scaffold:
 	@echo Scaffolding folder structure...
