@@ -3,8 +3,7 @@
         {
             "name": "Windows",
             "includePath": [
-                "${workspaceFolder}/src/**",
-                "${workspaceFolder}/testing/**"
+                "${workspaceFolder}/**"
             ],
             "compilerPath": "C:\\Program Files\\LLVM\\bin\\clang++.exe",
             "cStandard": "c17",
