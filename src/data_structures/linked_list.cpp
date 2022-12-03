@@ -35,7 +35,8 @@ struct LinkedList {
      * @brief Copy assignment operator. Uses the copy-and-swap idiom from
      * https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
      * 
-     * As discussed in the aforementioned link, we pass by value for optimization.
+     * As discussed in the aforementioned link, 
+     * we pass by value for optimization.
      * 
      * @param rhs The linked list to copy
      * @return LinkedList<T>& A copied linked list
@@ -116,8 +117,8 @@ int linkedListGetLength(LinkedList<T>*const& head) {
 }
 
 /**
- * @brief Finds the Nth occurrence of the data in the list and returns its index.
- * Assumes that the type has an equality operator.
+ * @brief Finds the Nth occurrence of the data in the list 
+ * and returns its index. Assumes that the type has an equality operator.
  * 
  * @tparam T The type of the linked list
  * @param head The head of the list to search
