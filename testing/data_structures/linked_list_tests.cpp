@@ -1,7 +1,5 @@
 #include <data_structures/linked_list_tests.hpp>
-#include "data_structures/linked_list.cpp"
 #include <string>
-#include "test_utils/test_group.hpp"
 
 bool linkedListTestDefaultConstructor() {
     bool result = true;
@@ -244,7 +242,7 @@ bool linkedListTestDeleteNthOccurrence() {
 }
 
 void linkedListTestsRegisterTests(TestManager* test_manager) {
-    TestGroup test_group("linked lists");
+    TestGroup test_group("linked list");
     testGroupAddTest(&test_group, UnitTest("default constructor",
         linkedListTestDefaultConstructor));
     testGroupAddTest(&test_group, UnitTest("data constructor",
