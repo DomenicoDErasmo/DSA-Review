@@ -116,6 +116,57 @@ int linkedListGetLength(LinkedList<T>*const& head) {
 }
 
 /**
+ * @brief Finds the Nth occurrence of the data in the list and returns its index.
+ * Assumes that the type has an equality operator.
+ * 
+ * @tparam T The type of the linked list
+ * @param head The head of the list to search
+ * @param data The data to search for
+ * @param n The occurrence of the data in the list
+ * @return int The position of the nth occurrence of the data
+ */
+template <typename T>
+int linkedListPositionOfNthOccurrence(
+        LinkedList<T>* const& head, const T& data, const int& n) {
+    int result = -1, num_found = 0;
+    LinkedList<T>* temp = head;
+    for (int i = 0; i < linkedListGetLength(head); i++) {
+        if (temp->data == data && num_found == n - 1) {
+            result = i;
+            break;
+        } else if (temp->data == data) {
+            num_found++;
+        }
+        temp = temp->next;
+    }
+
+    return result;
+}
+
+/**
+ * @brief Retrieves the Nth node from the list
+ * 
+ * @tparam T The type of the linked list
+ * @param head The head of the list to pull a node from
+ * @param n The positional node to retrieve
+ * @return LinkedList<T>* A node from the list
+ */
+template <typename T>
+LinkedList<T>* linkedListGetNthNode(LinkedList<T>* const& head, int n) {
+    if (n == -1) {return nullptr;}
+
+    LinkedList<T> *temp = head;
+    for (size_t i = 0; i < n; i++) {
+        if (!temp) {
+            break;
+        } else {
+            temp = temp->next;
+        }
+    }
+    return temp;
+}
+
+/**
  * @brief Finds the Nth occurrence of the data in the list and returns its node.
  * Assumes that the type has an equality operator.
  * Because the node comes from the list, it doesn't need to be deleted;
@@ -129,21 +180,43 @@ int linkedListGetLength(LinkedList<T>*const& head) {
  */
 template <typename T>
 LinkedList<T>* linkedListFindNthOccurrence(
-        LinkedList<T>* const& head, T data, int n) {
-    LinkedList<T> *result = nullptr, *temp = head;
-    int num_found = 0;
+        LinkedList<T>* const& head,
+        const T& data,
+        const int& n) {
+    int position = linkedListPositionOfNthOccurrence(head, data, n);
+    if (position == -1) {return nullptr;}
+    return linkedListGetNthNode(head, position);
+}
 
-    for (int i = 0; i < linkedListGetLength(head); i++) {
-        if (temp->data == data && num_found == n - 1) {
-            result = temp;
-            break;
-        } else if (temp->data == data) {
-            num_found++;
-        }
-        temp = temp->next;
-    }
+/**
+ * @brief Deletes the nth occurrence of the data from the list, if it exists
+ * 
+ * @tparam T The type of the linked list
+ * @param head The head of the list to search
+ * @param data The data to search for
+ * @param n The occurrence of the data in the list
+ */
+template <typename T>
+void linkedListDeleteNthOccurrence(
+        LinkedList<T>** head,
+        const T& data,
+        const int& n) {
+    int position = linkedListPositionOfNthOccurrence(*head, data, n);
+    if (position == -1) {return;}
 
-    return result;
+    // no need to make separate cases for head and not head
+    LinkedList<T> *dummy = new LinkedList<T>(0, *head), *prev = dummy;
+    for (int i = 0; i < position - 1; i++) {prev = prev->next;}
+
+    LinkedList<T> *temp = prev->next;
+    prev->next = temp->next;
+    temp->next = nullptr;
+    delete temp;
+
+    // need to delete dummy down here because for case of head, prev = dummy
+    *head = prev->next;
+    dummy->next = nullptr;
+    delete dummy;
 }
 
 #endif
