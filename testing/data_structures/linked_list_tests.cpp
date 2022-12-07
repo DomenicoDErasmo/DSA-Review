@@ -28,12 +28,13 @@ bool linkedListTestDataConstructor() {
 bool linkedListTestFullConstructor() {
     bool result = true;
 
-    // We don't call delete because temp is linked to int_list
-    // int_list is allocated on the stack, so it automatically gets destroyed
+    // We don't call delete on temp because 
+    // temp is deleted when we delete int_list
     LinkedList<int>* temp = new LinkedList<int>(5);
-    LinkedList<int> int_list(4, temp);
-    result &= (int_list.data == 4);
-    result &= (int_list.next->data == 5);
+    LinkedList<int>* int_list = new LinkedList<int>(4, temp);
+    result &= (int_list->data == 4);
+    result &= (int_list->next->data == 5);
+    delete int_list;
 
     return result;
 }
@@ -241,6 +242,33 @@ bool linkedListTestDeleteNthOccurrence() {
     return result;
 }
 
+bool linkedListTestEqualityOperator() {
+    bool result = true;
+
+    LinkedList<int>* unequal_rhs = new LinkedList<int>(5);
+    LinkedList<int>* unequal_lhs = new LinkedList<int>(2);
+    result &= !(*unequal_lhs == *unequal_rhs);
+    delete unequal_lhs;
+    delete unequal_rhs;
+
+    LinkedList<int>* different_size_lhs = new LinkedList<int>(3);
+    LinkedList<int>* different_size_rhs = new LinkedList<int>(3);
+    linkedListInsertAtTail(&different_size_rhs, 6);
+    result &= !(*different_size_lhs == *different_size_rhs);
+    delete different_size_lhs;
+    delete different_size_rhs;
+
+    LinkedList<int>* equals_lhs = new LinkedList<int>(4);
+    LinkedList<int>* equals_rhs = new LinkedList<int>(4);
+    linkedListInsertAtTail(&equals_lhs, 6);
+    linkedListInsertAtTail(&equals_rhs, 6);
+    result &= *equals_lhs == *equals_rhs;
+    delete equals_lhs;
+    delete equals_rhs;
+
+    return result;
+}
+
 void linkedListTestsRegisterTests(TestManager* test_manager) {
     TestGroup test_group("linked list");
     testGroupAddTest(&test_group, UnitTest("default constructor",
@@ -267,5 +295,7 @@ void linkedListTestsRegisterTests(TestManager* test_manager) {
         linkedListTestFindNthOccurrence));
     testGroupAddTest(&test_group, UnitTest("delete nth occurrence",
         linkedListTestDeleteNthOccurrence));
+    testGroupAddTest(&test_group, UnitTest("equality operator",
+        linkedListTestEqualityOperator));
     test_manager->test_groups.push_back(test_group);
 }

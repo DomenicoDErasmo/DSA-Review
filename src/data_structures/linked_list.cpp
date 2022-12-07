@@ -12,22 +12,16 @@ struct LinkedList {
     // Default - Assumes that the type has a default constructor
     LinkedList(): data(T()), next(nullptr) {}
 
-    explicit LinkedList(const T& data): data(data), next(nullptr) {}
+    LinkedList(const T& data): data(data), next(nullptr) {}
     LinkedList(const T& data,
                LinkedList<T>* const& next): data(data), next(next) {}
     LinkedList(const LinkedList<T>& other) {
         data = other.data;
-        if (other.next) {
-            next = new LinkedList<T>(*other.next);
-        } else {
-            next = nullptr;
-        }
+        next = other.next ? new LinkedList<T>(*other.next) : nullptr;
     }
 
     // Destructors
-    ~LinkedList() {
-        delete next;
-    }
+    ~LinkedList() {delete next;}
 
     // Operators
 
@@ -44,6 +38,34 @@ struct LinkedList {
     LinkedList<T>& operator = (LinkedList<T> rhs) {
         swap(*this, other);
         return *this;
+    }
+
+    /**
+     * @brief Checks equality of two linked lists
+     * 
+     * @param lhs The first linked list to chekc
+     * @param rhs The second linked list to checl
+     * @return true if the lists are equal, otherwise false
+     */
+    friend bool operator == (LinkedList<T>& lhs, LinkedList<T>& rhs) {
+        LinkedList<T> *lhs_temp = &lhs, *rhs_temp = &rhs;
+        while (lhs_temp && rhs_temp) {
+            if (lhs_temp->data != rhs_temp->data) {return false;}
+            lhs_temp = lhs_temp->next;
+            rhs_temp = rhs_temp->next;
+        }
+        return (!lhs_temp && !rhs_temp);
+    }
+
+    /**
+     * @brief Checks inequality of two linked lists
+     * 
+     * @param lhs The first linked list to chekc
+     * @param rhs The second linked list to checl
+     * @return true if the lists are inequal, otherwise false 
+     */
+    friend bool operator != (LinkedList<T>& lhs, LinkedList<T>& rhs)  {
+        return !(lhs == rhs);
     }
 
     // Utility Functions
