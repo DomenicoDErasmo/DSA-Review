@@ -1,6 +1,11 @@
 #ifndef LINKED_LIST_CPP
 #define LINKED_LIST_CPP
 
+/**
+ * @brief Generic linked list class
+ * 
+ * @tparam T Any type. Assumes that the type implements the equality operator
+ */
 template <typename T>
 struct LinkedList {
     // Fields

@@ -1,6 +1,5 @@
 #ifndef BINARY_TREE_CPP
 #define BINARY_TREE_CPP
-
 template <typename T>
 struct BinaryTree {
     // Fields
@@ -59,5 +58,30 @@ struct BinaryTree {
         swap(first.right, second.right);
     }
 };
+
+template <typename T>
+int binaryTreeGetHeight(BinaryTree<T>* const& tree) {
+    return binaryTreeGetHeightHelper(tree, 0);
+}
+
+template <typename T>
+int binaryTreeGetHeightHelper(BinaryTree<T>* const& tree, int height) {
+    if (!tree) {return height;}
+    int left = binaryTreeGetHeightHelper(tree->left, height + 1);
+    int right = binaryTreeGetHeightHelper(tree->right, height + 1);
+    return left > right ? left : right;
+}
+
+template <typename T>
+int binaryTreeGetSize(BinaryTree<T>* const& tree) {
+    if (!tree) {return 0;}
+    return 1 + binaryTreeGetHeight(tree->left) 
+             + binaryTreeGetHeight(tree->right);
+}
+
+template <typename T>
+void binaryTreeInsertNode(BinaryTree<T>** tree, T data) {
+    // TODO: implement with balancing
+}
 
 #endif
