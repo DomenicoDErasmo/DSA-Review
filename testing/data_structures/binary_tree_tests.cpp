@@ -123,20 +123,20 @@ bool binaryTreeTestGetHeight() {
     return result;
 }
 
-bool binaryTreeTestGetSize() {
+bool binaryTreeTestGetNumNodes() {
     bool result = true;
 
     BinaryTree<int>* empty = nullptr;
-    result &= binaryTreeGetSize(empty) == 0;
+    result &= binaryTreeGetNumNodes(empty) == 0;
 
     BinaryTree<int>* leaf = new BinaryTree<int>(4);
-    result &= binaryTreeGetSize(leaf) == 1;
+    result &= binaryTreeGetNumNodes(leaf) == 1;
     delete leaf;
 
     BinaryTree<int>* children = new BinaryTree<int>(5,
         new BinaryTree<int>(2),
         new BinaryTree<int>(6));
-    result &= binaryTreeGetSize(children) == 3;
+    result &= binaryTreeGetNumNodes(children) == 3;
     delete children;
 
     BinaryTree<int>* grandchildren = new BinaryTree<int>(5,
@@ -144,9 +144,32 @@ bool binaryTreeTestGetSize() {
             new BinaryTree<int>(1),
             nullptr),
         new BinaryTree<int>(7));
-    result &= binaryTreeGetSize(grandchildren) == 4;
-    result &= binaryTreeGetSize(grandchildren->left) == 2;
+    result &= binaryTreeGetNumNodes(grandchildren) == 4;
+    result &= binaryTreeGetNumNodes(grandchildren->left) == 2;
     delete grandchildren;
+
+    return result;
+}
+
+bool binaryTreeTestInsertNode() {
+    bool result = true;
+
+    BinaryTree<int>* empty = nullptr;
+    binaryTreeInsertNode(&empty, 4);
+    result &= empty->data == 4;
+    delete empty;
+
+    BinaryTree<int>* insert_lower = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&insert_lower, 3);
+    result &= insert_lower->left->data == 3;
+    result &= !insert_lower->right;
+    delete insert_lower;
+
+    BinaryTree<int>* insert_greater = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&insert_greater, 6);
+    result &= insert_greater->right->data == 6;
+    result &= !insert_greater->left;
+    delete insert_greater;
 
     return result;
 }
@@ -166,6 +189,8 @@ void binaryTreeTestsRegisterTests(TestManager* test_manager) {
     testGroupAddTest(&test_group, 
         UnitTest("get height", binaryTreeTestGetHeight));
     testGroupAddTest(&test_group,
-        UnitTest("get size", binaryTreeTestGetSize));
+        UnitTest("get size", binaryTreeTestGetNumNodes));
+    testGroupAddTest(&test_group, 
+        UnitTest("insert node", binaryTreeTestInsertNode));
     test_manager->test_groups.push_back(test_group);
 ;}

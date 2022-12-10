@@ -1,5 +1,7 @@
 #ifndef BINARY_TREE_CPP
 #define BINARY_TREE_CPP
+
+#include "linked_list.cpp"
 template <typename T>
 struct BinaryTree {
     // Fields
@@ -59,29 +61,80 @@ struct BinaryTree {
     }
 };
 
+/**
+ * @brief Helper function to get height of tree
+ * 
+ * @tparam T The type of the tree's data
+ * @param tree A binary tree
+ * @param level The current level of the tree
+ * @return int The total height of the tree
+ */
+template <typename T>
+int binaryTreeGetHeightHelper(BinaryTree<T>* const& tree, int level) {
+    if (!tree) {return level;}
+    int left = binaryTreeGetHeightHelper(tree->left, level + 1);
+    int right = binaryTreeGetHeightHelper(tree->right, level + 1);
+    return left > right ? left : right;
+}
+
+/**
+ * @brief Gets the height of the tree
+ * 
+ * @tparam T The type of the tree's data
+ * @param tree A binary tree
+ * @return int The total height of the tree
+ */
 template <typename T>
 int binaryTreeGetHeight(BinaryTree<T>* const& tree) {
     return binaryTreeGetHeightHelper(tree, 0);
 }
 
+/**
+ * @brief Gets the total number of nodes in the tree
+ * 
+ * @tparam T The type of the tree's data
+ * @param tree A binary tree
+ * @return int The total number of nodes in the tree
+ */
 template <typename T>
-int binaryTreeGetHeightHelper(BinaryTree<T>* const& tree, int height) {
-    if (!tree) {return height;}
-    int left = binaryTreeGetHeightHelper(tree->left, height + 1);
-    int right = binaryTreeGetHeightHelper(tree->right, height + 1);
-    return left > right ? left : right;
-}
-
-template <typename T>
-int binaryTreeGetSize(BinaryTree<T>* const& tree) {
+int binaryTreeGetNumNodes(BinaryTree<T>* const& tree) {
     if (!tree) {return 0;}
-    return 1 + binaryTreeGetHeight(tree->left) 
-             + binaryTreeGetHeight(tree->right);
+    return 1 + binaryTreeGetNumNodes(tree->left) 
+             + binaryTreeGetNumNodes(tree->right);
 }
 
+/**
+ * @brief Helper function to insert a node into the tree
+ * 
+ * @tparam T The type of the tree's data
+ * @param node The node to insert a value for
+ * @param data The data to insert into the tree
+ */
+template <typename T>
+void binaryTreeInsertNodeHelper(BinaryTree<T>** node, T data) {
+    if (*node) {binaryTreeInsertNode(node, data);} 
+    else {*node = new BinaryTree<T>(data);}
+}
+
+/**
+ * @brief Inserts a node into the tree
+ * 
+ * @tparam T The type of the tree's data
+ * @param tree The binary tree to insert data into
+ * @param data The data to insert into the tree
+ */
 template <typename T>
 void binaryTreeInsertNode(BinaryTree<T>** tree, T data) {
-    // TODO: implement with balancing
+    if (!*tree) {*tree = new BinaryTree<T>(data);}
+    T node_data = (*tree)->data;
+    if (node_data == data) {return;}
+    BinaryTree<T>** next = data < node_data ? &(*tree)->left : &(*tree)->right;
+    binaryTreeInsertNodeHelper(next, data);
+}
+
+template <typename T>
+LinkedList<T>* binaryTreeGetPrefixOrder(BinaryTree<T>* const& tree) {
+
 }
 
 #endif
