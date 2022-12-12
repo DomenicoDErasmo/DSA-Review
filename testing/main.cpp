@@ -4,8 +4,8 @@
 
 int main() {
     TestManager test_manager;
-    linkedListTestsRegisterTests(&test_manager);
-    binaryTreeTestsRegisterTests(&test_manager);
+    linkedListTestRegisterTests(&test_manager);
+    binaryTreeTestRegisterTests(&test_manager);
     testManagerRun(test_manager);
     return 0;
 }

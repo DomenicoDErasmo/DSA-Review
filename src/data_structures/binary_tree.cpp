@@ -132,9 +132,51 @@ void binaryTreeInsertNode(BinaryTree<T>** tree, T data) {
     binaryTreeInsertNodeHelper(next, data);
 }
 
+/**
+ * @brief Gets preorder for the binary tree
+ * 
+ * @tparam T The type of the tree's data
+ * @param tree The binary tree to insert data into
+ * @return LinkedList<T>* The preorder of the tree
+ */
 template <typename T>
-LinkedList<T>* binaryTreeGetPrefixOrder(BinaryTree<T>* const& tree) {
+void binaryTreeGetPreorder(
+        BinaryTree<T>* const& tree, LinkedList<T>** preorder) {
+    if (!tree) {return;}
+    linkedListInsertAtTail(preorder, tree->data);
+    binaryTreeGetPreorder(tree->left, preorder);
+    binaryTreeGetPreorder(tree->right, preorder);
+}
 
+/**
+ * @brief Gets inorder for the binary tree
+ * 
+ * @tparam T The type of the tree's data
+ * @param tree The binary tree to insert data into
+ * @return LinkedList<T>* The inorder of the tree
+ */
+template <typename T>
+void binaryTreeGetInorder(BinaryTree<T>* const& tree, LinkedList<T>** inorder) {
+    if (!tree) {return;}
+    binaryTreeGetInorder(tree->left, inorder);
+    linkedListInsertAtTail(inorder, tree->data);
+    binaryTreeGetInorder(tree->right, inorder);
+}
+
+/**
+ * @brief Gets postorder for the binary tree
+ * 
+ * @tparam T The type of the tree's data
+ * @param tree The binary tree to insert data into
+ * @return LinkedList<T>* The postorder of the tree
+ */
+template <typename T>
+void binaryTreeGetPostorder(
+        BinaryTree<T>* const& tree, LinkedList<T>** postorder) {
+    if (!tree) {return;}
+    binaryTreeGetPostorder(tree->left, postorder);
+    binaryTreeGetPostorder(tree->right, postorder);
+    linkedListInsertAtTail(postorder, tree->data);
 }
 
 #endif

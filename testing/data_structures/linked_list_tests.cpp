@@ -269,7 +269,7 @@ bool linkedListTestEqualityOperator() {
     return result;
 }
 
-void linkedListTestsRegisterTests(TestManager* test_manager) {
+void linkedListTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("linked list");
     testGroupAddTest(&test_group, UnitTest("default constructor",
         linkedListTestDefaultConstructor));

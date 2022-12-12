@@ -174,7 +174,194 @@ bool binaryTreeTestInsertNode() {
     return result;
 }
 
-void binaryTreeTestsRegisterTests(TestManager* test_manager) {
+bool binaryTreeTestGetPreorder() {
+    bool result = true;
+
+    BinaryTree<int>* empty = nullptr;
+    LinkedList<int>* empty_preorder = nullptr;
+    binaryTreeGetPreorder(empty, &empty_preorder);
+    result &= !empty_preorder;
+
+    BinaryTree<int>* leaf_root = new BinaryTree<int>(4);
+    LinkedList<int>* leaf_root_preorder = nullptr;
+    binaryTreeGetPreorder(leaf_root, &leaf_root_preorder);
+    result &= linkedListGetLength(leaf_root_preorder) == 1;
+    result &= leaf_root_preorder->data == 4;
+    delete leaf_root;
+    delete leaf_root_preorder;
+
+    BinaryTree<int>* has_left_child = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&has_left_child, 3);
+    LinkedList<int>* has_left_child_preorder = nullptr;
+    binaryTreeGetPreorder(has_left_child, &has_left_child_preorder);
+    result &= linkedListGetLength(has_left_child_preorder) == 2;
+    result &= has_left_child_preorder->data == 4;
+    result &= has_left_child_preorder->next->data == 3;
+    delete has_left_child;
+    delete has_left_child_preorder;
+
+    BinaryTree<int>* has_right_child = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&has_right_child, 5);
+    LinkedList<int>* has_right_child_preorder = nullptr;
+    binaryTreeGetPreorder(has_right_child, &has_right_child_preorder);
+    result &= linkedListGetLength(has_right_child_preorder) == 2;
+    result &= has_right_child_preorder->data == 4;
+    result &= has_right_child_preorder->next->data == 5;
+    delete has_right_child;
+    delete has_right_child_preorder;
+
+    BinaryTree<int>* has_grandchildren = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&has_grandchildren, 2);
+    binaryTreeInsertNode(&has_grandchildren, 1);
+    binaryTreeInsertNode(&has_grandchildren, 3);
+    binaryTreeInsertNode(&has_grandchildren, 6);
+    binaryTreeInsertNode(&has_grandchildren, 5);
+    binaryTreeInsertNode(&has_grandchildren, 7);
+    LinkedList<int>* has_grandchildren_preorder = nullptr;
+    binaryTreeGetPreorder(has_grandchildren, &has_grandchildren_preorder);
+
+    LinkedList<int>* has_grandchildren_preorder_expected = nullptr;
+    linkedListInsertAtTail(&has_grandchildren_preorder_expected, 4);
+    linkedListInsertAtTail(&has_grandchildren_preorder_expected, 2);
+    linkedListInsertAtTail(&has_grandchildren_preorder_expected, 1);
+    linkedListInsertAtTail(&has_grandchildren_preorder_expected, 3);
+    linkedListInsertAtTail(&has_grandchildren_preorder_expected, 6);
+    linkedListInsertAtTail(&has_grandchildren_preorder_expected, 5);
+    linkedListInsertAtTail(&has_grandchildren_preorder_expected, 7);
+    result &= *has_grandchildren_preorder == *has_grandchildren_preorder_expected;
+    delete has_grandchildren;
+    delete has_grandchildren_preorder;
+    delete has_grandchildren_preorder_expected;
+
+    return result;
+}
+
+bool binaryTreeTestGetInorder() {
+    bool result = true;
+
+    BinaryTree<int>* empty = nullptr;
+    LinkedList<int>* empty_inorder = nullptr;
+    binaryTreeGetInorder(empty, &empty_inorder);
+    result &= !empty_inorder;
+
+    BinaryTree<int>* leaf_root = new BinaryTree<int>(4);
+    LinkedList<int>* leaf_root_inorder = nullptr;
+    binaryTreeGetInorder(leaf_root, &leaf_root_inorder);
+    result &= linkedListGetLength(leaf_root_inorder) == 1;
+    result &= leaf_root_inorder->data == 4;
+    delete leaf_root;
+    delete leaf_root_inorder;
+
+    BinaryTree<int>* has_left_child = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&has_left_child, 3);
+    LinkedList<int>* has_left_child_inorder = nullptr;
+    binaryTreeGetInorder(has_left_child, &has_left_child_inorder);
+    result &= linkedListGetLength(has_left_child_inorder) == 2;
+    result &= has_left_child_inorder->data == 3;
+    result &= has_left_child_inorder->next->data == 4;
+    delete has_left_child;
+    delete has_left_child_inorder;
+
+    BinaryTree<int>* has_right_child = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&has_right_child, 5);
+    LinkedList<int>* has_right_child_inorder = nullptr;
+    binaryTreeGetInorder(has_right_child, &has_right_child_inorder);
+    result &= linkedListGetLength(has_right_child_inorder) == 2;
+    result &= has_right_child_inorder->data == 4;
+    result &= has_right_child_inorder->next->data == 5;
+    delete has_right_child;
+    delete has_right_child_inorder;
+
+    BinaryTree<int>* has_grandchildren = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&has_grandchildren, 2);
+    binaryTreeInsertNode(&has_grandchildren, 1);
+    binaryTreeInsertNode(&has_grandchildren, 3);
+    binaryTreeInsertNode(&has_grandchildren, 6);
+    binaryTreeInsertNode(&has_grandchildren, 5);
+    binaryTreeInsertNode(&has_grandchildren, 7);
+    LinkedList<int>* has_grandchildren_inorder = nullptr;
+    binaryTreeGetInorder(has_grandchildren, &has_grandchildren_inorder);
+
+    LinkedList<int>* has_grandchildren_inorder_expected = nullptr;
+    linkedListInsertAtTail(&has_grandchildren_inorder_expected, 1);
+    linkedListInsertAtTail(&has_grandchildren_inorder_expected, 2);
+    linkedListInsertAtTail(&has_grandchildren_inorder_expected, 3);
+    linkedListInsertAtTail(&has_grandchildren_inorder_expected, 4);
+    linkedListInsertAtTail(&has_grandchildren_inorder_expected, 5);
+    linkedListInsertAtTail(&has_grandchildren_inorder_expected, 6);
+    linkedListInsertAtTail(&has_grandchildren_inorder_expected, 7);
+    result &= *has_grandchildren_inorder == *has_grandchildren_inorder_expected;
+    delete has_grandchildren;
+    delete has_grandchildren_inorder;
+    delete has_grandchildren_inorder_expected;
+
+    return result;
+}
+
+bool binaryTreeTestGetPostorder() {
+    bool result = true;
+
+    BinaryTree<int>* empty = nullptr;
+    LinkedList<int>* empty_postorder = nullptr;
+    binaryTreeGetPostorder(empty, &empty_postorder);
+    result &= !empty_postorder;
+
+    BinaryTree<int>* leaf_root = new BinaryTree<int>(4);
+    LinkedList<int>* leaf_root_postorder = nullptr;
+    binaryTreeGetPostorder(leaf_root, &leaf_root_postorder);
+    result &= linkedListGetLength(leaf_root_postorder) == 1;
+    result &= leaf_root_postorder->data == 4;
+    delete leaf_root;
+    delete leaf_root_postorder;
+
+    BinaryTree<int>* has_left_child = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&has_left_child, 3);
+    LinkedList<int>* has_left_child_postorder = nullptr;
+    binaryTreeGetPostorder(has_left_child, &has_left_child_postorder);
+    result &= linkedListGetLength(has_left_child_postorder) == 2;
+    result &= has_left_child_postorder->data == 3;
+    result &= has_left_child_postorder->next->data == 4;
+    delete has_left_child;
+    delete has_left_child_postorder;
+
+    BinaryTree<int>* has_right_child = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&has_right_child, 5);
+    LinkedList<int>* has_right_child_postorder = nullptr;
+    binaryTreeGetPostorder(has_right_child, &has_right_child_postorder);
+    result &= linkedListGetLength(has_right_child_postorder) == 2;
+    result &= has_right_child_postorder->data == 5;
+    result &= has_right_child_postorder->next->data == 4;
+    delete has_right_child;
+    delete has_right_child_postorder;
+
+    BinaryTree<int>* has_grandchildren = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&has_grandchildren, 2);
+    binaryTreeInsertNode(&has_grandchildren, 1);
+    binaryTreeInsertNode(&has_grandchildren, 3);
+    binaryTreeInsertNode(&has_grandchildren, 6);
+    binaryTreeInsertNode(&has_grandchildren, 5);
+    binaryTreeInsertNode(&has_grandchildren, 7);
+    LinkedList<int>* has_grandchildren_postorder = nullptr;
+    binaryTreeGetPostorder(has_grandchildren, &has_grandchildren_postorder);
+
+    LinkedList<int>* has_grandchildren_postorder_expected = nullptr;
+    linkedListInsertAtTail(&has_grandchildren_postorder_expected, 1);
+    linkedListInsertAtTail(&has_grandchildren_postorder_expected, 3);
+    linkedListInsertAtTail(&has_grandchildren_postorder_expected, 2);
+    linkedListInsertAtTail(&has_grandchildren_postorder_expected, 5);
+    linkedListInsertAtTail(&has_grandchildren_postorder_expected, 7);
+    linkedListInsertAtTail(&has_grandchildren_postorder_expected, 6);
+    linkedListInsertAtTail(&has_grandchildren_postorder_expected, 4);
+    result &= *has_grandchildren_postorder 
+              == *has_grandchildren_postorder_expected;
+    delete has_grandchildren;
+    delete has_grandchildren_postorder;
+    delete has_grandchildren_postorder_expected;
+
+    return result;
+}
+
+void binaryTreeTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("binary tree");
     testGroupAddTest(&test_group, 
         UnitTest("default constructor", binaryTreeTestDefaultConstructor));
@@ -192,5 +379,11 @@ void binaryTreeTestsRegisterTests(TestManager* test_manager) {
         UnitTest("get size", binaryTreeTestGetNumNodes));
     testGroupAddTest(&test_group, 
         UnitTest("insert node", binaryTreeTestInsertNode));
+    testGroupAddTest(&test_group,
+        UnitTest("get preorder", binaryTreeTestGetPreorder));
+    testGroupAddTest(&test_group,
+        UnitTest("get inorder", binaryTreeTestGetInorder));
+    testGroupAddTest(&test_group,
+        UnitTest("get postorder", binaryTreeTestGetPostorder));
     test_manager->test_groups.push_back(test_group);
-;}
+}
