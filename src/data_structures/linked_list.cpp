@@ -98,7 +98,7 @@ struct LinkedList {
  * @param data The data to insert
  */
 template <typename T>
-void linkedListInsertAtTail(LinkedList<T>** head, const T& data) {
+void linkedListInsertAtTail(LinkedList<T>** head, T data) {
     if (!(*head)) {
         *head = new LinkedList<T>(data);
         return;
@@ -120,7 +120,7 @@ void linkedListInsertAtTail(LinkedList<T>** head, const T& data) {
  * @param data The data to insert
  */
 template <typename T>
-void linkedListInsertAtHead(LinkedList<T>** head, const T& data) {
+void linkedListInsertAtHead(LinkedList<T>** head, T data) {
     LinkedList<T>* temp = *head;
     *head = new LinkedList<T>(data, temp);
 }
@@ -155,7 +155,7 @@ int linkedListGetLength(LinkedList<T>*const& head) {
  */
 template <typename T>
 int linkedListPositionOfNthOccurrence(
-        LinkedList<T>* const& head, const T& data, const int& n) {
+        LinkedList<T>* const& head, T data, int n) {
     int result = -1, num_found = 0;
     LinkedList<T>* temp = head;
     for (int i = 0; i < linkedListGetLength(head); i++) {
@@ -208,9 +208,9 @@ LinkedList<T>* linkedListGetNthNode(LinkedList<T>* const& head, int n) {
  */
 template <typename T>
 LinkedList<T>* linkedListFindNthOccurrence(
-        LinkedList<T>* const& head,
-        const T& data,
-        const int& n) {
+    LinkedList<T>* const& head,
+    T data,
+    int n) {
     int position = linkedListPositionOfNthOccurrence(head, data, n);
     if (position == -1) {return nullptr;}
     return linkedListGetNthNode(head, position);
@@ -225,10 +225,7 @@ LinkedList<T>* linkedListFindNthOccurrence(
  * @param n The occurrence of the data in the list
  */
 template <typename T>
-void linkedListDeleteNthOccurrence(
-        LinkedList<T>** head,
-        const T& data,
-        const int& n) {
+void linkedListDeleteNthOccurrence(LinkedList<T>** head, T data, int n) {
     int position = linkedListPositionOfNthOccurrence(*head, data, n);
     if (position == -1) {return;}
 
@@ -245,6 +242,45 @@ void linkedListDeleteNthOccurrence(
     *head = prev->next;
     dummy->next = nullptr;
     delete dummy;
+}
+
+/**
+ * @brief Gets the previous node in the list
+ * 
+ * @tparam T The type of the linked list
+ * @param head The head of the list
+ * @param data The data to get the predecessor of
+ * @param n The nth occurrence of data in the list
+ * @return LinkedList<T>* The predecessor of data
+ */
+template <typename T>
+LinkedList<T>* linkedListFindPredecessorOfNthOccurrence(
+        LinkedList<T>* const& head, 
+        T data, 
+        int n) {
+    int position = linkedListPositionOfNthOccurrence(head, data, n);
+    if (position < 1) {return nullptr;}
+    return linkedListGetNthNode(head, position - 1);
+}
+
+/**
+ * @brief Gets the followingg node in the list
+ * 
+ * @tparam T The type of the linked list
+ * @param head The head of the list
+ * @param data The data to get the successor of
+ * @param n The nth occurrence of data in the list
+ * @return LinkedList<T>* The successor of data
+ */
+template <typename T>
+LinkedList<T>* linkedListFindSuccessorOfNthOccurrence(
+        LinkedList<T>* const& head, 
+        T data, 
+        int n) {
+    int position = linkedListPositionOfNthOccurrence(head, data, n);
+    if (position >= linkedListGetLength(head) - 1 
+        || position == -1) {return nullptr;}
+    return linkedListGetNthNode(head, position + 1);
 }
 
 #endif

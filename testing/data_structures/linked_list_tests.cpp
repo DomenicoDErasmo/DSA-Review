@@ -269,6 +269,56 @@ bool linkedListTestEqualityOperator() {
     return result;
 }
 
+bool linkedListTestFindPredecessorOfNthOccurrence() {
+    bool result = true;
+
+    LinkedList<int>* not_found = new LinkedList<int>(4);
+    LinkedList<int>* not_found_result = 
+        linkedListFindPredecessorOfNthOccurrence(not_found, 3, 1);
+    result &= !not_found_result;
+    delete not_found;
+
+    LinkedList<int>* first_element = new LinkedList<int>(4);
+    LinkedList<int>* first_element_result = 
+        linkedListFindPredecessorOfNthOccurrence(first_element, 4, 1);
+    result &= !first_element_result;
+    delete first_element;
+
+    LinkedList<int>* general_case = new LinkedList<int>(4);
+    linkedListInsertAtTail(&general_case, 2);
+    LinkedList<int>* general_case_result = 
+        linkedListFindPredecessorOfNthOccurrence(general_case, 2, 1);
+    result &= general_case_result == general_case;
+    delete general_case;
+
+    return result;
+}
+
+bool linkedListTestFindSuccessorOfNthOccurrence() {
+    bool result = true;
+
+    LinkedList<int>* not_found = new LinkedList<int>(4);
+    LinkedList<int>* not_found_result = 
+        linkedListFindSuccessorOfNthOccurrence(not_found, 3, 1);
+    result &= !not_found_result;
+    delete not_found;
+
+    LinkedList<int>* last_element = new LinkedList<int>(4);
+    LinkedList<int>* last_element_result = 
+        linkedListFindSuccessorOfNthOccurrence(last_element, 4, 1);
+    result &= !last_element_result;
+    delete last_element;
+
+    LinkedList<int>* general_case = new LinkedList<int>(4);
+    linkedListInsertAtTail(&general_case, 2);
+    LinkedList<int>* general_case_result = 
+        linkedListFindSuccessorOfNthOccurrence(general_case, 4, 1);
+    result &= general_case_result == general_case->next;
+    delete general_case;
+
+    return result;
+}
+
 void linkedListTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("linked list");
     testGroupAddTest(&test_group, UnitTest("default constructor",
@@ -297,5 +347,9 @@ void linkedListTestRegisterTests(TestManager* test_manager) {
         linkedListTestDeleteNthOccurrence));
     testGroupAddTest(&test_group, UnitTest("equality operator",
         linkedListTestEqualityOperator));
+    testGroupAddTest(&test_group, UnitTest("predecessor of nth occurrence",
+        linkedListTestFindPredecessorOfNthOccurrence));
+    testGroupAddTest(&test_group, UnitTest("successor of nth occurrence",
+        linkedListTestFindSuccessorOfNthOccurrence));
     test_manager->test_groups.push_back(test_group);
 }

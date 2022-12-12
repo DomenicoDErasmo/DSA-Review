@@ -179,4 +179,39 @@ void binaryTreeGetPostorder(
     linkedListInsertAtTail(postorder, tree->data);
 }
 
+/**
+ * @brief Finds the data in the binary tree
+ * 
+ * @tparam T The type of the tree's data
+ * @param tree The binary tree to search
+ * @param data The data to search for
+ * @return BinaryTree<T>* The node if found, otherwise nullptr
+ */
+template <typename T>
+BinaryTree<T>* binaryTreeFindNode(BinaryTree<T>* const& tree, T data) {
+    if (!tree || tree->data == data) {return tree;}
+    else if (data < tree->data) {return binaryTreeFindNode(tree->left, data);}
+    else {return binaryTreeFindNode(tree->right, data);}
+}
+
+// TODO: predecessor/successor functions for traversals
+template <typename T>
+BinaryTree<T>* getOrderPredecessor(
+        BinaryTree<T>* const& tree, 
+        T data, 
+        void (*order_function)(BinaryTree<T>* const&, LinkedList<T>**)) {
+    if (!order_function) {return nullptr;}
+    LinkedList<T>* order;
+    order_function(tree, &order);
+    // TODO: get previous in list
+    LinkedList<T>* item = linkedListFindNthOccurrence(order, data, 1);
+    LinkedList<T>* prev;
+    return binaryTreeFindNode(tree, prev->data;)
+}
+
+template <typename T>
+void binaryTreeDeleteNode(BinaryTree<T>** tree, T data) {
+
+}
+
 #endif
