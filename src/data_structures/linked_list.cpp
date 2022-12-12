@@ -254,7 +254,7 @@ void linkedListDeleteNthOccurrence(LinkedList<T>** head, T data, int n) {
  * @return LinkedList<T>* The predecessor of data
  */
 template <typename T>
-LinkedList<T>* linkedListFindPredecessorOfNthOccurrence(
+LinkedList<T>* linkedListGetPredecessorOfNthOccurrence(
         LinkedList<T>* const& head, 
         T data, 
         int n) {
@@ -273,7 +273,7 @@ LinkedList<T>* linkedListFindPredecessorOfNthOccurrence(
  * @return LinkedList<T>* The successor of data
  */
 template <typename T>
-LinkedList<T>* linkedListFindSuccessorOfNthOccurrence(
+LinkedList<T>* linkedListGetSuccessorOfNthOccurrence(
         LinkedList<T>* const& head, 
         T data, 
         int n) {

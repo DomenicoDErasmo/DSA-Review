@@ -180,7 +180,7 @@ void binaryTreeGetPostorder(
 }
 
 /**
- * @brief Finds the data in the binary tree
+ * @brief Gets the node in the binary tree with matching data
  * 
  * @tparam T The type of the tree's data
  * @param tree The binary tree to search
@@ -188,25 +188,35 @@ void binaryTreeGetPostorder(
  * @return BinaryTree<T>* The node if found, otherwise nullptr
  */
 template <typename T>
-BinaryTree<T>* binaryTreeFindNode(BinaryTree<T>* const& tree, T data) {
+BinaryTree<T>* binaryTreeGetNode(BinaryTree<T>* const& tree, T data) {
     if (!tree || tree->data == data) {return tree;}
-    else if (data < tree->data) {return binaryTreeFindNode(tree->left, data);}
-    else {return binaryTreeFindNode(tree->right, data);}
+    else if (data < tree->data) {return binaryTreeGetNode(tree->left, data);}
+    else {return binaryTreeGetNode(tree->right, data);}
 }
 
-// TODO: predecessor/successor functions for traversals
+/**
+ * @brief Gets the prede/suc cessor to the desired order.
+ * 
+ * @tparam T The type of the tree's data
+ * @param tree The binary tree to search
+ * @param data The data to search for
+ * @param order_function The tree traversal function (such as preorder)
+ * @param cessor_function A function to get either the predecessor or successor
+ * @return BinaryTree<T>* The node if found, otherwise nullptr
+ */
 template <typename T>
-BinaryTree<T>* getOrderPredecessor(
+// TODO: unit tests
+BinaryTree<T>* binaryTreeGetOrderCessor(
         BinaryTree<T>* const& tree, 
         T data, 
-        void (*order_function)(BinaryTree<T>* const&, LinkedList<T>**)) {
+        void (*order_function)(BinaryTree<T>* const&, LinkedList<T>**),
+        void (*cessor_function)(BinaryTree<T>* const&, T data, int n)) {
     if (!order_function) {return nullptr;}
     LinkedList<T>* order;
     order_function(tree, &order);
-    // TODO: get previous in list
     LinkedList<T>* item = linkedListFindNthOccurrence(order, data, 1);
-    LinkedList<T>* prev;
-    return binaryTreeFindNode(tree, prev->data;)
+    LinkedList<T>* prev = cessor_function(order, item, 1);
+    return binaryTreeGetNode(tree, prev->data;)
 }
 
 template <typename T>

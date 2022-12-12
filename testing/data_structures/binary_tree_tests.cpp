@@ -365,36 +365,38 @@ bool binaryTreeTestFindNode() {
     bool result = true;
 
     BinaryTree<int>* empty = nullptr;
-    BinaryTree<int>* empty_result = binaryTreeFindNode(empty, 4);
+    BinaryTree<int>* empty_result = binaryTreeGetNode(empty, 4);
     result &= !empty_result;
 
     BinaryTree<int>* not_found = new BinaryTree<int>(4);
-    BinaryTree<int>* not_found_result = binaryTreeFindNode(empty, 3);
+    BinaryTree<int>* not_found_result = binaryTreeGetNode(empty, 3);
     result &= !not_found_result;
     delete not_found;
 
     BinaryTree<int>* in_left = new BinaryTree<int>(4);
     binaryTreeInsertNode(&in_left, 3);
-    BinaryTree<int>* in_left_result = binaryTreeFindNode(in_left, 3);
+    BinaryTree<int>* in_left_result = binaryTreeGetNode(in_left, 3);
     result &= in_left_result == in_left->left;
     delete in_left;
 
     BinaryTree<int>* in_right = new BinaryTree<int>(4);
     binaryTreeInsertNode(&in_right, 5);
-    BinaryTree<int>* in_right_result = binaryTreeFindNode(in_right, 5);
+    BinaryTree<int>* in_right_result = binaryTreeGetNode(in_right, 5);
     result &= in_right_result == in_right->right;
     delete in_right;
 
     BinaryTree<int>* recursive_test = new BinaryTree<int>(4);
     binaryTreeInsertNode(&recursive_test, 3);
     binaryTreeInsertNode(&recursive_test, 2);
-    BinaryTree<int>* recursive_test_result = binaryTreeFindNode(
+    BinaryTree<int>* recursive_test_result = binaryTreeGetNode(
         recursive_test, 2);
     result &= recursive_test_result == recursive_test->left->left;
     delete recursive_test;
 
     return result;
 }
+
+
 
 void binaryTreeTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("binary tree");
