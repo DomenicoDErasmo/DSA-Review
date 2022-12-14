@@ -317,33 +317,6 @@ BinaryTree<T>* binaryTreeGetParentOf(BinaryTree<T>* const& tree, T data) {
 }
 
 template <typename T>
-void binaryTreeDeleteNodeHelper(
-        BinaryTree<T>** tree, 
-        BinaryTree<T>** to_delete,
-        BinaryTree<T>* (BinaryTree<T>::*accessor_fn)(),
-        BinaryTree<T>* (BinaryTree<T>::*other_accessor_fn)()) {
-    BinaryTree<T>* predecessor = binaryTreeGetInorderPredecessor(
-        *tree, 
-        (*to_delete)->data);
-    BinaryTree<T>* parent = binaryTreeGetParentOf(
-        *tree, 
-        predecessor->data);
-
-    // Set parent's child to predecessor's chlid
-    if (parent == *to_delete) {
-        parent->accessor_fn() = predecessor->accessor_fn();
-    } else {
-        parent->other_accessor_fn() = predecessor->accessor_fn();
-    }
-    (*to_delete)->data = predecessor->data;
-
-    // Delete predecessor
-    predecessor->accessor_fn() = nullptr;
-    predecessor->other_accessor_fn() =  nullptr;
-    delete predecessor;
-}
-
-template <typename T>
 void binaryTreeDeleteNode(BinaryTree<T>** tree, T data) {
     BinaryTree<T>* to_delete = binaryTreeGetNode(*tree, data);
     if (!to_delete) {return;}
@@ -372,7 +345,6 @@ void binaryTreeDeleteNode(BinaryTree<T>** tree, T data) {
         predecessor->right =  nullptr;
         delete predecessor;
         return;
-        */
     } else /* to_delete->right */ {
         BinaryTree<T>* successor = binaryTreeGetInorderSuccessor(
             *tree, 
