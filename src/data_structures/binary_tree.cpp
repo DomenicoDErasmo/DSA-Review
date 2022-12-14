@@ -23,10 +23,6 @@ struct BinaryTree {
         right = other.right ? new BinaryTree<T>(*other.right) : nullptr;
     }
 
-    // Accessors (not for encapsulation but for passing to functions)
-    BinaryTree<T>* getLeft() {return left;}
-    BinaryTree<T>* getRight() {return right;}
-
     // Destructors
     ~BinaryTree() {
         delete left;
@@ -316,6 +312,15 @@ BinaryTree<T>* binaryTreeGetParentOf(BinaryTree<T>* const& tree, T data) {
     return nullptr;
 }
 
+/**
+ * @brief Deletes the specififed node from the list, if it exists
+ * TODO: Can we refactor this with a helper function?
+ * I tried using function pointers with getters but that doesn't work
+ * 
+ * @tparam T The type of the tree's data
+ * @param tree The tree to delete the node from
+ * @param data The data of the node to delete
+ */
 template <typename T>
 void binaryTreeDeleteNode(BinaryTree<T>** tree, T data) {
     BinaryTree<T>* to_delete = binaryTreeGetNode(*tree, data);
