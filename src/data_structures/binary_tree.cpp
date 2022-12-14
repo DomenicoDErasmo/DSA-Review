@@ -66,6 +66,17 @@ struct BinaryTree {
         return result;
     }
 
+    /**
+     * @brief Checks inequality of two binary trees
+     * 
+     * @param lhs The first binary tree to check
+     * @param rhs The second binary tree to check
+     * @return true if the trees are inequal, otherwise false 
+     */
+    friend bool operator != (BinaryTree<T>& lhs, BinaryTree<T>& rhs) {
+        return !(lhs == rhs);
+    }
+
     // Utility Functions
 
     /**
