@@ -23,6 +23,10 @@ struct BinaryTree {
         right = other.right ? new BinaryTree<T>(*other.right) : nullptr;
     }
 
+    // Accessors (not for encapsulation but for passing to functions)
+    BinaryTree<T>* getLeft() {return left;}
+    BinaryTree<T>* getRight() {return right;}
+
     // Destructors
     ~BinaryTree() {
         delete left;
@@ -140,6 +144,7 @@ void binaryTreeInsertNode(BinaryTree<T>** tree, T data) {
  * @return LinkedList<T>* The preorder of the tree
  */
 template <typename T>
+// TODO: fix infinite loop
 void binaryTreeGetPreorder(
         BinaryTree<T>* const& tree, LinkedList<T>** preorder) {
     if (!tree) {return;}
@@ -200,28 +205,168 @@ BinaryTree<T>* binaryTreeGetNode(BinaryTree<T>* const& tree, T data) {
  * @tparam T The type of the tree's data
  * @param tree The binary tree to search
  * @param data The data to search for
- * @param order_function The tree traversal function (such as preorder)
+ * @param order_fn The tree traversal function (such as preorder)
  * @param cessor_function A function to get either the predecessor or successor
  * @return BinaryTree<T>* The node if found, otherwise nullptr
  */
 template <typename T>
-// TODO: unit tests
 BinaryTree<T>* binaryTreeGetOrderCessor(
         BinaryTree<T>* const& tree, 
         T data, 
-        void (*order_function)(BinaryTree<T>* const&, LinkedList<T>**),
-        void (*cessor_function)(BinaryTree<T>* const&, T data, int n)) {
-    if (!order_function) {return nullptr;}
-    LinkedList<T>* order;
-    order_function(tree, &order);
-    LinkedList<T>* item = linkedListFindNthOccurrence(order, data, 1);
-    LinkedList<T>* prev = cessor_function(order, item, 1);
-    return binaryTreeGetNode(tree, prev->data;)
+        void (*order_fn)(BinaryTree<T>* const&, LinkedList<T>**),
+        LinkedList<T>* (*cessor_fn)(LinkedList<T>* const&, T data, int n)) {
+    if (!order_fn) {return nullptr;}
+    LinkedList<T>* order = nullptr;
+    order_fn(tree, &order);
+
+    LinkedList<T>* item = linkedListGetNthOccurrence(order, data, 1);
+    LinkedList<T>* prev = cessor_fn(order, item->data, 1);
+
+    if (!prev) {return nullptr;}
+    return binaryTreeGetNode(tree, prev->data);
+}
+
+template <typename T>
+BinaryTree<T>* binaryTreeGetPreorderPredecessor(
+        BinaryTree<T>* const& tree, 
+        T data) {
+    return binaryTreeGetOrderCessor(
+        tree, 
+        data, 
+        binaryTreeGetPreorder, 
+        linkedListGetPredecessorOfNthOccurrence);
+}
+
+template <typename T>
+BinaryTree<T>* binaryTreeGetPreorderSuccessor(
+        BinaryTree<T>* const& tree, 
+        T data) {
+    return binaryTreeGetOrderCessor(
+        tree, 
+        data, 
+        binaryTreeGetPreorder, 
+        linkedListGetSuccessorOfNthOccurrence);
+}
+
+template <typename T>
+BinaryTree<T>* binaryTreeGetInorderPredecessor(
+        BinaryTree<T>* const& tree, 
+        T data) {
+    return binaryTreeGetOrderCessor(
+        tree, 
+        data, 
+        binaryTreeGetInorder, 
+        linkedListGetPredecessorOfNthOccurrence);
+}
+
+template <typename T>
+BinaryTree<T>* binaryTreeGetInorderSuccessor(
+        BinaryTree<T>* const& tree, 
+        T data) {
+    return binaryTreeGetOrderCessor(
+        tree, 
+        data, 
+        binaryTreeGetInorder, 
+        linkedListGetSuccessorOfNthOccurrence);
+}
+
+template <typename T>
+BinaryTree<T>* binaryTreeGetPostorderPredecessor(
+        BinaryTree<T>* const& tree, 
+        T data) {
+    return binaryTreeGetOrderCessor(
+        tree, 
+        data, 
+        binaryTreeGetPostorder, 
+        linkedListGetPredecessorOfNthOccurrence);
+}
+
+template <typename T>
+BinaryTree<T>* binaryTreeGetPostorderSuccessor(
+        BinaryTree<T>* const& tree, 
+        T data) {
+    return binaryTreeGetOrderCessor(
+        tree, 
+        data, 
+        binaryTreeGetPostorder, 
+        linkedListGetSuccessorOfNthOccurrence);
+}
+
+/**
+ * @brief Gets the parent of the provided data within the tree, if it exists
+ * 
+ * @tparam T The type of the tree's data
+ * @param tree The tree to search
+ * @param data The data to find the parent of
+ * @return BinaryTree<T>* The parent of the node, or nullptr if none is found
+ */
+template <typename T>
+BinaryTree<T>* binaryTreeGetParentOf(BinaryTree<T>* const& tree, T data) {
+    // Base cases
+    if (!tree || tree->data == data) {return nullptr;}
+    BinaryTree<T> *left = tree->left, *right = tree->right;
+    if (left) {
+        if (data == left->data) {return tree;}
+        if (data < tree->data) {return binaryTreeGetParentOf(left, data);}
+    }
+    if (right) {
+        if (data == right->data) {return tree;}
+        if (data > tree->data) {return binaryTreeGetParentOf(right, data);}
+    }
+    return nullptr;
 }
 
 template <typename T>
 void binaryTreeDeleteNode(BinaryTree<T>** tree, T data) {
+    BinaryTree<T>* to_delete = binaryTreeGetNode(*tree, data);
+    if (!to_delete) {return;}
 
+    if (!to_delete->left && !to_delete->right) {
+        delete to_delete;
+        return;
+    } else if (to_delete->left) {
+        BinaryTree<T>* predecessor = binaryTreeGetInorderPredecessor(
+            *tree, 
+            to_delete->data);
+        BinaryTree<T>* parent = binaryTreeGetParentOf(
+            *tree, 
+            predecessor->data);
+
+        // Set parent's child to predecessor's chlid
+        if (parent == to_delete) {
+            parent->left = predecessor->left;
+        } else {
+            parent->right = predecessor->left;
+        }
+        to_delete->data = predecessor->data;
+
+        // Delete predecessor
+        predecessor->left = nullptr;
+        predecessor->right =  nullptr;
+        delete predecessor;
+        return;
+    } else /* to_delete->right */ {
+        BinaryTree<T>* successor = binaryTreeGetInorderSuccessor(
+            *tree, 
+            to_delete->data);
+        BinaryTree<T>* parent = binaryTreeGetParentOf(
+            *tree, 
+            successor->data);
+
+        // Set parent's child to predecessor's chlid
+        if (parent == to_delete) {
+            parent->right = successor->right;
+        } else {
+            parent->left = successor->right;
+        }
+        to_delete->data = successor->data;
+
+        // Delete predecessor
+        successor->left = nullptr;
+        successor->right =  nullptr;
+        delete successor;
+        return;
+    }
 }
 
 #endif

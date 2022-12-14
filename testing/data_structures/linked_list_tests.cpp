@@ -181,12 +181,12 @@ bool linkedListTestGetNthNode() {
     return result;
 }
 
-bool linkedListTestFindNthOccurrence() {
+bool linkedListTestGetNthOccurrence() {
     bool result = true;
 
     LinkedList<char>* not_found = new LinkedList<char>('a');
     LinkedList<char>* not_found_result =
-        linkedListFindNthOccurrence(not_found, 'b', 1);
+        linkedListGetNthOccurrence(not_found, 'b', 1);
     result &= !not_found_result;
     delete not_found;
 
@@ -194,21 +194,21 @@ bool linkedListTestFindNthOccurrence() {
     linkedListInsertAtTail(&not_enough, 3);
     linkedListInsertAtTail(&not_enough, 5);
     LinkedList<int>* not_enough_result =
-        linkedListFindNthOccurrence(not_enough, 3, 3);
+        linkedListGetNthOccurrence(not_enough, 3, 3);
     result &= !not_enough_result;
     delete not_enough;
 
     LinkedList<std::string>* found_one = new LinkedList<std::string>("5");
     linkedListInsertAtTail(&found_one, std::string("4"));
     LinkedList<std::string>* found_one_result =
-        linkedListFindNthOccurrence(found_one, std::string("5"), 1);
+        linkedListGetNthOccurrence(found_one, std::string("5"), 1);
     result &= found_one_result == found_one;
     delete found_one;
 
     LinkedList<std::string>* found_many = new LinkedList<std::string>("5");
     linkedListInsertAtTail(&found_many, std::string("5"));
     LinkedList<std::string>* found_many_result =
-        linkedListFindNthOccurrence(found_many, std::string("5"), 2);
+        linkedListGetNthOccurrence(found_many, std::string("5"), 2);
     result &= found_many_result == found_many->next;
     delete found_many;
 
@@ -342,7 +342,7 @@ void linkedListTestRegisterTests(TestManager* test_manager) {
     testGroupAddTest(&test_group, UnitTest("get nth node",
         linkedListTestGetNthNode));
     testGroupAddTest(&test_group, UnitTest("find nth occurrence",
-        linkedListTestFindNthOccurrence));
+        linkedListTestGetNthOccurrence));
     testGroupAddTest(&test_group, UnitTest("delete nth occurrence",
         linkedListTestDeleteNthOccurrence));
     testGroupAddTest(&test_group, UnitTest("equality operator",

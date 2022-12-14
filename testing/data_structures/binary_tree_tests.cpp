@@ -396,7 +396,118 @@ bool binaryTreeTestFindNode() {
     return result;
 }
 
+bool binaryTreeTestGetOrderCessor() {
+    bool result = true;
 
+    BinaryTree<int>* preorder_predecessor = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&preorder_predecessor, 2);
+    result &= binaryTreeGetOrderCessor(
+        preorder_predecessor, 
+        2, 
+        binaryTreeGetPreorder, 
+        linkedListGetPredecessorOfNthOccurrence) == preorder_predecessor;
+    delete preorder_predecessor;
+
+    BinaryTree<int>* inorder_predecessor = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&inorder_predecessor, 2);
+    result &= binaryTreeGetOrderCessor(
+        inorder_predecessor, 
+        4, 
+        binaryTreeGetInorder, 
+        linkedListGetPredecessorOfNthOccurrence) == inorder_predecessor->left;
+    delete inorder_predecessor;
+
+    BinaryTree<int>* postorder_successor = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&postorder_successor, 2);
+    binaryTreeInsertNode(&postorder_successor, 5);
+    result &= binaryTreeGetOrderCessor(
+        postorder_successor, 
+        5, 
+        binaryTreeGetPostorder, 
+        linkedListGetSuccessorOfNthOccurrence) == postorder_successor;
+    delete postorder_successor;
+
+    return result;
+}
+
+bool binaryTreeTestGetParentOf() {
+    bool result = true;
+
+    BinaryTree<int>* empty = nullptr;
+    result &= !binaryTreeGetParentOf(empty, 2);
+    
+    BinaryTree<int>* leaf_root = new BinaryTree<int>(5);
+    result &= !binaryTreeGetParentOf(leaf_root, 5);
+    delete leaf_root;
+
+    BinaryTree<int>* parent_of_left = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&parent_of_left, 2);
+    result &= binaryTreeGetParentOf(parent_of_left, 2) == parent_of_left;
+    delete parent_of_left;
+
+    BinaryTree<int>* parent_of_right = new BinaryTree<int>(5);
+    binaryTreeInsertNode(&parent_of_right, 7);
+    result &= binaryTreeGetParentOf(parent_of_right, 7) == parent_of_right;
+    delete parent_of_right;
+
+    BinaryTree<int>* left_is_parent = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&left_is_parent, 3);
+    binaryTreeInsertNode(&left_is_parent, 2);
+    result &= binaryTreeGetParentOf(left_is_parent, 2) == left_is_parent->left;
+    delete left_is_parent;
+
+    return result;
+}
+
+bool binaryTreeTestDeleteNode() {
+    bool result = true;
+
+    BinaryTree<int>* empty = nullptr;
+    binaryTreeDeleteNode(&empty, 2);
+    result &= !empty;
+
+    BinaryTree<int>* delete_root = new BinaryTree<int>(4);
+    binaryTreeDeleteNode(&delete_root, 4);
+
+    BinaryTree<int>* delete_head_left_leaf = new BinaryTree<int>(5);
+    binaryTreeInsertNode(&delete_head_left_leaf, 2);
+    binaryTreeDeleteNode(&delete_head_left_leaf, 5);
+    result &= delete_head_left_leaf->data == 2;
+    delete delete_head_left_leaf;
+
+    BinaryTree<int>* delete_head_left_non_leaf = new BinaryTree<int>(6);
+    binaryTreeInsertNode(&delete_head_left_non_leaf, 3);
+    binaryTreeInsertNode(&delete_head_left_non_leaf, 5);
+    binaryTreeInsertNode(&delete_head_left_non_leaf, 4);
+    binaryTreeDeleteNode(&delete_head_left_non_leaf, 6);
+    result &= delete_head_left_non_leaf->data == 5;
+    result &= delete_head_left_non_leaf->left->right->data == 4;
+    delete delete_head_left_non_leaf;
+
+    BinaryTree<int>* delete_head_right_leaf = new BinaryTree<int>(5);
+    binaryTreeInsertNode(&delete_head_right_leaf, 4);
+    binaryTreeDeleteNode(&delete_head_right_leaf, 5);
+    result &= delete_head_right_leaf->data == 4;
+    delete delete_head_right_leaf;
+
+    BinaryTree<int>* delete_head_right_non_leaf = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&delete_head_right_non_leaf, 7);
+    binaryTreeInsertNode(&delete_head_right_non_leaf, 5);
+    binaryTreeInsertNode(&delete_head_right_non_leaf, 6);
+    binaryTreeDeleteNode(&delete_head_right_non_leaf, 4);
+    result &= delete_head_right_non_leaf->data == 5;
+    result &= delete_head_right_non_leaf->right->left->data == 6;
+    delete delete_head_right_non_leaf;
+
+    BinaryTree<int>* delete_left = new BinaryTree<int>(4);
+    binaryTreeInsertNode(&delete_left, 2);
+    binaryTreeInsertNode(&delete_left, 1);
+    binaryTreeDeleteNode(&delete_left, 2);
+    result &= delete_left->left->data == 1;
+    delete delete_left;
+
+    return result;
+}
 
 void binaryTreeTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("binary tree");
@@ -424,5 +535,11 @@ void binaryTreeTestRegisterTests(TestManager* test_manager) {
         UnitTest("get postorder", binaryTreeTestGetPostorder));
     testGroupAddTest(&test_group,
         UnitTest("find node", binaryTreeTestFindNode));
+    testGroupAddTest(&test_group,
+        UnitTest("get order cessor", binaryTreeTestGetOrderCessor));
+    testGroupAddTest(&test_group,
+        UnitTest("get parent of", binaryTreeTestGetParentOf));
+    testGroupAddTest(&test_group,
+        UnitTest("delete node", binaryTreeTestDeleteNode));
     test_manager->test_groups.push_back(test_group);
 }

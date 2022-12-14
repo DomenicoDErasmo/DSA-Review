@@ -106,9 +106,7 @@ void linkedListInsertAtTail(LinkedList<T>** head, T data) {
     LinkedList<T>* temp = *head;
 
     // We have to set temp->next, setting temp makes it fail sometimes
-    while (temp->next) {
-        temp = temp->next;
-    }
+    while (temp->next) {temp = temp->next;}
     temp->next = new LinkedList<T>(data);
 }
 
@@ -195,7 +193,7 @@ LinkedList<T>* linkedListGetNthNode(LinkedList<T>* const& head, int n) {
 }
 
 /**
- * @brief Finds the Nth occurrence of the data in the list and returns its node.
+ * @brief Gets the Nth occurrence of the data in the list and returns its node.
  * Assumes that the type has an equality operator.
  * Because the node comes from the list, it doesn't need to be deleted;
  * it gets deleted when the list's head is deleted.
@@ -207,7 +205,7 @@ LinkedList<T>* linkedListGetNthNode(LinkedList<T>* const& head, int n) {
  * @return LinkedList<T>* A node denoting the nth occurrence of the data
  */
 template <typename T>
-LinkedList<T>* linkedListFindNthOccurrence(
+LinkedList<T>* linkedListGetNthOccurrence(
     LinkedList<T>* const& head,
     T data,
     int n) {
