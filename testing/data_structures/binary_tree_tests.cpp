@@ -98,6 +98,65 @@ bool binaryTreeTestAssignmentOperator() {
     return result;
 }
 
+bool binaryTreeTestEqualityOperator() {
+    bool result = true;
+
+    BinaryTree<int> data_mismatch_lhs(4);
+    BinaryTree<int> data_mismatch_rhs(5);
+    result &= !(data_mismatch_lhs == data_mismatch_rhs);
+
+    BinaryTree<int> left_mismatch_lhs(4, new BinaryTree<int>(3), nullptr);
+    BinaryTree<int> left_mismatch_rhs(4, nullptr, nullptr);
+    result &= !(left_mismatch_lhs == left_mismatch_rhs);
+
+    BinaryTree<int> left_mismatch_lhs_2(4, nullptr, nullptr);
+    BinaryTree<int> left_mismatch_rhs_2(4, new BinaryTree<int>(3), nullptr);
+    result &= !(left_mismatch_lhs_2 == left_mismatch_rhs_2);
+
+    BinaryTree<int> right_mismatch_lhs(4, nullptr, new BinaryTree<int>(5));
+    BinaryTree<int> right_mismatch_rhs(4, nullptr, nullptr);
+    result &= !(right_mismatch_lhs == right_mismatch_rhs);
+
+    BinaryTree<int> right_mismatch_lhs_2(4, nullptr, nullptr);
+    BinaryTree<int> right_mismatch_rhs_2(4, nullptr, new BinaryTree<int>(5));
+    result &= !(right_mismatch_lhs_2 == right_mismatch_rhs_2);
+    
+    BinaryTree<int> left_val_mismatch_lhs(4, 
+        new BinaryTree<int>(3), 
+        new BinaryTree<int>(5));
+    BinaryTree<int> left_val_mismatch_rhs(4,
+        new BinaryTree<int>(2),
+        new BinaryTree<int>(5));
+    result &= !(left_val_mismatch_lhs == left_val_mismatch_rhs);
+    
+    BinaryTree<int> right_val_mismatch_lhs(4, 
+        new BinaryTree<int>(3), 
+        new BinaryTree<int>(5));
+    BinaryTree<int> right_val_mismatch_rhs(4,
+        new BinaryTree<int>(3),
+        new BinaryTree<int>(6));
+    result &= !(left_val_mismatch_lhs == left_val_mismatch_rhs);
+    
+    BinaryTree<int> equals_lhs(4, 
+        new BinaryTree<int>(2,
+            new BinaryTree<int>(1),
+            nullptr), 
+        new BinaryTree<int>(6,
+            nullptr,
+            new BinaryTree<int>(7)));
+    BinaryTree<int> equals_rhs(4,
+        new BinaryTree<int>(2,
+            new BinaryTree<int>(1),
+            nullptr),
+        new BinaryTree<int>(6,
+            nullptr,
+            new BinaryTree<int>(7)));
+    result &= equals_lhs == equals_rhs;
+    result &= &equals_lhs != &equals_rhs;
+
+    return result;
+}
+
 bool binaryTreeTestGetHeight() {
     bool result = true;
 
@@ -521,6 +580,8 @@ void binaryTreeTestRegisterTests(TestManager* test_manager) {
         UnitTest("copy constructor", binaryTreeTestCopyConstructor));
     testGroupAddTest(&test_group,
         UnitTest("assignment operator", binaryTreeTestAssignmentOperator));
+    testGroupAddTest(&test_group,
+        UnitTest("equality operator", binaryTreeTestEqualityOperator));
     testGroupAddTest(&test_group, 
         UnitTest("get height", binaryTreeTestGetHeight));
     testGroupAddTest(&test_group,

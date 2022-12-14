@@ -10,6 +10,7 @@ struct BinaryTree {
     BinaryTree<T>* right;
 
     // Constructors
+    // TODO: remove full param constructor
     BinaryTree(): data(T()), left(nullptr), right(nullptr) {}
     BinaryTree(const T& data): data(data), left(nullptr), right(nullptr) {}
     BinaryTree(
@@ -41,6 +42,28 @@ struct BinaryTree {
     BinaryTree<T>& operator = (BinaryTree<T> rhs) {
         swap(*this, other);
         return *this;
+    }
+
+    /**
+     * @brief Checks equality of two binary trees
+     * 
+     * @param lhs The first binary tree to check
+     * @param rhs The second binary tree to check
+     * @return true if the trees are equal, otherwise false
+     */
+    friend bool operator == (BinaryTree<T>& lhs, BinaryTree<T>& rhs) {
+        if ((lhs.data != rhs.data)
+        || (lhs.left && !rhs.left) 
+        || (!lhs.left && rhs.left) 
+        || (lhs.right && !rhs.right)
+        || (!lhs.right && rhs.right)) {return false;}
+
+        bool result = true;
+
+        if (lhs.left && rhs.left) {result &= *lhs.left == *rhs.left;}
+        if (lhs.right && rhs.right) {result &= *lhs.right == *rhs.right;}
+
+        return result;
     }
 
     // Utility Functions
