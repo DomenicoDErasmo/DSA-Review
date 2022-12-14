@@ -17,15 +17,14 @@ struct LinkedList {
     // Default - Assumes that the type has a default constructor
     LinkedList(): data(T()), next(nullptr) {}
 
-    LinkedList(const T& data): data(data), next(nullptr) {}
-    LinkedList(const T& data,
-               LinkedList<T>* const& next): data(data), next(next) {}
+    LinkedList(T data): data(data), next(nullptr) {}
+    LinkedList(T data, LinkedList<T>* next): data(data), next(next) {}
     LinkedList(const LinkedList<T>& other) {
         data = other.data;
         next = other.next ? new LinkedList<T>(*other.next) : nullptr;
     }
 
-    // Destructors
+    // Destructor
     ~LinkedList() {delete next;}
 
     // Operators
