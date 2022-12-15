@@ -16,7 +16,7 @@ struct Stack {
     // Constructors
     Stack(): top(nullptr) {}
     Stack(T data): top(new DoubleLinkedList<T>(data)) {}
-    Stack(const Stack<T>& other): top(new DoubleLinkedList<T>(other)) {}
+    Stack(const Stack<T>& other): top(new DoubleLinkedList<T>(*other.top)) {}
 
     // Destructor
     ~Stack() {delete top;}
@@ -31,6 +31,28 @@ struct Stack {
     Stack<T>& operator = (Stack<T> rhs) {
         swap (*this, other);
         return *this;
+    }
+
+    /**
+     * @brief Checks equality of two stacks
+     * 
+     * @param lhs The first stack to check
+     * @param rhs The second stack to check
+     * @return true if the stacks are equal, otherwise false
+     */
+    friend bool operator == (Stack<T>& lhs, Stack<T>& rhs) {
+        return *lhs.top == *rhs.top;
+    }
+
+    /**
+     * @brief Checks inequality of two stacks
+     * 
+     * @param lhs The first stack to check
+     * @param rhs The second stack to check
+     * @return true if the stacks are inequal, otherwise false
+     */
+    friend bool operator != (Stack<T>& lhs, Stack<T>& rhs) {
+        return !(lhs == rhs);
     }
 
     // Utility Functions
