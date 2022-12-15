@@ -1,5 +1,5 @@
-#include "test_utils/test_manager.hpp"
-#include "test_utils/test_group.hpp"
+#include "test_manager.hpp"
+#include "test_group.hpp"
 #include <iostream>
 
 void testManagerRun(const TestManager& test_manager) {
@@ -13,4 +13,10 @@ void testManagerRun(const TestManager& test_manager) {
         testGroupRun(test_group);
     }
     std::cout << "Done!" << std::endl;
+}
+
+void testManagerAddTestGroup(
+        TestManager* test_manager, 
+        const TestGroup& test_group) {
+    test_manager->test_groups.push_back(test_group);
 }

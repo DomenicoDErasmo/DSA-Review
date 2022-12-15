@@ -1,4 +1,4 @@
-#include "test_utils/test_group.hpp"
+#include "test_group.hpp"
 #include <iostream>
 
 void testGroupRun(const TestGroup& test_group) {

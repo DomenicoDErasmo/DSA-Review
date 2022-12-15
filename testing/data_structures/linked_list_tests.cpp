@@ -350,5 +350,5 @@ void linkedListTestRegisterTests(TestManager* test_manager) {
         linkedListTestGetPredecessorOfNthOccurrence));
     testGroupAddTest(&test_group, UnitTest("get successor of nth occurrence",
         linkedListTestGetSuccessorOfNthOccurrence));
-    test_manager->test_groups.push_back(test_group);
+    testManagerAddTestGroup(test_manager, test_group);
 }

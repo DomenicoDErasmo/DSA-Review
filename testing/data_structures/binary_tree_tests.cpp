@@ -601,5 +601,5 @@ void binaryTreeTestRegisterTests(TestManager* test_manager) {
         UnitTest("get parent of", binaryTreeTestGetParentOf));
     testGroupAddTest(&test_group,
         UnitTest("delete node", binaryTreeTestDeleteNode));
-    test_manager->test_groups.push_back(test_group);
+    testManagerAddTestGroup(test_manager, test_group);
 }
