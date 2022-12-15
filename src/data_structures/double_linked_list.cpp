@@ -75,6 +75,19 @@ struct DoubleLinkedList {
         return (!lhs_temp && !rhs_temp);
     }
 
+    /**
+     * @brief Checks inequality of two double linked lists
+     * 
+     * @param lhs The first double linked list to check
+     * @param rhs The second double linked list to check
+     * @return true if the lists are inequal, otherwise false
+     */
+    friend bool operator != (
+            DoubleLinkedList<T>& lhs, 
+            DoubleLinkedList<T>& rhs) {
+        return !(lhs == rhs);
+    }
+
     // Utility Functions
 
     /**

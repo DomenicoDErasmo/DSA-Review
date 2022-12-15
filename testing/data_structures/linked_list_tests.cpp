@@ -77,6 +77,33 @@ bool linkedListTestAssignmentOperator() {
     return result;
 }
 
+bool linkedListTestEqualityOperator() {
+    bool result = true;
+
+    LinkedList<int>* unequal_lhs = new LinkedList<int>(2);
+    LinkedList<int>* unequal_rhs = new LinkedList<int>(5);
+    result &= !(*unequal_lhs == *unequal_rhs);
+    delete unequal_lhs;
+    delete unequal_rhs;
+
+    LinkedList<int>* different_size_lhs = new LinkedList<int>(3);
+    LinkedList<int>* different_size_rhs = new LinkedList<int>(3);
+    linkedListInsertAtTail(&different_size_rhs, 6);
+    result &= !(*different_size_lhs == *different_size_rhs);
+    delete different_size_lhs;
+    delete different_size_rhs;
+
+    LinkedList<int>* equals_lhs = new LinkedList<int>(4);
+    LinkedList<int>* equals_rhs = new LinkedList<int>(4);
+    linkedListInsertAtTail(&equals_lhs, 6);
+    linkedListInsertAtTail(&equals_rhs, 6);
+    result &= *equals_lhs == *equals_rhs;
+    delete equals_lhs;
+    delete equals_rhs;
+
+    return result;
+}
+
 bool linkedListTestInsertAtTail() {
     bool result = true;
 
@@ -241,33 +268,6 @@ bool linkedListTestDeleteNthOccurrence() {
     return result;
 }
 
-bool linkedListTestEqualityOperator() {
-    bool result = true;
-
-    LinkedList<int>* unequal_rhs = new LinkedList<int>(5);
-    LinkedList<int>* unequal_lhs = new LinkedList<int>(2);
-    result &= !(*unequal_lhs == *unequal_rhs);
-    delete unequal_lhs;
-    delete unequal_rhs;
-
-    LinkedList<int>* different_size_lhs = new LinkedList<int>(3);
-    LinkedList<int>* different_size_rhs = new LinkedList<int>(3);
-    linkedListInsertAtTail(&different_size_rhs, 6);
-    result &= !(*different_size_lhs == *different_size_rhs);
-    delete different_size_lhs;
-    delete different_size_rhs;
-
-    LinkedList<int>* equals_lhs = new LinkedList<int>(4);
-    LinkedList<int>* equals_rhs = new LinkedList<int>(4);
-    linkedListInsertAtTail(&equals_lhs, 6);
-    linkedListInsertAtTail(&equals_rhs, 6);
-    result &= *equals_lhs == *equals_rhs;
-    delete equals_lhs;
-    delete equals_rhs;
-
-    return result;
-}
-
 bool linkedListTestGetPredecessorOfNthOccurrence() {
     bool result = true;
 
@@ -330,6 +330,8 @@ void linkedListTestRegisterTests(TestManager* test_manager) {
         linkedListTestCopyConstructor));
     testGroupAddTest(&test_group, UnitTest("assignment operator",
         linkedListTestAssignmentOperator));
+    testGroupAddTest(&test_group, UnitTest("equality operator",
+        linkedListTestEqualityOperator));
     testGroupAddTest(&test_group, UnitTest("insert at tail",
         linkedListTestInsertAtTail));
     testGroupAddTest(&test_group, UnitTest("insert at head",
@@ -344,8 +346,6 @@ void linkedListTestRegisterTests(TestManager* test_manager) {
         linkedListTestGetNthOccurrence));
     testGroupAddTest(&test_group, UnitTest("delete nth occurrence",
         linkedListTestDeleteNthOccurrence));
-    testGroupAddTest(&test_group, UnitTest("equality operator",
-        linkedListTestEqualityOperator));
     testGroupAddTest(&test_group, UnitTest("get predecessor of nth occurrence",
         linkedListTestGetPredecessorOfNthOccurrence));
     testGroupAddTest(&test_group, UnitTest("get successor of nth occurrence",

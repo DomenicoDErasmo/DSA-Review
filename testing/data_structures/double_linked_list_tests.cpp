@@ -90,6 +90,52 @@ bool doubleLinkedListTestAssignmentOperator() {
     return result;
 }
 
+bool doubleLinkedListTestEqualityOperator() {
+    bool result = true;
+
+    DoubleLinkedList<int>* unequal_lhs = new DoubleLinkedList<int>(3);
+    DoubleLinkedList<int>* unequal_rhs = new DoubleLinkedList<int>(4);
+    result &= !(*unequal_lhs == *unequal_rhs);
+    delete unequal_lhs;
+    delete unequal_rhs;
+
+    DoubleLinkedList<int>* lhs_too_big = new DoubleLinkedList<int>(3,
+        nullptr,
+        new DoubleLinkedList<int>(4,
+            nullptr,
+            new DoubleLinkedList<int>(5)));
+    DoubleLinkedList<int>* rhs_too_small = new DoubleLinkedList<int>(3,
+        nullptr,
+        new DoubleLinkedList<int>(4));
+    result &= !(*lhs_too_big == *rhs_too_small);
+    delete lhs_too_big;
+    delete rhs_too_small;
+
+    DoubleLinkedList<int>* lhs_too_small = new DoubleLinkedList<int>(3,
+        nullptr,
+        new DoubleLinkedList<int>(4));
+    DoubleLinkedList<int>* rhs_too_big = new DoubleLinkedList<int>(3,
+        nullptr,
+        new DoubleLinkedList<int>(4,
+            nullptr,
+            new DoubleLinkedList<int>(5)));
+    result &= !(*lhs_too_small == *rhs_too_big);
+    delete lhs_too_small;
+    delete rhs_too_big;
+
+    DoubleLinkedList<int>* equal_lhs = new DoubleLinkedList<int>(3,
+        nullptr,
+        new DoubleLinkedList<int>(4));
+    DoubleLinkedList<int>* equal_rhs = new DoubleLinkedList<int>(3,
+        nullptr,
+        new DoubleLinkedList<int>(4));
+    result &= *equal_lhs == *equal_rhs;
+    delete equal_lhs;
+    delete equal_rhs;
+
+    return result;
+}
+
 bool doubleLinkedListTestInsertPrev() {
     bool result = true;
 
@@ -219,6 +265,8 @@ void doubleLinkedListTestRegisterTests(TestManager* test_manager) {
         doubleLinkedListTestCopyConstructor));
     testGroupAddTest(&test_group, UnitTest("assignment operator",
         doubleLinkedListTestAssignmentOperator));
+    testGroupAddTest(&test_group, UnitTest("equality operator",
+        doubleLinkedListTestEqualityOperator));
     testGroupAddTest(&test_group, UnitTest("insert prev",
         doubleLinkedListTestInsertPrev));
     testGroupAddTest(&test_group, UnitTest("insert next",
