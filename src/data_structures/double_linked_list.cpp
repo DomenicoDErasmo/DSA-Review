@@ -137,6 +137,10 @@ struct DoubleLinkedList {
  */
 template <typename T>
 void doubleLinkedListInsertPrev(DoubleLinkedList<T>** node, T data) {
+    if (!*node) {
+        *node = new DoubleLinkedList<T>(data);
+        return;
+    }
     DoubleLinkedList<T>* prev = (*node)->prev;
     DoubleLinkedList<T>* new_node = new DoubleLinkedList<T>(data, prev, *node);
     (*node)->prev = new_node;
@@ -152,6 +156,10 @@ void doubleLinkedListInsertPrev(DoubleLinkedList<T>** node, T data) {
  */
 template <typename T>
 void doubleLinkedListInsertNext(DoubleLinkedList<T>** node, T data) {
+    if (!*node) {
+        *node = new DoubleLinkedList<T>(data);
+        return;
+    }
     DoubleLinkedList<T>* next = (*node)->next;
     DoubleLinkedList<T>* new_node = new DoubleLinkedList<T>(data, *node, next);
     (*node)->next = new_node;

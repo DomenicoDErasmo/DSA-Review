@@ -139,6 +139,13 @@ bool doubleLinkedListTestEqualityOperator() {
 bool doubleLinkedListTestInsertPrev() {
     bool result = true;
 
+    DoubleLinkedList<int>* empty = nullptr;
+    doubleLinkedListInsertPrev(&empty, 2);
+    result &= empty->data == 2;
+    result &= !empty->prev;
+    result &= !empty->next;
+    delete empty;
+
     DoubleLinkedList<int>* no_prev = new DoubleLinkedList<int>(3);
     doubleLinkedListInsertPrev(&no_prev, 4);
     result &= no_prev->prev->data == 4;
@@ -162,6 +169,13 @@ bool doubleLinkedListTestInsertPrev() {
 
 bool doubleLinkedListTestInsertNext() {
     bool result = true;
+
+    DoubleLinkedList<int>* empty = nullptr;
+    doubleLinkedListInsertNext(&empty, 2);
+    result &= empty->data == 2;
+    result &= !empty->prev;
+    result &= !empty->next;
+    delete empty;
 
     DoubleLinkedList<int>* no_next = new DoubleLinkedList<int>(3);
     doubleLinkedListInsertNext(&no_next, 4);

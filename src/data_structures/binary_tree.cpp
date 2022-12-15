@@ -2,6 +2,12 @@
 #define BINARY_TREE_CPP
 
 #include "linked_list.cpp"
+
+/**
+ * @brief Binary tree implementation
+ * 
+ * @tparam T The type of the binary tree's data
+ */
 template <typename T>
 struct BinaryTree {
     // Fields
