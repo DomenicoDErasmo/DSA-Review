@@ -130,6 +130,7 @@ struct DoubleLinkedList {
 
 /**
  * @brief Inserts a new node before the current node
+ * We pass a double pointer because otherwise we don't get the exact head
  * 
  * @tparam T The type of the double linked list's data
  * @param node A pointer to the node to insert before
@@ -219,5 +220,35 @@ void doubleLinkedListInsertAtTail(DoubleLinkedList<T>** node, T data) {
     DoubleLinkedList<T>* tail = doubleLinkedListGetTail(node);
     doubleLinkedListInsertNext(&tail, data);
 }
+
+/**
+ * @brief Gets the position of the Nth occurrence of data starting from the head
+ * 
+ * @tparam T The type of the double linked list's data
+ * @param node A pointer to the node in the list
+ * @param data The data to search for in the list
+ * @param n The number of occurrences to stop at
+ * @return int The position of the nth occurrence of data in the list or -1
+ */
+template <typename T>
+int doubleLinkedListGetForwardPositionOfNthOccurrence(
+        DoubleLinkedList<T>* node, 
+        T data,
+        int n) {
+    DoubleLinkedList<T>* head = doubleLinkedListGetHead(&node);
+    int num_found = 0, current = 0;
+    while (head && num_found < n) {
+        if (head->data == data) {
+            num_found++;
+            if (num_found == n) {return current;} 
+        }
+        head = head->next;
+        current++;
+    }
+    return -1;
+}
+
+// TODO: get position of nth occurrence, get nth occurrence, delete nth occurrence, get size
+// provide direction for these?
 
 #endif

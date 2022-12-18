@@ -267,6 +267,63 @@ bool doubleLinkedListTestInsertAtTail() {
     return result;
 }
 
+// TODO: unit tests
+bool doubleLinkedListTestGetForwardPositionOfNthOccurrence() {
+    bool result = true;
+
+    DoubleLinkedList<int>* not_found = new DoubleLinkedList<int>(4);
+    result &= doubleLinkedListGetForwardPositionOfNthOccurrence(
+        not_found, 
+        5, 
+        1) == -1;
+    delete not_found;
+
+    // TODO: case of >1
+    DoubleLinkedList<int>* not_enough = new DoubleLinkedList<int>(4,
+        nullptr,
+        new DoubleLinkedList<int>(5,
+            nullptr,
+            new DoubleLinkedList<int>(6)));
+    not_enough->next->prev = not_enough;
+    not_enough->next->next->prev = not_enough->next;
+    result &= doubleLinkedListGetForwardPositionOfNthOccurrence(
+        not_enough,
+        4,
+        2) == -1;
+    delete not_enough;
+
+    DoubleLinkedList<int>* found_for_one = new DoubleLinkedList<int>(4,
+        nullptr,
+        new DoubleLinkedList<int>(5,
+            nullptr,
+            new DoubleLinkedList<int>(6)));
+    found_for_one->next->prev = found_for_one;
+    found_for_one->next->next->prev = found_for_one->next;
+    result &= doubleLinkedListGetForwardPositionOfNthOccurrence(
+        found_for_one,
+        4,
+        1) == 0;
+    delete found_for_one;
+
+    DoubleLinkedList<int>* found_for_multiple = new DoubleLinkedList<int>(4,
+        nullptr,
+        new DoubleLinkedList<int>(5,
+            nullptr,
+            new DoubleLinkedList<int>(4,
+                nullptr,
+                new DoubleLinkedList<int>(4))));
+    found_for_multiple->next->prev = found_for_multiple;
+    found_for_multiple->next->next->prev = found_for_multiple->next;
+    found_for_multiple->next->next->next->prev = found_for_multiple->next->next;
+    result &= doubleLinkedListGetForwardPositionOfNthOccurrence(
+        found_for_multiple,
+        4,
+        2) == 2;
+    delete found_for_multiple;
+
+    return result;
+}
+
 void doubleLinkedListTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("double linked list");
     testGroupAddTest(&test_group, UnitTest("default constructor", 
@@ -293,5 +350,8 @@ void doubleLinkedListTestRegisterTests(TestManager* test_manager) {
         doubleLinkedListTestInsertAtHead));
     testGroupAddTest(&test_group, UnitTest("insert at tail",
         doubleLinkedListTestInsertAtTail));
+    testGroupAddTest(&test_group, UnitTest(
+        "get forward position of nth occurrence", 
+        doubleLinkedListTestGetForwardPositionOfNthOccurrence));
     test_manager->test_groups.push_back(test_group);
 }
