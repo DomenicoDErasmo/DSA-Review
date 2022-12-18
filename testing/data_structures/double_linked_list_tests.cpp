@@ -199,6 +199,9 @@ bool doubleLinkedListTestInsertNext() {
 bool doubleLinkedListTestGetHead() {
     bool result = true;
 
+    DoubleLinkedList<int>* empty = nullptr;
+    result &= !doubleLinkedListGetHead(&empty);
+
     DoubleLinkedList<int>* has_prev = new DoubleLinkedList<int>(4,
         new DoubleLinkedList<int>(2),
         nullptr);
@@ -211,12 +214,194 @@ bool doubleLinkedListTestGetHead() {
 
 bool doubleLinkedListTestGetTail() {
     bool result = true;
+    DoubleLinkedList<int>* empty = nullptr;
+    result &= !doubleLinkedListGetTail(&empty);
 
     DoubleLinkedList<int>* has_next = new DoubleLinkedList<int>(4,
         nullptr,
         new DoubleLinkedList<int>(2));
     result &= doubleLinkedListGetTail(&has_next) == has_next->next;
     delete has_next;
+
+    return result;
+}
+
+bool doubleLinkedListTestGetFromForwardPosition() {
+    bool result = true;
+
+    DoubleLinkedList<int>* empty = nullptr;
+    result &= !doubleLinkedListGetFromForwardPosition(&empty, 1);
+
+    DoubleLinkedList<int>* list_too_small = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtTail(&list_too_small, 6);
+    doubleLinkedListInsertAtTail(&list_too_small, 4);
+    result &= !doubleLinkedListGetFromForwardPosition(&list_too_small, 4);
+    delete list_too_small;
+
+    DoubleLinkedList<int>* big_enough = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtTail(&big_enough, 6);
+    doubleLinkedListInsertAtTail(&big_enough, 4);
+    result &= doubleLinkedListGetFromForwardPosition(
+        &big_enough, 
+        2) == big_enough->next->next;
+    delete big_enough;
+
+    return result;
+}
+
+bool doubleLinkedListTestGetFromBackwardPosition() {
+    bool result = true;
+
+    DoubleLinkedList<int>* empty = nullptr;
+    result &= !doubleLinkedListGetFromBackwardPosition(&empty, 1);
+
+    DoubleLinkedList<int>* list_too_small = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtHead(&list_too_small, 6);
+    doubleLinkedListInsertAtHead(&list_too_small, 4);
+    result &= !doubleLinkedListGetFromBackwardPosition(&list_too_small, 4);
+    delete list_too_small;
+
+    DoubleLinkedList<int>* big_enough = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtHead(&big_enough, 6);
+    doubleLinkedListInsertAtHead(&big_enough, 4);
+    result &= doubleLinkedListGetFromBackwardPosition(
+        &big_enough, 
+        2) == big_enough->prev->prev;
+    big_enough = big_enough->prev->prev;
+    delete big_enough;
+
+    return result;
+}
+
+bool doubleLinkedListTestDeleteFromForwardPosition() {
+    bool result = true;
+
+    DoubleLinkedList<int>* invalid_n = nullptr;
+    doubleLinkedListDeleteFromForwardPosition(&invalid_n, -1);
+    result &= !invalid_n;
+
+    DoubleLinkedList<int>* empty = nullptr;
+    doubleLinkedListDeleteFromForwardPosition(&empty, 0);
+    result &= !empty;
+
+    DoubleLinkedList<int>* delete_head_when_not_node = 
+        new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtHead(&delete_head_when_not_node, 2);
+    doubleLinkedListDeleteFromForwardPosition(&delete_head_when_not_node, 0);
+    result &= !delete_head_when_not_node->prev;
+    delete delete_head_when_not_node;
+
+    DoubleLinkedList<int>* delete_head_when_node = new DoubleLinkedList<int>(4);
+    doubleLinkedListDeleteFromForwardPosition(&delete_head_when_node, 0);
+    result &= !delete_head_when_node;
+
+    DoubleLinkedList<int>* delete_head_when_next = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtTail(&delete_head_when_next, 2);
+    doubleLinkedListDeleteFromForwardPosition(&delete_head_when_next, 0);
+    result &= delete_head_when_next->data == 2;
+    result &= !delete_head_when_next->prev;
+    delete delete_head_when_next;
+
+    DoubleLinkedList<int>* too_small = new DoubleLinkedList<int>(4);
+    doubleLinkedListDeleteFromForwardPosition(
+        &too_small, 
+        doubleLinkedListGetLength(too_small) + 1);
+    result &= too_small->data == 4;
+    result &= !too_small->prev;
+    result &= !too_small->next;
+    delete too_small;
+
+    DoubleLinkedList<int>* delete_when_not_node = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtTail(&delete_when_not_node, 2);
+    doubleLinkedListDeleteFromForwardPosition(&delete_when_not_node, 1);
+    result &= delete_when_not_node->data == 4;
+    result &= !delete_when_not_node->prev;
+    result &= !delete_when_not_node->next;
+    delete delete_when_not_node;
+
+    DoubleLinkedList<int>* delete_when_node = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtHead(&delete_when_node, 2);
+    doubleLinkedListDeleteFromForwardPosition(&delete_when_node, 1);
+    result &= delete_when_node->data == 2;
+    result &= !delete_when_node->prev;
+    result &= !delete_when_node->next;
+    delete delete_when_node;
+
+    DoubleLinkedList<int>* delete_when_next = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtTail(&delete_when_next, 2);
+    doubleLinkedListInsertAtTail(&delete_when_next, 3);
+    doubleLinkedListDeleteFromForwardPosition(&delete_when_next, 1);
+    result &= delete_when_next->data == 4;
+    result &= !delete_when_next->prev;
+    result &= delete_when_next->next->data == 3;
+    delete delete_when_next;
+
+    return result;
+}
+
+bool doubleLinkedListTestDeleteFromBackwardPosition() {
+    bool result = true;
+
+    DoubleLinkedList<int>* invalid_n = nullptr;
+    doubleLinkedListDeleteFromBackwardPosition(&invalid_n, -1);
+    result &= !invalid_n;
+
+    DoubleLinkedList<int>* empty = nullptr;
+    doubleLinkedListDeleteFromBackwardPosition(&empty, 0);
+    result &= !empty;
+
+    DoubleLinkedList<int>* delete_tail_when_not_node = 
+        new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtTail(&delete_tail_when_not_node, 2);
+    doubleLinkedListDeleteFromBackwardPosition(&delete_tail_when_not_node, 0);
+    result &= !delete_tail_when_not_node->prev;
+    delete delete_tail_when_not_node;
+
+    DoubleLinkedList<int>* delete_tail_when_node = new DoubleLinkedList<int>(4);
+    doubleLinkedListDeleteFromBackwardPosition(&delete_tail_when_node, 0);
+    result &= !delete_tail_when_node;
+
+    DoubleLinkedList<int>* delete_tail_when_prev = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtHead(&delete_tail_when_prev, 2);
+    doubleLinkedListDeleteFromBackwardPosition(&delete_tail_when_prev, 0);
+    result &= delete_tail_when_prev->data == 2;
+    result &= !delete_tail_when_prev->next;
+    delete delete_tail_when_prev;
+
+    DoubleLinkedList<int>* too_small = new DoubleLinkedList<int>(4);
+    doubleLinkedListDeleteFromBackwardPosition(
+        &too_small, 
+        doubleLinkedListGetLength(too_small) + 1);
+    result &= too_small->data == 4;
+    result &= !too_small->prev;
+    result &= !too_small->next;
+    delete too_small;
+
+    DoubleLinkedList<int>* delete_when_not_node = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtHead(&delete_when_not_node, 2);
+    doubleLinkedListDeleteFromBackwardPosition(&delete_when_not_node, 1);
+    result &= delete_when_not_node->data == 4;
+    result &= !delete_when_not_node->prev;
+    result &= !delete_when_not_node->next;
+    delete delete_when_not_node;
+
+    DoubleLinkedList<int>* delete_when_node = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtTail(&delete_when_node, 2);
+    doubleLinkedListDeleteFromBackwardPosition(&delete_when_node, 1);
+    result &= delete_when_node->data == 2;
+    result &= !delete_when_node->prev;
+    result &= !delete_when_node->next;
+    delete delete_when_node;
+
+    DoubleLinkedList<int>* delete_when_prev = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtHead(&delete_when_prev, 2);
+    doubleLinkedListInsertAtHead(&delete_when_prev, 3);
+    doubleLinkedListDeleteFromBackwardPosition(&delete_when_prev, 1);
+    result &= delete_when_prev->data == 4;
+    result &= !delete_when_prev->next;
+    result &= delete_when_prev->prev->data == 3;
+    delete_when_prev = delete_when_prev->prev;
+    delete delete_when_prev;
 
     return result;
 }
@@ -267,6 +452,29 @@ bool doubleLinkedListTestInsertAtTail() {
     return result;
 }
 
+bool doubleLinkedListTestGetLength() {
+    bool result = true;
+
+    DoubleLinkedList<int>* empty = nullptr;
+    result &= doubleLinkedListGetLength(empty) == 0;
+
+    DoubleLinkedList<int>* single_element = new DoubleLinkedList<int>(4);
+    result &= doubleLinkedListGetLength(single_element) == 1;
+    delete single_element;
+
+    DoubleLinkedList<int>* multiple_elements = new DoubleLinkedList<int>(5);
+    doubleLinkedListInsertAtTail(&multiple_elements, 6);
+    result &= doubleLinkedListGetLength(multiple_elements) == 2;
+    delete multiple_elements;
+
+    DoubleLinkedList<int>* not_at_head = new DoubleLinkedList<int>(5);
+    doubleLinkedListInsertAtHead(&not_at_head, 3);
+    result &= doubleLinkedListGetLength(not_at_head) == 2;
+    delete not_at_head;
+
+    return result;
+}
+
 bool doubleLinkedListTestGetForwardPositionOfNthOccurrence() {
     bool result = true;
 
@@ -308,6 +516,214 @@ bool doubleLinkedListTestGetForwardPositionOfNthOccurrence() {
     return result;
 }
 
+bool doubleLinkedListTestGetBackwardPositionOfNthOccurrence() {
+    bool result = true;
+
+    DoubleLinkedList<int>* not_found = new DoubleLinkedList<int>(4);
+    result &= doubleLinkedListGetBackwardPositionOfNthOccurrence(
+        not_found, 
+        5, 
+        1) == -1;
+    delete not_found;
+
+    DoubleLinkedList<int>* not_enough = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtHead(&not_enough, 5);
+    doubleLinkedListInsertAtHead(&not_enough, 6);
+    result &= doubleLinkedListGetBackwardPositionOfNthOccurrence(
+        not_enough,
+        4,
+        2) == -1;
+    delete not_enough;
+
+    DoubleLinkedList<int>* found_for_one = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtHead(&found_for_one, 5);
+    doubleLinkedListInsertAtHead(&found_for_one, 6);
+    result &= doubleLinkedListGetBackwardPositionOfNthOccurrence(
+        found_for_one,
+        4,
+        1) == 0;
+    delete found_for_one;
+
+    DoubleLinkedList<int>* found_for_multiple = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtHead(&found_for_multiple, 5);
+    doubleLinkedListInsertAtHead(&found_for_multiple, 4);
+    doubleLinkedListInsertAtHead(&found_for_multiple, 4);
+    result &= doubleLinkedListGetBackwardPositionOfNthOccurrence(
+        found_for_multiple,
+        4,
+        2) == 2;
+    delete found_for_multiple;
+
+    return result;
+}
+
+bool doubleLinkedListTestGetForwardNthOccurrence() {
+    bool result = true;
+
+    DoubleLinkedList<int>* empty = nullptr;
+    result &= !doubleLinkedListGetForwardNthOccurrence(&empty, 5, 2);
+
+    DoubleLinkedList<int>* not_found = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtTail(&not_found, 5);
+    doubleLinkedListInsertAtTail(&not_found, 6);
+    result &= !doubleLinkedListGetForwardNthOccurrence(&not_found, 7, 1);
+    delete not_found;
+
+    DoubleLinkedList<int>* not_enough = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtTail(&not_enough, 5);
+    doubleLinkedListInsertAtTail(&not_enough, 6);
+    result &= !doubleLinkedListGetForwardNthOccurrence(&not_enough, 6, 2);
+    delete not_enough;
+
+    DoubleLinkedList<int>* found = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtTail(&found, 5);
+    doubleLinkedListInsertAtTail(&found, 6);
+    result &= doubleLinkedListGetForwardNthOccurrence(
+        &found, 
+        6, 
+        1) == found->next->next;
+    delete found;
+
+    DoubleLinkedList<int>* not_at_head = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtHead(&not_at_head, 2);
+    doubleLinkedListInsertAtHead(&not_at_head, 2);
+    doubleLinkedListInsertAtHead(&not_at_head, 3);
+    result &= doubleLinkedListGetForwardNthOccurrence(
+        &not_at_head,
+        3,
+        2) == not_at_head;
+    not_at_head = not_at_head->prev->prev->prev;
+    delete not_at_head;
+
+    return result;
+}
+
+bool doubleLinkedListTestGetBackwardNthOccurrence() {
+    bool result = true;
+
+    DoubleLinkedList<int>* empty = nullptr;
+    result &= !doubleLinkedListGetBackwardNthOccurrence(&empty, 5, 2);
+
+    DoubleLinkedList<int>* not_found = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtHead(&not_found, 5);
+    doubleLinkedListInsertAtHead(&not_found, 6);
+    result &= !doubleLinkedListGetBackwardNthOccurrence(&not_found, 7, 1);
+    delete not_found;
+
+    DoubleLinkedList<int>* not_enough = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtHead(&not_enough, 5);
+    doubleLinkedListInsertAtHead(&not_enough, 6);
+    result &= !doubleLinkedListGetBackwardNthOccurrence(&not_enough, 6, 2);
+    delete not_enough;
+
+    DoubleLinkedList<int>* found = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtHead(&found, 5);
+    doubleLinkedListInsertAtHead(&found, 6);
+    result &= doubleLinkedListGetBackwardNthOccurrence(
+        &found, 
+        6, 
+        1) == found->prev->prev;
+    delete found;
+
+    DoubleLinkedList<int>* not_at_tail = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtTail(&not_at_tail, 2);
+    doubleLinkedListInsertAtTail(&not_at_tail, 2);
+    doubleLinkedListInsertAtTail(&not_at_tail, 3);
+    result &= doubleLinkedListGetBackwardNthOccurrence(
+        &not_at_tail,
+        3,
+        2) == not_at_tail;
+    delete not_at_tail;
+
+    return result;
+}
+
+bool doubleLinkedListTestDeleteForwardNthOccurrence() {
+    bool result = true;
+
+    DoubleLinkedList<int>* empty =  nullptr;
+    doubleLinkedListDeleteForwardNthOccurrence(&empty, 0, 1);
+    result &= !empty;
+
+    DoubleLinkedList<int>* not_found = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtTail(&not_found, 4);
+    doubleLinkedListInsertAtTail(&not_found, 5);
+    doubleLinkedListDeleteForwardNthOccurrence(&not_found, 6, 1);
+    result &= doubleLinkedListGetLength(not_found) == 3;
+    delete not_found;
+
+    DoubleLinkedList<int>* not_enough = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtTail(&not_enough, 4);
+    doubleLinkedListInsertAtTail(&not_enough, 5);
+    doubleLinkedListDeleteForwardNthOccurrence(&not_enough, 5, 2);
+    result &= doubleLinkedListGetLength(not_enough) == 3;
+    delete not_enough;
+
+    DoubleLinkedList<int>* delete_first_instance = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtTail(&delete_first_instance, 4);
+    doubleLinkedListInsertAtTail(&delete_first_instance, 5);
+    doubleLinkedListDeleteForwardNthOccurrence(&delete_first_instance, 4, 1);
+    result &= delete_first_instance->next->data == 5;
+    delete delete_first_instance;
+
+    DoubleLinkedList<int>* delete_not_first_instance = 
+        new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtTail(&delete_not_first_instance, 4);
+    doubleLinkedListInsertAtTail(&delete_not_first_instance, 4);
+    doubleLinkedListInsertAtTail(&delete_not_first_instance, 5);
+    doubleLinkedListDeleteForwardNthOccurrence(
+        &delete_not_first_instance, 
+        4, 
+        2);
+    result &= delete_not_first_instance->next->next->data == 5;
+    delete delete_not_first_instance;
+
+    return result;
+}
+
+bool doubleLinkedListTestDeleteBackwardNthOccurrence() {
+    bool result = true;
+
+    DoubleLinkedList<int>* empty =  nullptr;
+    doubleLinkedListDeleteBackwardNthOccurrence(&empty, 0, 1);
+    result &= !empty;
+
+    DoubleLinkedList<int>* not_found = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtHead(&not_found, 4);
+    doubleLinkedListInsertAtHead(&not_found, 5);
+    doubleLinkedListDeleteBackwardNthOccurrence(&not_found, 6, 1);
+    result &= doubleLinkedListGetLength(not_found) == 3;
+    delete not_found;
+
+    DoubleLinkedList<int>* not_enough = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtHead(&not_enough, 4);
+    doubleLinkedListInsertAtHead(&not_enough, 5);
+    doubleLinkedListDeleteBackwardNthOccurrence(&not_enough, 5, 2);
+    result &= doubleLinkedListGetLength(not_enough) == 3;
+    delete not_enough;
+
+    DoubleLinkedList<int>* delete_first_instance = new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtHead(&delete_first_instance, 4);
+    doubleLinkedListInsertAtHead(&delete_first_instance, 5);
+    doubleLinkedListDeleteBackwardNthOccurrence(&delete_first_instance, 4, 1);
+    result &= delete_first_instance->prev->data == 5;
+    delete delete_first_instance;
+
+    DoubleLinkedList<int>* delete_not_first_instance = 
+        new DoubleLinkedList<int>(3);
+    doubleLinkedListInsertAtHead(&delete_not_first_instance, 4);
+    doubleLinkedListInsertAtHead(&delete_not_first_instance, 4);
+    doubleLinkedListInsertAtHead(&delete_not_first_instance, 5);
+    doubleLinkedListDeleteBackwardNthOccurrence(
+        &delete_not_first_instance, 
+        4, 
+        2);
+    result &= delete_not_first_instance->prev->prev->data == 5;
+    delete delete_not_first_instance;
+
+    return result;
+}
+
 void doubleLinkedListTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("double linked list");
     testGroupAddTest(&test_group, UnitTest("default constructor", 
@@ -330,12 +746,33 @@ void doubleLinkedListTestRegisterTests(TestManager* test_manager) {
         doubleLinkedListTestGetHead));
     testGroupAddTest(&test_group, UnitTest("get tail",
         doubleLinkedListTestGetTail));
+    testGroupAddTest(&test_group, UnitTest("get forward position",
+        doubleLinkedListTestGetFromForwardPosition));
+    testGroupAddTest(&test_group, UnitTest("get backward position",
+        doubleLinkedListTestGetFromBackwardPosition));
+    testGroupAddTest(&test_group, UnitTest("delete from forward position",
+        doubleLinkedListTestDeleteFromForwardPosition));
+    testGroupAddTest(&test_group, UnitTest("delete from backward position",
+        doubleLinkedListTestDeleteFromBackwardPosition));
     testGroupAddTest(&test_group, UnitTest("insert at head",
         doubleLinkedListTestInsertAtHead));
     testGroupAddTest(&test_group, UnitTest("insert at tail",
         doubleLinkedListTestInsertAtTail));
+    testGroupAddTest(&test_group, UnitTest("get length",
+        doubleLinkedListTestGetLength));
     testGroupAddTest(&test_group, UnitTest(
         "get forward position of nth occurrence", 
         doubleLinkedListTestGetForwardPositionOfNthOccurrence));
+    testGroupAddTest(&test_group, UnitTest(
+        "get backward position of nth occurrence", 
+        doubleLinkedListTestGetBackwardPositionOfNthOccurrence));
+    testGroupAddTest(&test_group, UnitTest("get forward nth occurrence", 
+        doubleLinkedListTestGetForwardNthOccurrence));
+    testGroupAddTest(&test_group, UnitTest("get backward nth occurrence", 
+        doubleLinkedListTestGetBackwardNthOccurrence));
+    testGroupAddTest(&test_group, UnitTest("delete forward nth occurrence",
+        doubleLinkedListTestDeleteForwardNthOccurrence));
+    testGroupAddTest(&test_group, UnitTest("delete backward nth occurrence",
+        doubleLinkedListTestDeleteBackwardNthOccurrence));
     test_manager->test_groups.push_back(test_group);
 }
