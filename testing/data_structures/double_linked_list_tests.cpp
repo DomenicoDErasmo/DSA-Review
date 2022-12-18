@@ -267,7 +267,6 @@ bool doubleLinkedListTestInsertAtTail() {
     return result;
 }
 
-// TODO: unit tests
 bool doubleLinkedListTestGetForwardPositionOfNthOccurrence() {
     bool result = true;
 
@@ -278,43 +277,28 @@ bool doubleLinkedListTestGetForwardPositionOfNthOccurrence() {
         1) == -1;
     delete not_found;
 
-    // TODO: case of >1
-    DoubleLinkedList<int>* not_enough = new DoubleLinkedList<int>(4,
-        nullptr,
-        new DoubleLinkedList<int>(5,
-            nullptr,
-            new DoubleLinkedList<int>(6)));
-    not_enough->next->prev = not_enough;
-    not_enough->next->next->prev = not_enough->next;
+    DoubleLinkedList<int>* not_enough = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtTail(&not_enough, 5);
+    doubleLinkedListInsertAtTail(&not_enough, 6);
     result &= doubleLinkedListGetForwardPositionOfNthOccurrence(
         not_enough,
         4,
         2) == -1;
     delete not_enough;
 
-    DoubleLinkedList<int>* found_for_one = new DoubleLinkedList<int>(4,
-        nullptr,
-        new DoubleLinkedList<int>(5,
-            nullptr,
-            new DoubleLinkedList<int>(6)));
-    found_for_one->next->prev = found_for_one;
-    found_for_one->next->next->prev = found_for_one->next;
+    DoubleLinkedList<int>* found_for_one = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtTail(&found_for_one, 5);
+    doubleLinkedListInsertAtTail(&found_for_one, 6);
     result &= doubleLinkedListGetForwardPositionOfNthOccurrence(
         found_for_one,
         4,
         1) == 0;
     delete found_for_one;
 
-    DoubleLinkedList<int>* found_for_multiple = new DoubleLinkedList<int>(4,
-        nullptr,
-        new DoubleLinkedList<int>(5,
-            nullptr,
-            new DoubleLinkedList<int>(4,
-                nullptr,
-                new DoubleLinkedList<int>(4))));
-    found_for_multiple->next->prev = found_for_multiple;
-    found_for_multiple->next->next->prev = found_for_multiple->next;
-    found_for_multiple->next->next->next->prev = found_for_multiple->next->next;
+    DoubleLinkedList<int>* found_for_multiple = new DoubleLinkedList<int>(4);
+    doubleLinkedListInsertAtTail(&found_for_multiple, 5);
+    doubleLinkedListInsertAtTail(&found_for_multiple, 4);
+    doubleLinkedListInsertAtTail(&found_for_multiple, 4);
     result &= doubleLinkedListGetForwardPositionOfNthOccurrence(
         found_for_multiple,
         4,
