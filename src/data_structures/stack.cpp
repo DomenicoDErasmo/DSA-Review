@@ -70,4 +70,34 @@ struct Stack {
     }
 };
 
+/**
+ * @brief Push a value onto the stack
+ * 
+ * @tparam T The type of the stack's data
+ * @param stack The stack to push onto
+ * @param data The data to add to the stack
+ */
+template <typename T>
+void stackPush(Stack<T>& stack, T data) {
+    doubleLinkedListInsertAtTail(&(stack.top), data);
+    if (stack.top->next) {stack.top = stack.top->next;}
+}
+
+/**
+ * @brief Yields the top element in the stack
+ * 
+ * @tparam T The type of the stack's data
+ * @param stack The stack to take the top of
+ * @return T& A reference to the data on the top of the stack
+ */
+template <typename T>
+T& stackTop(Stack<T>& stack) {
+    if (doubleLinkedListGetLength(stack.top) == 0) {
+        throw std::logic_error("Can't take the top of an empty list!");
+    } else {
+        T& top = doubleLinkedListGetFromBackwardPosition(&stack.top, 0)->data;
+        return top;
+    }
+}
+
 #endif

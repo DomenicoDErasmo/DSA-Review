@@ -409,6 +409,11 @@ bool doubleLinkedListTestDeleteFromBackwardPosition() {
 bool doubleLinkedListTestInsertAtHead() {
     bool result = true;
 
+    DoubleLinkedList<int>* empty = nullptr;
+    doubleLinkedListInsertAtHead(&empty, 4);
+    result &= empty->data == 4;
+    delete empty;
+
     DoubleLinkedList<int> *at_head = new DoubleLinkedList<int>(4);
     doubleLinkedListInsertAtHead(&at_head, 2);
     result &= at_head->prev->data == 2;

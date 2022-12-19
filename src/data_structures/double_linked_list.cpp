@@ -336,6 +336,10 @@ void doubleLinkedListDeleteFromBackwardPosition(
  */
 template <typename T>
 void doubleLinkedListInsertAtHead(DoubleLinkedList<T>** node, T data) {
+    if (!*node) {
+        *node = new DoubleLinkedList<T>(data);
+        return;
+    }
     DoubleLinkedList<T>* head = doubleLinkedListGetHead(node);
     doubleLinkedListInsertPrev(&head, data);
 }
@@ -349,6 +353,10 @@ void doubleLinkedListInsertAtHead(DoubleLinkedList<T>** node, T data) {
  */
 template <typename T>
 void doubleLinkedListInsertAtTail(DoubleLinkedList<T>** node, T data) {
+    if (!*node) {
+        *node = new DoubleLinkedList<T>(data);
+        return;
+    }
     DoubleLinkedList<T>* tail = doubleLinkedListGetTail(node);
     doubleLinkedListInsertNext(&tail, data);
 }

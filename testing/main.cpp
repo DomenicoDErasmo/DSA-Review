@@ -9,7 +9,7 @@ int main() {
     //linkedListTestRegisterTests(&test_manager);
     doubleLinkedListTestRegisterTests(&test_manager);
     //binaryTreeTestRegisterTests(&test_manager);
-    //stackTestRegisterTests(&test_manager);
+    stackTestRegisterTests(&test_manager);
     testManagerRun(test_manager);
     return 0;
 }

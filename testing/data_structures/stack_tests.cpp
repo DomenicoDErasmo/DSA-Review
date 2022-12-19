@@ -53,6 +53,42 @@ bool stackTestEqualityOperator() {
     return result;
 }
 
+bool stackTestPush() {
+    bool result = true;
+
+    Stack<int> empty;
+    stackPush(empty, 4);
+    result &= empty.top->data == 4;
+
+    Stack<int> not_empty(3);
+    stackPush(not_empty, 5);
+    result &= not_empty.top->data == 5;
+
+    return result;
+}
+
+bool stackTestTop() {
+    bool result = true;
+
+    Stack<int> empty;
+    try {
+        int top = stackTop(empty);
+        result &= (top == 0);
+    } catch (std::logic_error) {
+        result &= true;
+    } catch (...) {
+        result &= false;
+    }
+
+    Stack<int> not_empty(4);
+    int top = stackTop(not_empty);
+    result &= top == 4;
+
+    return result;
+}
+
+
+
 void stackTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("stack");
 
@@ -66,6 +102,9 @@ void stackTestRegisterTests(TestManager* test_manager) {
         stackTestAssignmentOperator));
     testGroupAddTest(&test_group, UnitTest("equality operator",
         stackTestEqualityOperator));
+    testGroupAddTest(&test_group, UnitTest("push", stackTestPush));
+    testGroupAddTest(&test_group, UnitTest("top", stackTestTop));
+    
 
     testManagerAddTestGroup(test_manager, test_group);
 }
