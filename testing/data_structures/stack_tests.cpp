@@ -53,6 +53,30 @@ bool stackTestEqualityOperator() {
     return result;
 }
 
+bool stackTestSize() {
+    bool result = true;
+
+    Stack<int> empty;
+    result &= stackSize(empty) == 0;
+
+    Stack<int> one_element(4);
+    result &= stackSize(one_element) == 1;
+
+    return result;
+}
+
+bool stackTestEmpty() {
+    bool result = true;
+
+    Stack<char> empty;
+    result &= stackEmpty(empty);
+
+    Stack<char> not_empty('4');
+    result &= !stackEmpty(not_empty);
+
+    return result;
+}
+
 bool stackTestPush() {
     bool result = true;
 
@@ -84,10 +108,36 @@ bool stackTestTop() {
     int top = stackTop(not_empty);
     result &= top == 4;
 
+    Stack<int> two_elements(5);
+    stackPush(two_elements, 2);
+    result &= stackTop(two_elements) == 2;
+
     return result;
 }
 
+bool stackTestPop() {
+    bool result = true;
 
+    Stack<int> empty;
+    try {
+        stackPop(empty);
+    } catch (std::logic_error) {
+        result &= true;
+    } catch (...) {
+        result &= false;
+    }
+
+    Stack<int> one_element(4);
+    stackPop(one_element);
+    result &= stackEmpty(one_element);
+
+    Stack<int> two_elements(4);
+    stackPush(two_elements, 6);
+    stackPop(two_elements);
+    result &= stackTop(two_elements) == 4;
+
+    return result;
+}
 
 void stackTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("stack");
@@ -102,8 +152,11 @@ void stackTestRegisterTests(TestManager* test_manager) {
         stackTestAssignmentOperator));
     testGroupAddTest(&test_group, UnitTest("equality operator",
         stackTestEqualityOperator));
+    testGroupAddTest(&test_group, UnitTest("size", stackTestSize));
+    testGroupAddTest(&test_group, UnitTest("empty", stackTestEmpty));
     testGroupAddTest(&test_group, UnitTest("push", stackTestPush));
     testGroupAddTest(&test_group, UnitTest("top", stackTestTop));
+    testGroupAddTest(&test_group, UnitTest("pop", stackTestPop));
     
 
     testManagerAddTestGroup(test_manager, test_group);

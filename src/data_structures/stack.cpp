@@ -71,6 +71,30 @@ struct Stack {
 };
 
 /**
+ * @brief Gets the size of the stack
+ * 
+ * @tparam T The type of the stack's data
+ * @param stack The stack to get the size of
+ * @return int The size of the stack
+ */
+template <typename T>
+int stackSize(Stack<T>& stack) {
+    return doubleLinkedListGetLength(stack.top);
+}
+
+/**
+ * @brief Checks if the stack is empty
+ * 
+ * @tparam T The type of the stack's data
+ * @param stack The stack to check
+ * @return true if the stack is empty, otherwise false
+ */
+template <typename T>
+bool stackEmpty(Stack<T>& stack) {
+    return stackSize(stack) == 0;
+}
+
+/**
  * @brief Push a value onto the stack
  * 
  * @tparam T The type of the stack's data
@@ -92,11 +116,26 @@ void stackPush(Stack<T>& stack, T data) {
  */
 template <typename T>
 T& stackTop(Stack<T>& stack) {
-    if (doubleLinkedListGetLength(stack.top) == 0) {
+    if (stackEmpty(stack)) {
         throw std::logic_error("Can't take the top of an empty list!");
     } else {
         T& top = doubleLinkedListGetFromBackwardPosition(&stack.top, 0)->data;
         return top;
+    }
+}
+
+/**
+ * @brief Pops a value from the stack if the stack is not empty
+ * 
+ * @tparam T The type of the stack's data
+ * @param stack The stack to pop from
+ */
+template <typename T>
+void stackPop(Stack<T>& stack) {
+    if (stackEmpty(stack)) {
+        throw std::logic_error("Can't pop from an empty list!");
+    } else {
+        doubleLinkedListDeleteFromBackwardPosition(&(stack.top), 0);
     }
 }
 
