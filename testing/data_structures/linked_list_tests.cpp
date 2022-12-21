@@ -72,7 +72,9 @@ bool linkedListTestAssignmentOperator() {
     LinkedList<int> original(4, new LinkedList<int>(5));
     LinkedList<int> assigned = original;
     result &= (assigned.data == original.data);
+    result &= assigned != original;
     result &= (assigned.next->data == original.next->data);
+    result &= assigned.next != original.next;
 
     return result;
 }
@@ -100,6 +102,21 @@ bool linkedListTestEqualityOperator() {
     result &= *equals_lhs == *equals_rhs;
     delete equals_lhs;
     delete equals_rhs;
+
+    return result;
+}
+
+bool linkedListTestGetTail() {
+    bool result = true;
+
+    LinkedList<int>* empty = nullptr;
+    result &= !linkedListGetTail(&empty);
+
+    LinkedList<int>* multiple_nodes = new LinkedList<int>(4,
+        new LinkedList<int>(3));
+    result &= linkedListGetTail(&multiple_nodes)->data == 3;
+    result &= multiple_nodes->data == 4;
+    delete multiple_nodes;
 
     return result;
 }
@@ -332,6 +349,8 @@ void linkedListTestRegisterTests(TestManager* test_manager) {
         linkedListTestAssignmentOperator));
     testGroupAddTest(&test_group, UnitTest("equality operator",
         linkedListTestEqualityOperator));
+    testGroupAddTest(&test_group, UnitTest("get tail",
+        linkedListTestGetTail));
     testGroupAddTest(&test_group, UnitTest("insert at tail",
         linkedListTestInsertAtTail));
     testGroupAddTest(&test_group, UnitTest("insert at head",

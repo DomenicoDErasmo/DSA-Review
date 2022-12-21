@@ -89,6 +89,14 @@ struct LinkedList {
     }
 };
 
+template <typename T>
+LinkedList<T>* linkedListGetTail(LinkedList<T>** head) {
+    if (!*head) {return nullptr;}
+    LinkedList<T> *tail = *head;
+    while (tail->next) {tail = tail->next;}
+    return tail;
+}
+
 /**
  * @brief Inserts data at the tail of the linked list
  * 
@@ -102,10 +110,7 @@ void linkedListInsertAtTail(LinkedList<T>** head, T data) {
         *head = new LinkedList<T>(data);
         return;
     }
-    LinkedList<T>* temp = *head;
-
-    // We have to set temp->next, setting temp makes it fail sometimes
-    while (temp->next) {temp = temp->next;}
+    LinkedList<T>* temp = linkedListGetTail(head);
     temp->next = new LinkedList<T>(data);
 }
 
