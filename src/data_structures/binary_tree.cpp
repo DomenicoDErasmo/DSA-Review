@@ -2,6 +2,7 @@
 #define BINARY_TREE_CPP
 
 #include "linked_list.cpp"
+#include "queue.cpp"
 
 /**
  * @brief Binary tree implementation
@@ -172,8 +173,6 @@ void binaryTreeInsertNode(BinaryTree<T>** tree, T data) {
     binaryTreeInsertNodeHelper(next, data);
 }
 
-// TODO: change orders to return a linked list or throw an explicit error
-
 /**
  * @brief Gets preorder for the binary tree
  * 
@@ -182,12 +181,15 @@ void binaryTreeInsertNode(BinaryTree<T>** tree, T data) {
  * @return LinkedList<T>* The preorder of the tree
  */
 template <typename T>
-void binaryTreeGetPreorder(
-        BinaryTree<T>* const& tree, LinkedList<T>** preorder) {
-    if (!tree) {return;}
-    linkedListInsertAtTail(preorder, tree->data);
-    binaryTreeGetPreorder(tree->left, preorder);
-    binaryTreeGetPreorder(tree->right, preorder);
+LinkedList<T>* binaryTreeGetPreorder(BinaryTree<T>* const& tree) {
+    if (!tree) {return nullptr;}
+    LinkedList<T>* result = nullptr;
+    linkedListInsertAtTail(&result, tree->data);
+    LinkedList<T>* left_preorder = binaryTreeGetPreorder(tree->left);
+    linkedListConcatenate(&result, &left_preorder);
+    LinkedList<T>* right_preorder = binaryTreeGetPreorder(tree->right);
+    linkedListConcatenate(&result, &right_preorder);
+    return result;
 }
 
 /**
@@ -198,11 +200,13 @@ void binaryTreeGetPreorder(
  * @return LinkedList<T>* The inorder of the tree
  */
 template <typename T>
-void binaryTreeGetInorder(BinaryTree<T>* const& tree, LinkedList<T>** inorder) {
-    if (!tree) {return;}
-    binaryTreeGetInorder(tree->left, inorder);
-    linkedListInsertAtTail(inorder, tree->data);
-    binaryTreeGetInorder(tree->right, inorder);
+LinkedList<T>* binaryTreeGetInorder(BinaryTree<T>* const& tree) {
+    if (!tree) {return nullptr;}
+    LinkedList<T>* result = binaryTreeGetInorder(tree->left);
+    linkedListInsertAtTail(&result, tree->data);
+    LinkedList<T>* right_inorder = binaryTreeGetInorder(tree->right);
+    linkedListConcatenate(&result, &right_inorder);
+    return result;
 }
 
 /**
@@ -213,15 +217,29 @@ void binaryTreeGetInorder(BinaryTree<T>* const& tree, LinkedList<T>** inorder) {
  * @return LinkedList<T>* The postorder of the tree
  */
 template <typename T>
-void binaryTreeGetPostorder(
-        BinaryTree<T>* const& tree, LinkedList<T>** postorder) {
-    if (!tree) {return;}
-    binaryTreeGetPostorder(tree->left, postorder);
-    binaryTreeGetPostorder(tree->right, postorder);
-    linkedListInsertAtTail(postorder, tree->data);
+LinkedList<T>* binaryTreeGetPostorder(BinaryTree<T>* const& tree) {
+    if (!tree) {return nullptr;}
+    LinkedList<T>* result = binaryTreeGetPostorder(tree->left);
+    LinkedList<T>* right_postorder = binaryTreeGetPostorder(tree->right);
+    linkedListConcatenate(&result, &right_postorder);
+    linkedListInsertAtTail(&result, tree->data);
+    return result;
 }
 
-// TODO: implement BFS (level order)
+template <typename T>
+LinkedList<T>* binaryTreeGetLevelOrder(BinaryTree<T>* const& tree) {
+    if (!tree) {return nullptr;}
+    LinkedList<T>* result = nullptr;
+    Queue<BinaryTree<T>*> queue(tree);
+    while (!queueEmpty(queue)) {
+        BinaryTree<T>* front = queueFront(queue);
+        linkedListInsertAtTail(&result, front->data);
+        if (front->left) {queuePush(queue, front->left);}
+        if (front->right) {queuePush(queue, front->right);}
+        queuePop(queue);
+    }
+    return result;
+}
 
 /**
  * @brief Gets the node in the binary tree with matching data
@@ -252,12 +270,10 @@ template <typename T>
 BinaryTree<T>* binaryTreeGetOrderCessor(
         BinaryTree<T>* const& tree, 
         T data, 
-        void (*order_fn)(BinaryTree<T>* const&, LinkedList<T>**),
+        LinkedList<T>* (*order_fn)(BinaryTree<T>* const&),
         LinkedList<T>* (*cessor_fn)(LinkedList<T>* const&, T data, int n)) {
     if (!order_fn) {return nullptr;}
-    LinkedList<T>* order = nullptr;
-    order_fn(tree, &order);
-
+    LinkedList<T>* order = order_fn(tree);
     LinkedList<T>* item = linkedListGetNthOccurrence(order, data, 1);
     LinkedList<T>* prev = cessor_fn(order, item->data, 1);
 
@@ -416,5 +432,4 @@ void binaryTreeDeleteNode(BinaryTree<T>** tree, T data) {
         return;
     }
 }
-
 #endif
