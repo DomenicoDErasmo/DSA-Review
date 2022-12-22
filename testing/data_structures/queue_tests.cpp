@@ -75,6 +75,93 @@ bool queueTestEqualityOperator() {
     return result;
 }
 
+bool queueTestEmpty() {
+    bool result = true;
+
+    Queue<int> empty;
+    result &= queueEmpty(empty);
+    
+    Queue<int> not_empty(4);
+    result &= !queueEmpty(not_empty);
+
+    return result;
+}
+
+bool queueTestLength() {
+    bool result = true;
+
+    Queue<int> empty;
+    result &= queueLength(empty) == 0;
+
+    Queue<int> one_element(4);
+    result &= queueLength(one_element) == 1;
+
+    Queue<int> many_elements(4);
+    linkedListInsertAtTail(&many_elements.head, 2);
+    linkedListInsertAtTail(&many_elements.head, 3);
+    many_elements.tail = linkedListGetTail(&many_elements.head);
+    result &= queueLength(many_elements) == 3;
+
+    return result;
+}
+
+bool queueTestPush() {
+    bool result = true;
+
+    Queue<char> empty;
+    queuePush(empty, 'h');
+    result &= queueFront(empty) == 'h';
+    result &= queueLength(empty) == 1;
+    result &= empty.tail->data == 'h';
+
+    Queue<int> not_empty(4);
+    queuePush(not_empty, 1);
+    result &= queueLength(not_empty) == 2;
+    result &= not_empty.tail->data == 1;
+
+    return result;
+}
+
+bool queueTestFront() {
+    bool result = true;
+
+    Queue<int> empty;
+    try {
+        queueFront(empty);
+    } catch (std::logic_error) {
+        result &= true;
+    } catch (...) {
+        result &= false;
+    }
+
+    Queue<char> many_characters('a');
+    linkedListInsertAtTail(&many_characters.head, '2');
+    linkedListInsertAtTail(&many_characters.head, 'f');
+    many_characters.tail = linkedListGetTail(&many_characters.head);
+    result &= queueFront(many_characters) == 'a';
+
+    return result;
+}
+
+bool queueTestPop() {
+    bool result = true;
+
+    Queue<int> empty;
+    try {
+        queuePop(empty);
+    } catch (std::logic_error) {
+        result &= true;
+    } catch (...) {
+        result &= false;
+    }
+
+    Queue<int> one_element(4);
+    queuePop(one_element);
+    result &= queueEmpty(one_element);
+
+    return result;
+}
+
 void queueTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("queue");
 
@@ -88,6 +175,11 @@ void queueTestRegisterTests(TestManager* test_manager) {
         queueTestAssignmentOperator));
     testGroupAddTest(&test_group, UnitTest("equality operator",
         queueTestEqualityOperator));
+    testGroupAddTest(&test_group, UnitTest("empty", queueTestEmpty));
+    testGroupAddTest(&test_group, UnitTest("length", queueTestLength));
+    testGroupAddTest(&test_group, UnitTest("push", queueTestPush));
+    testGroupAddTest(&test_group, UnitTest("front", queueTestFront));
+    testGroupAddTest(&test_group, UnitTest("pop", queueTestPop));
 
     testManagerAddTestGroup(test_manager, test_group);
 }
