@@ -115,6 +115,25 @@ void linkedListInsertAtTail(LinkedList<T>** head, T data) {
 }
 
 /**
+ * @brief Combines head and concat into one list. Note that once head and concat
+ * are joined, we shouldn't explicitly delete concat
+ * 
+ * @tparam T The type of the linked list's data
+ * @param head The head of the linked list
+ * @param concat The head of the linked list to concatenate to head
+ */
+template <typename T>
+void linkedListConcatenate(LinkedList<T>** head, LinkedList<T>** concat) {
+    if (!*head) {
+        *head = *concat;
+        return;
+    }
+
+    LinkedList<T>* tail = linkedListGetTail(head);
+    tail->next = *concat;
+}
+
+/**
  * @brief Inserts data at the head of the linked list
  * 
  * @tparam T The type of the linked list

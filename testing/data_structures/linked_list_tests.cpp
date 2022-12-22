@@ -72,7 +72,7 @@ bool linkedListTestAssignmentOperator() {
     LinkedList<int> original(4, new LinkedList<int>(5));
     LinkedList<int> assigned = original;
     result &= (assigned.data == original.data);
-    result &= assigned != original;
+    result &= &assigned != &original;
     result &= (assigned.next->data == original.next->data);
     result &= assigned.next != original.next;
 
@@ -136,6 +136,35 @@ bool linkedListTestInsertAtTail() {
     result &= not_empty->next->data == 5;
     result &= !not_empty->next->next;
     delete not_empty;
+
+    return result;
+}
+
+bool linkedListTestConcatenate() {
+    bool result = true;
+
+    LinkedList<int>* empty_head = nullptr;
+    LinkedList<int>* empty_concat = nullptr;
+    linkedListConcatenate(&empty_head, &empty_concat);
+    result &= !empty_head;
+
+    empty_head = nullptr;
+    LinkedList<int>* concat = new LinkedList<int>(4);
+    linkedListConcatenate(&empty_head, &concat);
+    result &= empty_head->data == 4;
+    result &= !empty_head->next;
+    delete empty_head;
+
+    LinkedList<int>* head = new LinkedList<int>(3);
+    linkedListConcatenate(&head, &empty_concat);
+    result &= !head->next;
+
+    LinkedList<int>* new_concat = new LinkedList<int>(4);
+    linkedListConcatenate(&head, &new_concat);
+    result &= head->data == 3;
+    result &= head->next->data == 4;
+    result &= !head->next->next;
+    delete head;
 
     return result;
 }
@@ -353,6 +382,8 @@ void linkedListTestRegisterTests(TestManager* test_manager) {
         linkedListTestGetTail));
     testGroupAddTest(&test_group, UnitTest("insert at tail",
         linkedListTestInsertAtTail));
+    testGroupAddTest(&test_group, UnitTest("concatenate",
+        linkedListTestConcatenate));
     testGroupAddTest(&test_group, UnitTest("insert at head",
         linkedListTestInsertAtHead));
     testGroupAddTest(&test_group, UnitTest("length",

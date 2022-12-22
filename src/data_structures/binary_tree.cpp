@@ -172,6 +172,8 @@ void binaryTreeInsertNode(BinaryTree<T>** tree, T data) {
     binaryTreeInsertNodeHelper(next, data);
 }
 
+// TODO: change orders to return a linked list or throw an explicit error
+
 /**
  * @brief Gets preorder for the binary tree
  * 
@@ -180,7 +182,6 @@ void binaryTreeInsertNode(BinaryTree<T>** tree, T data) {
  * @return LinkedList<T>* The preorder of the tree
  */
 template <typename T>
-// TODO: fix infinite loop
 void binaryTreeGetPreorder(
         BinaryTree<T>* const& tree, LinkedList<T>** preorder) {
     if (!tree) {return;}
@@ -219,6 +220,8 @@ void binaryTreeGetPostorder(
     binaryTreeGetPostorder(tree->right, postorder);
     linkedListInsertAtTail(postorder, tree->data);
 }
+
+// TODO: implement BFS (level order)
 
 /**
  * @brief Gets the node in the binary tree with matching data
