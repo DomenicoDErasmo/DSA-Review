@@ -1,4 +1,5 @@
 #include "double_linked_list_tests.hpp"
+#include <data_structures/double_linked_list.cpp>
 
 bool doubleLinkedListTestDefaultConstructor() {
     bool result = true;
@@ -779,5 +780,5 @@ void doubleLinkedListTestRegisterTests(TestManager* test_manager) {
         doubleLinkedListTestDeleteForwardNthOccurrence));
     testGroupAddTest(&test_group, UnitTest("delete backward nth occurrence",
         doubleLinkedListTestDeleteBackwardNthOccurrence));
-    test_manager->test_groups.push_back(test_group);
+    testManagerAddTestGroup(test_manager, test_group);
 }

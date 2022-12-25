@@ -1,4 +1,5 @@
 #include "binary_tree_tests.hpp"
+#include <data_structures/binary_tree.cpp>
 
 bool binaryTreeTestDefaultConstructor() {
     bool result = true;

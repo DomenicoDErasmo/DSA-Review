@@ -1,9 +1,8 @@
-#ifndef TESTING_DATA_STRUCTURES_LINKED_LIST_TESTS_HPP_
-#define TESTING_DATA_STRUCTURES_LINKED_LIST_TESTS_HPP_
+#ifndef LINKED_LIST_TESTS_HPP
+#define LINKED_LIST_TESTS_HPP
 
 #include "test_utils/test_manager.hpp"
-#include <data_structures/linked_list.cpp>
 
 void linkedListTestRegisterTests(TestManager* test_manager);
 
-#endif  // TESTING_DATA_STRUCTURES_LINKED_LIST_TESTS_HPP_
+#endif

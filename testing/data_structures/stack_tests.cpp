@@ -1,4 +1,5 @@
 #include "stack_tests.hpp"
+#include <data_structures/stack.cpp>
 
 bool stackTestEmptyConstructor() {
     bool result = true;

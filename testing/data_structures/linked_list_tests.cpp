@@ -1,4 +1,5 @@
 #include "linked_list_tests.hpp"
+#include <data_structures/linked_list.cpp>
 
 bool linkedListTestDefaultConstructor() {
     bool result = true;

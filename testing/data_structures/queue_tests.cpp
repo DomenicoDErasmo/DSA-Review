@@ -1,4 +1,5 @@
 #include "queue_tests.hpp"
+#include <data_structures/queue.cpp>
 
 bool queueTestDefaultConstructor() {
     bool result = true;
