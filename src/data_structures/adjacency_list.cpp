@@ -2,6 +2,7 @@
 #define ADJACENCY_LIST_CPP
 
 #include "linked_list.cpp"
+#include "edge.cpp"
 
 /**
  * @brief Implementation of adjacency list
@@ -11,17 +12,27 @@
 template <typename T>
 struct AdjacencyList {
     // Fields
-    LinkedList<LinkedList<T>*>* nodes;
+    T from;
+    LinkedList<Edge<T>>* nodes;
 
     // Constructors
-    
+    AdjacencyList(): from(T()), nodes(nullptr) {}
+    AdjacencyList(T from): from(from), nodes(nullptr) {}
+    AdjacencyList(
+        T from, 
+        LinkedList<Edge<T>>* nodes): from(from), nodes(nodes) {}
+    AdjacencyList(const AdjacencyList<T>& other): 
+        from(other.from), 
+        nodes(new LinkedList<Edge<T>>(*other.nodes)) {}
 
     // Destructor
+    ~AdjacencyList() {delete nodes;}
 
     // Operators
+    // TODO: equality, inequality, copy assignment
 
     // Utility Functions
-
+    // TODO: copy and swap
 };
 
 #endif
