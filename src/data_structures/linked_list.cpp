@@ -36,10 +36,10 @@ struct LinkedList {
      * As discussed in the aforementioned link, 
      * we pass by value for optimization.
      * 
-     * @param rhs The linked list to copy
+     * @param other The linked list to copy
      * @return LinkedList<T>& A copied linked list
      */
-    LinkedList<T>& operator = (LinkedList<T> rhs) {
+    LinkedList<T>& operator = (LinkedList<T> other) {
         swap(*this, other);
         return *this;
     }

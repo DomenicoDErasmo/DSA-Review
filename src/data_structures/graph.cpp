@@ -21,11 +21,24 @@ public:
 
     // Operators
     
-    // TODO: equality, inequality, assignment
+    // TODO: equality, inequality
+    const Graph<T>& operator = (Graph<T> rhs) {
+        swap(*this, other);
+        return *this;
+    }
 
     // Utility Functions
-    
-    // TODO: swap
+    /**
+     * @brief Swaps the given graphs
+     * 
+     * @param lhs The left graph to swap
+     * @param rhs The right graph to swap
+     */
+    friend void swap(Graph<T>& lhs, Graph<T>& rhs) {
+        using std::swap;
+
+        swap(lhs.adjacency_list, rhs.adjacency_list);
+    }
 };
 
 // TODO: add node, add edge, many other ops
