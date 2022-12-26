@@ -41,6 +41,36 @@ bool graphTestAssignmentOperator() {
     return result;
 }
 
+bool graphTestEqualityOperator() {
+    bool result = true;
+
+    Graph<int> inequal_lhs;
+    linkedListInsertAtHead(&inequal_lhs.adjacency_list, 
+        new LinkedList<Edge<int>>(Edge<int>(4)));
+    linkedListInsertAtHead(&inequal_lhs.adjacency_list, 
+        new LinkedList<Edge<int>>(Edge<int>(5)));
+    Graph<int> inequal_rhs;
+    linkedListInsertAtHead(&inequal_rhs.adjacency_list, 
+        new LinkedList<Edge<int>>(Edge<int>(4)));
+    linkedListInsertAtHead(&inequal_rhs.adjacency_list, 
+        new LinkedList<Edge<int>>(Edge<int>(6)));
+    result &= !(inequal_lhs == inequal_rhs);
+
+    Graph<int> equal_lhs;
+    linkedListInsertAtHead(&inequal_lhs.adjacency_list, 
+        new LinkedList<Edge<int>>(Edge<int>(4)));
+    linkedListInsertAtHead(&inequal_lhs.adjacency_list, 
+        new LinkedList<Edge<int>>(Edge<int>(5)));
+    Graph<int> equal_rhs;
+    linkedListInsertAtHead(&inequal_rhs.adjacency_list, 
+        new LinkedList<Edge<int>>(Edge<int>(4)));
+    linkedListInsertAtHead(&inequal_rhs.adjacency_list, 
+        new LinkedList<Edge<int>>(Edge<int>(5)));
+    result &= equal_lhs == equal_rhs;
+
+    return result;
+}
+
 void graphTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("graph");
 
@@ -50,6 +80,8 @@ void graphTestRegisterTests(TestManager* test_manager) {
         graphTestCopyConstructor));
     testGroupAddTest(&test_group, UnitTest("assignment operator", 
         graphTestAssignmentOperator));
+    testGroupAddTest(&test_group, UnitTest("equality operator", 
+        graphTestEqualityOperator));
 
     testManagerAddTestGroup(test_manager, test_group);
 }

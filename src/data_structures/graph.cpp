@@ -20,11 +20,38 @@ public:
     ~Graph() {delete adjacency_list;}
 
     // Operators
-    
-    // TODO: equality, inequality
+
+    /**
+     * @brief Assignment operator for graphs
+     * 
+     * @param rhs The graph to copy over to the new graph
+     * @return const Graph<T>& The copied graph
+     */
     const Graph<T>& operator = (Graph<T> rhs) {
         swap(*this, other);
         return *this;
+    }
+
+    /**
+     * @brief Equality operator for graphs
+     * 
+     * @param lhs The left graph to check
+     * @param rhs The right graph to check
+     * @return true if the graphs are equal, otherwise false
+     */
+    friend bool operator == (const Graph<T>& lhs, const Graph<T>& rhs) {
+        return *lhs.adjacency_list == *rhs.adjacency_list;
+    }
+
+    /**
+     * @brief Inequality operator for graphs
+     * 
+     * @param lhs The left graph to check
+     * @param rhs The right graph to check
+     * @return true if the graphs are inequal, otherwise false
+     */
+    friend bool operator != (const Graph<T>& lhs, const Graph<T>& rhs) {
+        return *lhs.adjacency_list == *rhs.adjacency_list;
     }
 
     // Utility Functions
