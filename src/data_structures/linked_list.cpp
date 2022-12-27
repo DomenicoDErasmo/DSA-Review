@@ -64,8 +64,8 @@ struct LinkedList {
     /**
      * @brief Checks inequality of two linked lists
      * 
-     * @param lhs The first linked list to chekc
-     * @param rhs The second linked list to checl
+     * @param lhs The first linked list to check
+     * @param rhs The second linked list to check
      * @return true if the lists are inequal, otherwise false 
      */
     friend bool operator != (LinkedList<T>& lhs, LinkedList<T>& rhs)  {

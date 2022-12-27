@@ -2,13 +2,13 @@
 #define GRAPH_CPP
 
 #include "linked_list.cpp"
-#include "edge.cpp"
+#include "adjacency_list.cpp"
 
 template <typename T>
 struct Graph {
 public:
     // Fields
-    LinkedList<LinkedList<Edge<T>>*>* adjacency_list;
+    LinkedList<AdjacencyList<T>>* adjacency_list;
 
     // Constructors
     Graph(): adjacency_list(nullptr) {}
@@ -69,5 +69,9 @@ public:
 };
 
 // TODO: add node, add edge, many other ops
+template <typename T>
+void graphAddNode(Graph<T>& graph, T data) {
+    
+}
 
 #endif

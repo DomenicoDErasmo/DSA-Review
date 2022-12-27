@@ -5,6 +5,7 @@
 #include "data_structures/stack_tests.hpp"
 #include "data_structures/queue_tests.hpp"
 #include "data_structures/edge_tests.hpp"
+#include "data_structures/adjacency_list_tests.hpp"
 #include "data_structures/graph_tests.hpp"
 
 int main() {
@@ -15,7 +16,8 @@ int main() {
     stackTestRegisterTests(&test_manager);
     queueTestRegisterTests(&test_manager);
     edgeTestRegisterTests(&test_manager);
-    graphTestRegisterTests(&test_manager);
+    adjacencyListTestRegisterTests(&test_manager);
+    //graphTestRegisterTests(&test_manager);
     testManagerRun(test_manager);
     return 0;
 }

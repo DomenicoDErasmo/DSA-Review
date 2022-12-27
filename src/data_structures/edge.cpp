@@ -12,13 +12,14 @@ template <typename T>
 struct Edge {
 public:
     // Fields
+    T from;
     T to;
     double weight;
 
     // Constructors
-    Edge(): to(T()), weight(0) {}
-    Edge(T to): to(to), weight(0) {}
-    Edge(T to, double weight): to(to), weight(weight) {}
+    Edge(): from(T()), to(T()), weight(0) {}
+    Edge(T from, T to): from(from), to(to), weight(0) {}
+    Edge(T from, T to, double weight): from(from), to(to), weight(weight) {}
 
     // Operators
 
@@ -30,7 +31,9 @@ public:
      * @return true if the edges are equal, otherwise false
      */
     friend bool operator == (const Edge<T>& lhs, const Edge<T>& rhs) {
-        return lhs.to == rhs.to && std::abs(lhs.weight - rhs.weight) < 0.001;
+        return lhs.from == rhs.from 
+        && lhs.to == rhs.to 
+        && std::abs(lhs.weight - rhs.weight) < 0.001;
     }
 
     /**
