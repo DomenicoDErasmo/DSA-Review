@@ -80,4 +80,30 @@ public:
     }
 };
 
+/**
+ * @brief Adds an edge to the adjacency list
+ * 
+ * @tparam T The type of the list's data
+ * @param list The list to add an edge to
+ * @param edge The edge to add
+ */
+template <typename T>
+void adjacencyListAddEdge(AdjacencyList<T>& list, Edge<T> edge) {
+    linkedListInsertAtTail(&list.edges, edge);
+}
+
+/**
+ * @brief Deletes an edge from the adjacency list
+ * 
+ * @tparam T The type of the list's data
+ * @param list The list to delete an edge from
+ * @param edge The edge to delete
+ */
+template <typename T>
+void adjacencyListDeleteEdge(AdjacencyList<T>& list, Edge<T> edge) {
+    linkedListDeleteNthOccurrence(&list.edges, edge, 1);
+}
+
+// TODO: delete, search, update
+
 #endif

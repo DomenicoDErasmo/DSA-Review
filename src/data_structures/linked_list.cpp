@@ -251,7 +251,7 @@ void linkedListDeleteNthOccurrence(LinkedList<T>** head, T data, int n) {
     if (position == -1) {return;}
 
     // no need to make separate cases for head and not head
-    LinkedList<T> *dummy = new LinkedList<T>(0, *head), *prev = dummy;
+    LinkedList<T> *dummy = new LinkedList<T>(T(), *head), *prev = dummy;
     for (int i = 0; i < position - 1; i++) {prev = prev->next;}
 
     LinkedList<T> *temp = prev->next;

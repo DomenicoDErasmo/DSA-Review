@@ -75,6 +75,36 @@ bool adjacencyListTestEqualityOperator() {
     return result;
 }
 
+bool adjacencyListTestAddEdge() {
+    bool result = true;
+
+    AdjacencyList<int> list(4);
+    result &= !list.edges;
+    adjacencyListAddEdge(list, Edge<int>(4, 5));
+    result &= linkedListGetLength(list.edges) == 1;
+    result &= list.edges->data == Edge<int>(4, 5);
+    adjacencyListAddEdge(list, Edge<int>(4, 6, 1.2));
+    result &= linkedListGetLength(list.edges) == 2;
+    result &= list.edges->next->data == Edge<int>(4, 6, 1.2);
+
+    return result;
+}
+
+// TODO: fix
+bool adjacencyListTestDeleteEdge() {
+    bool result = true;
+
+    AdjacencyList<int> list(4);
+    result &= !list.edges;
+    adjacencyListAddEdge(list, Edge<int>(4, 5));
+    adjacencyListAddEdge(list, Edge<int>(4, 6, 1.2));
+    adjacencyListDeleteEdge(list, Edge<int>(4, 5));
+    result &= list.edges->data == Edge<int>(4, 6, 1.2);
+    result &= linkedListGetLength(list.edges) == 1;
+
+    return result;
+}
+
 void adjacencyListTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("adjaceny list");
 
@@ -88,6 +118,10 @@ void adjacencyListTestRegisterTests(TestManager* test_manager) {
         adjacencyListTestAssignmentOperator));
     testGroupAddTest(&test_group, UnitTest("equality operator", 
         adjacencyListTestEqualityOperator));
+    testGroupAddTest(&test_group, UnitTest("add edge", 
+        adjacencyListTestAddEdge));
+    testGroupAddTest(&test_group, UnitTest("delete edge", 
+        adjacencyListTestDeleteEdge));
 
     testManagerAddTestGroup(test_manager, test_group);
 }
