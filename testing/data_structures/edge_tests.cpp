@@ -45,11 +45,7 @@ bool edgeTestEqualityOperator() {
     Edge<int> inequal_to_rhs(2, 5);
     result &= !(inequal_to_lhs == inequal_to_rhs);
 
-    Edge<int> inequal_weight_lhs(1, 2, 1.4);
-    Edge<int> inequal_weight_rhs(1, 2, 1.5);
-    result &= !(inequal_weight_lhs == inequal_weight_rhs);
-
-    Edge<int> equal_lhs(2, 1, 1.0001);
+    Edge<int> equal_lhs(2, 1, 1.2);
     Edge<int> equal_rhs(2, 1, 1);
     result &= equal_lhs == equal_rhs;
 

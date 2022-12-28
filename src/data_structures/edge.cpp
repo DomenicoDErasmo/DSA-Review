@@ -1,8 +1,6 @@
 #ifndef EDGE_CPP
 #define EDGE_CPP
 
-#include <cmath>
-
 /**
  * @brief Implementation of an "edge" - a destination object and a weight
  * 
@@ -24,7 +22,7 @@ public:
     // Operators
 
     /**
-     * @brief Checks equality of the two edges
+     * @brief Checks equality of the two edges. Ignores differences in weight
      * 
      * @param lhs The left edge to check
      * @param rhs The right edge to check
@@ -32,8 +30,7 @@ public:
      */
     friend bool operator == (const Edge<T>& lhs, const Edge<T>& rhs) {
         return lhs.from == rhs.from 
-        && lhs.to == rhs.to 
-        && std::abs(lhs.weight - rhs.weight) < 0.001;
+        && lhs.to == rhs.to;
     }
 
     /**

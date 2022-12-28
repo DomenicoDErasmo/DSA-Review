@@ -104,6 +104,33 @@ void adjacencyListDeleteEdge(AdjacencyList<T>& list, Edge<T> edge) {
     linkedListDeleteNthOccurrence(&list.edges, edge, 1);
 }
 
-// TODO: delete, search, update
+/**
+ * @brief Gets an edge from the adjacency list
+ * 
+ * @tparam T The type of the list's data
+ * @param list The adjacency list to search
+ * @param edge The edge to search for
+ * @return LinkedList<Edge<T>>* The edge
+ */
+template <typename T>
+LinkedList<Edge<T>>* adjacencyListGetEdge(
+        AdjacencyList<T>& list, 
+        T data) {
+    return linkedListGetNthOccurrence(list.edges, Edge<T>(list.from, data), 1);
+}
+
+/**
+ * @brief Updates the edge associated with param data with new info
+ * 
+ * @tparam T The type of the list's data
+ * @param list The adjacency list to update
+ * @param data The edge in the list to update
+ * @param new_edge The new edge to set the info to
+ */
+template <typename T>
+void adjacencyListUpdateEdge(AdjacencyList<T>& list, T data, Edge<T> new_edge) {
+    LinkedList<Edge<T>>* original_edge = adjacencyListGetEdge(list, data);
+    original_edge->data = new_edge;
+}
 
 #endif
