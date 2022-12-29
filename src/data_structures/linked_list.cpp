@@ -314,7 +314,7 @@ LinkedList<T>* linkedListGetPredecessorOfNthOccurrence(
 }
 
 /**
- * @brief Gets the followingg node in the list
+ * @brief Gets the following node in the list
  * 
  * @tparam T The type of the linked list
  * @param head The head of the list
