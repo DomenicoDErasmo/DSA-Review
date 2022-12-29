@@ -80,13 +80,23 @@ public:
         swap(first.from, second.from);
         swap(first.edges, second.edges);
     }
-
-    friend bool adjacencyListWeakEquality(
-            const AdjacencyList<T>& lhs, 
-            const AdjacencyList<T>& rhs) {
-        return lhs.from == rhs.from;
-    }
 };
+
+/**
+ * @brief Weak equality operator for adjacency lists, ignores the underlying 
+ *  linked lists. Can make searching easier.
+ * 
+ * @tparam T The type of the list's data
+ * @param lhs The left list to check
+ * @param rhs The right list to check
+ * @return true if the lists satisfy weak equality, otherwise false
+ */
+template <typename T>
+bool adjacencyListWeakEquality(
+        const AdjacencyList<T>& lhs, 
+        const AdjacencyList<T>& rhs) {
+    return lhs.from == rhs.from;
+}
 
 /**
  * @brief Adds an edge to the adjacency list

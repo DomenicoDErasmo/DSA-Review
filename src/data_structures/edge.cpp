@@ -48,7 +48,8 @@ public:
 };
 
 /**
- * @brief Weak eqaulity check for two edges. Ignores differences in weight
+ * @brief Weak eqaulity check for two edges. Ignores differences in weight.
+ *  Can make searching easier.
  * 
  * @tparam T The type of the edge's data
  * @param lhs The left edge to check
