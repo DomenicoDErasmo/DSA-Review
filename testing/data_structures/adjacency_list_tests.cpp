@@ -52,17 +52,9 @@ bool adjacencyListTestAssignmentOperator() {
 bool adjacencyListTestEqualityOperator() {
     bool result = true;
 
-    AdjacencyList<int> inequal_data_lhs(3);
-    AdjacencyList<int> inequal_data_rhs(2);
-    result &= !(inequal_data_lhs == inequal_data_rhs);
-
-    AdjacencyList<int> inequal_edges_lhs(2);
-    linkedListInsertAtTail(&inequal_edges_lhs.edges, Edge<int>(2, 4));
-    linkedListInsertAtTail(&inequal_edges_lhs.edges, Edge<int>(2, 5));
-    AdjacencyList<int> inequal_edges_rhs(2);
-    linkedListInsertAtTail(&inequal_edges_rhs.edges, Edge<int>(2, 4));
-    linkedListInsertAtTail(&inequal_edges_rhs.edges, Edge<int>(2, 6));
-    result &= !(inequal_edges_lhs == inequal_edges_rhs);
+    AdjacencyList<int> inequal_from_lhs(3);
+    AdjacencyList<int> inequal_from_rhs(2);
+    result &= !(inequal_from_lhs == inequal_from_rhs);
 
     AdjacencyList<int> equal_lhs(2);
     linkedListInsertAtTail(&equal_lhs.edges, Edge<int>(2, 4));

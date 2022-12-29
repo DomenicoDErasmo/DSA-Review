@@ -17,7 +17,7 @@ int main() {
     queueTestRegisterTests(&test_manager);
     edgeTestRegisterTests(&test_manager);
     adjacencyListTestRegisterTests(&test_manager);
-    //graphTestRegisterTests(&test_manager);
+    graphTestRegisterTests(&test_manager);
     testManagerRun(test_manager);
     return 0;
 }

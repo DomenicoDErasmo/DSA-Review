@@ -176,16 +176,29 @@ int linkedListGetLength(LinkedList<T>*const& head) {
  */
 template <typename T>
 int linkedListPositionOfNthOccurrence(
-        LinkedList<T>* const& head, T data, int n) {
+        LinkedList<T>* const& head, 
+        T data, 
+        int n,
+        bool (*equals_fn)(T lhs, T rhs) = nullptr) {
     int result = -1, num_found = 0;
     LinkedList<T>* temp = head;
+
     for (int i = 0; i < linkedListGetLength(head); i++) {
-        if (temp->data == data && num_found == n - 1) {
+        bool equals = !equals_fn 
+            ? temp->data == data 
+            : equals_fn(temp->data, data);
+        
+        if (!equals) {
+            temp = temp->next;
+            continue;
+        }
+
+        if (num_found == n - 1) {
             result = i;
             break;
-        } else if (temp->data == data) {
-            num_found++;
         }
+
+        num_found++;
         temp = temp->next;
     }
 

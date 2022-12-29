@@ -34,6 +34,24 @@ bool edgeTestFullConstructor() {
     return result;
 }
 
+bool edgeTestWeakEquality() {
+    bool result = true;
+
+    Edge<int> inequal_from_lhs(2, 4);
+    Edge<int> inequal_from_rhs(3, 4);
+    result &= !edgeWeakEquality(inequal_from_lhs, inequal_from_rhs);
+
+    Edge<int> inequal_to_lhs(2, 4);
+    Edge<int> inequal_to_rhs(2, 5);
+    result &= !edgeWeakEquality(inequal_to_lhs, inequal_to_rhs);
+
+    Edge<int> equal_lhs(2, 1, 1.2);
+    Edge<int> equal_rhs(2, 1, 1);
+    result &= edgeWeakEquality(equal_lhs, equal_rhs);
+
+    return result;
+}
+
 bool edgeTestEqualityOperator() {
     bool result = true;
 
@@ -45,7 +63,11 @@ bool edgeTestEqualityOperator() {
     Edge<int> inequal_to_rhs(2, 5);
     result &= !(inequal_to_lhs == inequal_to_rhs);
 
-    Edge<int> equal_lhs(2, 1, 1.2);
+    Edge<int> inequal_weight_lhs(2, 1, 1.2);
+    Edge<int> inequal_weight_rhs(2, 1, 1);
+    result &= !(inequal_weight_lhs == inequal_weight_rhs);
+
+    Edge<int> equal_lhs(2, 1, 1.0001);
     Edge<int> equal_rhs(2, 1, 1);
     result &= equal_lhs == equal_rhs;
 
@@ -61,6 +83,8 @@ void edgeTestRegisterTests(TestManager* test_manager) {
         edgeTestDataConstructor));
     testGroupAddTest(&test_group, UnitTest("full constructor", 
         edgeTestFullConstructor));
+    testGroupAddTest(&test_group, UnitTest("weak equality", 
+        edgeTestWeakEquality));
     testGroupAddTest(&test_group, UnitTest("equality operator", 
         edgeTestEqualityOperator));
 

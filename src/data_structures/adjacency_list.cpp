@@ -19,8 +19,13 @@ public:
     // Constructors
     AdjacencyList(): from(T()), edges(nullptr) {}
     AdjacencyList(T from): from(from), edges(nullptr) {}
-    AdjacencyList(const AdjacencyList<T>& other): 
-        from(other.from), edges(new LinkedList<Edge<T>>(*other.edges)) {}
+    AdjacencyList(const AdjacencyList<T>& other): from(other.from) {
+        if (other.edges) {
+            edges = new LinkedList<Edge<T>>(*other.edges);
+        } else {
+            edges = nullptr;
+        }
+    }
 
     // Destructor
     ~AdjacencyList() {delete edges;}
@@ -39,7 +44,7 @@ public:
     }
 
     /**
-     * @brief Checks equality of two adjacency lists
+     * @brief Checks equality of two adjacency lists.
      * 
      * @param lhs The first adjacency list to check
      * @param rhs The second adjacency list to check
@@ -48,7 +53,7 @@ public:
     friend bool operator == (
             const AdjacencyList<T>& lhs, 
             const AdjacencyList<T>& rhs) {
-        return lhs.from == rhs.from && *lhs.edges == *rhs.edges;
+        return lhs.from == rhs.from;
     }
 
     /**

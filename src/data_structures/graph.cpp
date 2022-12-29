@@ -13,7 +13,7 @@ public:
     // Constructors
     Graph(): adjacency_list(nullptr) {}
     Graph(const Graph<T>& other): 
-        adjacency_list(new LinkedList<LinkedList<Edge<T>>*>(
+        adjacency_list(new LinkedList<AdjacencyList<T>>(
             *other.adjacency_list)) {}
 
     // Destructor
@@ -33,7 +33,13 @@ public:
     }
 
     /**
-     * @brief Equality operator for graphs
+     * @brief Equality operator for graphs.
+     * Because the adjacency list only checks for the same "from", this isn't
+     * a full equality check
+     * 
+     * TODO: revert edge and adjacency list equality operators
+     * TODO: make a "loose equality" function mirroring the current version
+     * TODO: change linked list insertions to take a function, default of ==?
      * 
      * @param lhs The left graph to check
      * @param rhs The right graph to check

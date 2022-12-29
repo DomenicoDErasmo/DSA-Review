@@ -11,14 +11,47 @@ bool graphTestDefaultConstructor() {
 }
 
 // TODO: reimplement all of the below
+
 bool graphTestCopyConstructor() {
     bool result = true;
+
+    Graph<int> original;
+    linkedListInsertAtTail(&original.adjacency_list, AdjacencyList<int>(4));
+    linkedListInsertAtTail(&original.adjacency_list, AdjacencyList<int>(5));
+    adjacencyListAddEdge(
+        linkedListGetNthOccurrence(
+            original.adjacency_list, AdjacencyList<int>(4), 1)->data,
+        Edge<int>(5, 4));
+    Graph<int> copy(original);
+    LinkedList<AdjacencyList<int>>* original_adj_node = 
+        linkedListGetNthOccurrence(
+            original.adjacency_list, AdjacencyList<int>(5), 1);
+    LinkedList<AdjacencyList<int>>* copy_adj_node = 
+        linkedListGetNthOccurrence(
+            copy.adjacency_list, AdjacencyList<int>(5), 1);
+    result &= *copy_adj_node->data.edges == *original_adj_node->data.edges;
 
     return result;
 }
 
 bool graphTestAssignmentOperator() {
     bool result = true;
+
+    Graph<int> original;
+    linkedListInsertAtTail(&original.adjacency_list, AdjacencyList<int>(4));
+    linkedListInsertAtTail(&original.adjacency_list, AdjacencyList<int>(5));
+    adjacencyListAddEdge(
+        linkedListGetNthOccurrence(
+            original.adjacency_list, AdjacencyList<int>(4), 1)->data,
+        Edge<int>(5, 4));
+    Graph<int> copy = original;
+    LinkedList<AdjacencyList<int>>* original_adj_node = 
+        linkedListGetNthOccurrence(
+            original.adjacency_list, AdjacencyList<int>(5), 1);
+    LinkedList<AdjacencyList<int>>* copy_adj_node = 
+        linkedListGetNthOccurrence(
+            copy.adjacency_list, AdjacencyList<int>(5), 1);
+    result &= *copy_adj_node->data.edges == *original_adj_node->data.edges;
 
     return result;
 }
