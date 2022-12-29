@@ -172,6 +172,8 @@ int linkedListGetLength(LinkedList<T>*const& head) {
  * @param head The head of the list to search
  * @param data The data to search for
  * @param n The occurrence of the data in the list
+ * @param equals_fn A function pointer for the function to use for equality, 
+ *  defaults to the equality operator.
  * @return int The position of the nth occurrence of the data
  */
 template <typename T>
@@ -211,6 +213,8 @@ int linkedListPositionOfNthOccurrence(
  * @tparam T The type of the linked list
  * @param head The head of the list to pull a node from
  * @param n The positional node to retrieve
+ * @param equals_fn A function pointer for the function to use for equality, 
+ *  defaults to the equality operator.
  * @return LinkedList<T>* A node from the list
  */
 template <typename T>
@@ -238,14 +242,17 @@ LinkedList<T>* linkedListGetNthNode(LinkedList<T>* const& head, int n) {
  * @param head The head of the list to search
  * @param data The data to search for
  * @param n The occurrence of the data in the list
+ * @param equals_fn A function pointer for the function to use for equality, 
+ *  defaults to the equality operator.
  * @return LinkedList<T>* A node denoting the nth occurrence of the data
  */
 template <typename T>
 LinkedList<T>* linkedListGetNthOccurrence(
-    LinkedList<T>* const& head,
-    T data,
-    int n) {
-    int position = linkedListPositionOfNthOccurrence(head, data, n);
+        LinkedList<T>* const& head,
+        T data,
+        int n,
+        bool (*equals_fn)(T lhs, T rhs) = nullptr) {
+    int position = linkedListPositionOfNthOccurrence(head, data, n, equals_fn);
     if (position == -1) {return nullptr;}
     return linkedListGetNthNode(head, position);
 }
@@ -257,10 +264,16 @@ LinkedList<T>* linkedListGetNthOccurrence(
  * @param head The head of the list to search
  * @param data The data to search for
  * @param n The occurrence of the data in the list
+ * @param equals_fn A function pointer for the function to use for equality, 
+ *  defaults to the equality operator.
  */
 template <typename T>
-void linkedListDeleteNthOccurrence(LinkedList<T>** head, T data, int n) {
-    int position = linkedListPositionOfNthOccurrence(*head, data, n);
+void linkedListDeleteNthOccurrence(
+        LinkedList<T>** head, 
+        T data, 
+        int n,
+        bool (*equals_fn)(T lhs, T rhs) = nullptr) {
+    int position = linkedListPositionOfNthOccurrence(*head, data, n, equals_fn);
     if (position == -1) {return;}
 
     // no need to make separate cases for head and not head
@@ -285,14 +298,17 @@ void linkedListDeleteNthOccurrence(LinkedList<T>** head, T data, int n) {
  * @param head The head of the list
  * @param data The data to get the predecessor of
  * @param n The nth occurrence of data in the list
+ * @param equals_fn A function pointer for the function to use for equality, 
+ *  defaults to the equality operator.
  * @return LinkedList<T>* The predecessor of data
  */
 template <typename T>
 LinkedList<T>* linkedListGetPredecessorOfNthOccurrence(
         LinkedList<T>* const& head, 
         T data, 
-        int n) {
-    int position = linkedListPositionOfNthOccurrence(head, data, n);
+        int n,
+        bool (*equals_fn)(T lhs, T rhs) = nullptr) {
+    int position = linkedListPositionOfNthOccurrence(head, data, n, equals_fn);
     if (position < 1) {return nullptr;}
     return linkedListGetNthNode(head, position - 1);
 }
@@ -304,14 +320,17 @@ LinkedList<T>* linkedListGetPredecessorOfNthOccurrence(
  * @param head The head of the list
  * @param data The data to get the successor of
  * @param n The nth occurrence of data in the list
+ * @param equals_fn A function pointer for the function to use for equality, 
+ *  defaults to the equality operator.
  * @return LinkedList<T>* The successor of data
  */
 template <typename T>
 LinkedList<T>* linkedListGetSuccessorOfNthOccurrence(
         LinkedList<T>* const& head, 
         T data, 
-        int n) {
-    int position = linkedListPositionOfNthOccurrence(head, data, n);
+        int n,
+        bool (*equals_fn)(T lhs, T rhs) = nullptr) {
+    int position = linkedListPositionOfNthOccurrence(head, data, n, equals_fn);
     if (position >= linkedListGetLength(head) - 1 
         || position == -1) {return nullptr;}
     return linkedListGetNthNode(head, position + 1);

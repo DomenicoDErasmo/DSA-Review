@@ -270,12 +270,16 @@ template <typename T>
 BinaryTree<T>* binaryTreeGetOrderCessor(
         BinaryTree<T>* const& tree, 
         T data, 
-        LinkedList<T>* (*order_fn)(BinaryTree<T>* const&),
-        LinkedList<T>* (*cessor_fn)(LinkedList<T>* const&, T data, int n)) {
+        LinkedList<T>* (*order_fn)(BinaryTree<T>* const& root),
+        LinkedList<T>* (*cessor_fn)(
+            LinkedList<T>* const& head, 
+            T data, 
+            int n, 
+            bool (*equality_fn)(T lhs, T rhs))) {
     if (!order_fn) {return nullptr;}
     LinkedList<T>* order = order_fn(tree);
     LinkedList<T>* item = linkedListGetNthOccurrence(order, data, 1);
-    LinkedList<T>* prev = cessor_fn(order, item->data, 1);
+    LinkedList<T>* prev = cessor_fn(order, item->data, 1, nullptr);
 
     if (!prev) {return nullptr;}
     return binaryTreeGetNode(tree, prev->data);
