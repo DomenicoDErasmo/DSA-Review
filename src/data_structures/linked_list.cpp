@@ -181,7 +181,7 @@ int linkedListPositionOfNthOccurrence(
         LinkedList<T>* const& head, 
         T data, 
         int n,
-        bool (*equals_fn)(T lhs, T rhs) = nullptr) {
+        bool (*equals_fn)(const T& lhs, const T& rhs) = nullptr) {
     int result = -1, num_found = 0;
     LinkedList<T>* temp = head;
 
@@ -251,7 +251,7 @@ LinkedList<T>* linkedListGetNthOccurrence(
         LinkedList<T>* const& head,
         T data,
         int n,
-        bool (*equals_fn)(T lhs, T rhs) = nullptr) {
+        bool (*equals_fn)(const T& lhs, const T& rhs) = nullptr) {
     int position = linkedListPositionOfNthOccurrence(head, data, n, equals_fn);
     if (position == -1) {return nullptr;}
     return linkedListGetNthNode(head, position);
@@ -272,7 +272,7 @@ void linkedListDeleteNthOccurrence(
         LinkedList<T>** head, 
         T data, 
         int n,
-        bool (*equals_fn)(T lhs, T rhs) = nullptr) {
+        bool (*equals_fn)(const T& lhs, const T& rhs) = nullptr) {
     int position = linkedListPositionOfNthOccurrence(*head, data, n, equals_fn);
     if (position == -1) {return;}
 
@@ -307,7 +307,7 @@ LinkedList<T>* linkedListGetPredecessorOfNthOccurrence(
         LinkedList<T>* const& head, 
         T data, 
         int n,
-        bool (*equals_fn)(T lhs, T rhs) = nullptr) {
+        bool (*equals_fn)(const T& lhs, const T& rhs) = nullptr) {
     int position = linkedListPositionOfNthOccurrence(head, data, n, equals_fn);
     if (position < 1) {return nullptr;}
     return linkedListGetNthNode(head, position - 1);
@@ -329,7 +329,7 @@ LinkedList<T>* linkedListGetSuccessorOfNthOccurrence(
         LinkedList<T>* const& head, 
         T data, 
         int n,
-        bool (*equals_fn)(T lhs, T rhs) = nullptr) {
+        bool (*equals_fn)(const T& lhs, const T& rhs) = nullptr) {
     int position = linkedListPositionOfNthOccurrence(head, data, n, equals_fn);
     if (position >= linkedListGetLength(head) - 1 
         || position == -1) {return nullptr;}

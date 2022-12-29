@@ -49,7 +49,7 @@ bool adjacencyListTestAssignmentOperator() {
     return result;
 }
 
-bool adjacencyListTestEqualityOperator() {
+bool adjacencyListTestWeakEquality() {
     bool result = true;
 
     AdjacencyList<int> inequal_from_lhs(3);
@@ -62,6 +62,34 @@ bool adjacencyListTestEqualityOperator() {
     AdjacencyList<int> equal_rhs(2);
     linkedListInsertAtTail(&equal_rhs.edges, Edge<int>(2, 4));
     linkedListInsertAtTail(&equal_rhs.edges, Edge<int>(2, 5));
+    result &= equal_lhs == equal_rhs;
+
+    return result;
+}
+
+bool adjacencyListTestEqualityOperator() {
+    bool result = true;
+
+    AdjacencyList<int> inequal_from_lhs(3);
+    AdjacencyList<int> inequal_from_rhs(2);
+    result &= !(inequal_from_lhs == inequal_from_rhs);
+
+    AdjacencyList<int> inequal_edges_lhs(2);
+    linkedListInsertAtTail(&inequal_edges_lhs.edges, Edge<int>(2, 4));
+    linkedListInsertAtTail(&inequal_edges_lhs.edges, Edge<int>(2, 5, 1));
+    AdjacencyList<int> inequal_edges_rhs(2);
+    linkedListInsertAtTail(&inequal_edges_rhs.edges, Edge<int>(2, 4));
+    linkedListInsertAtTail(&inequal_edges_rhs.edges, Edge<int>(2, 5, 1.1));
+    result &= !(inequal_edges_lhs == inequal_edges_rhs);
+
+    AdjacencyList<int> equal_lhs(2);
+    linkedListInsertAtTail(&equal_lhs.edges, Edge<int>(2, 3));
+    linkedListInsertAtTail(&equal_lhs.edges, Edge<int>(2, 4, 1.4));
+    linkedListInsertAtTail(&equal_lhs.edges, Edge<int>(2, 5, 1.7));
+    AdjacencyList<int> equal_rhs(2);
+    linkedListInsertAtTail(&equal_rhs.edges, Edge<int>(2, 3));
+    linkedListInsertAtTail(&equal_rhs.edges, Edge<int>(2, 4, 1.4));
+    linkedListInsertAtTail(&equal_rhs.edges, Edge<int>(2, 5, 1.7));
     result &= equal_lhs == equal_rhs;
 
     return result;
@@ -87,7 +115,7 @@ bool adjacencyListTestDeleteEdge() {
 
     AdjacencyList<int> list(4);
     result &= !list.edges;
-    adjacencyListAddEdge(list, Edge<int>(4, 5));
+    adjacencyListAddEdge(list, Edge<int>(4, 5, 1.3));
     adjacencyListAddEdge(list, Edge<int>(4, 6, 1.2));
     adjacencyListDeleteEdge(list, Edge<int>(4, 5));
     result &= list.edges->data == Edge<int>(4, 6, 1.2);
@@ -101,11 +129,13 @@ bool adjacencyListTestGetEdge() {
 
     AdjacencyList<int> list(4);
     result &= !list.edges;
-    adjacencyListAddEdge(list, Edge<int>(4, 5));
+    adjacencyListAddEdge(list, Edge<int>(4, 5, 4.6));
     adjacencyListAddEdge(list, Edge<int>(4, 6, 1.2));
-    LinkedList<Edge<int>>* not_found = adjacencyListGetEdge(list, 3);
+    LinkedList<Edge<int>>* not_found = adjacencyListGetEdge(
+        list, Edge<int>(4, 3));
     result &= !not_found;
-    LinkedList<Edge<int>>* found = adjacencyListGetEdge(list, 5);
+    LinkedList<Edge<int>>* found = adjacencyListGetEdge(
+        list, Edge<int>(4, 5));
     result &= found == list.edges;
 
     return result;
@@ -118,7 +148,7 @@ bool adjacencyListTestUpdateEdge() {
     result &= !list.edges;
     adjacencyListAddEdge(list, Edge<int>(4, 5));
     adjacencyListAddEdge(list, Edge<int>(4, 6, 1.2));
-    adjacencyListUpdateEdge(list, 5, Edge<int>(4, 5, 2.2));
+    adjacencyListUpdateEdge(list, Edge<int>(4, 5), Edge<int>(4, 5, 2.2));
     result &= list.edges->data.weight == 2.2;
 
     return result;
@@ -135,6 +165,8 @@ void adjacencyListTestRegisterTests(TestManager* test_manager) {
         adjacencyListTestCopyConstructor));
     testGroupAddTest(&test_group, UnitTest("assignment operator", 
         adjacencyListTestAssignmentOperator));
+    testGroupAddTest(&test_group, UnitTest("weak equality", 
+        adjacencyListTestWeakEquality));
     testGroupAddTest(&test_group, UnitTest("equality operator", 
         adjacencyListTestEqualityOperator));
     testGroupAddTest(&test_group, UnitTest("add edge", 

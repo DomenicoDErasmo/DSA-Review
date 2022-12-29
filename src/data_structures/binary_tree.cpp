@@ -275,7 +275,7 @@ BinaryTree<T>* binaryTreeGetOrderCessor(
             LinkedList<T>* const& head, 
             T data, 
             int n, 
-            bool (*equality_fn)(T lhs, T rhs))) {
+            bool (*equality_fn)(const T& lhs, const T& rhs))) {
     if (!order_fn) {return nullptr;}
     LinkedList<T>* order = order_fn(tree);
     LinkedList<T>* item = linkedListGetNthOccurrence(order, data, 1);

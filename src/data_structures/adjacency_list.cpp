@@ -20,11 +20,8 @@ public:
     AdjacencyList(): from(T()), edges(nullptr) {}
     AdjacencyList(T from): from(from), edges(nullptr) {}
     AdjacencyList(const AdjacencyList<T>& other): from(other.from) {
-        if (other.edges) {
-            edges = new LinkedList<Edge<T>>(*other.edges);
-        } else {
-            edges = nullptr;
-        }
+        if (other.edges) { edges = new LinkedList<Edge<T>>(*other.edges); } 
+        else { edges = nullptr; }
     }
 
     // Destructor
@@ -53,7 +50,7 @@ public:
     friend bool operator == (
             const AdjacencyList<T>& lhs, 
             const AdjacencyList<T>& rhs) {
-        return lhs.from == rhs.from;
+        return adjacencyListWeakEquality(lhs, rhs) && *lhs.edges == *rhs.edges;
     }
 
     /**
@@ -83,6 +80,12 @@ public:
         swap(first.from, second.from);
         swap(first.edges, second.edges);
     }
+
+    friend bool adjacencyListWeakEquality(
+            const AdjacencyList<T>& lhs, 
+            const AdjacencyList<T>& rhs) {
+        return lhs.from == rhs.from;
+    }
 };
 
 /**
@@ -106,7 +109,7 @@ void adjacencyListAddEdge(AdjacencyList<T>& list, Edge<T> edge) {
  */
 template <typename T>
 void adjacencyListDeleteEdge(AdjacencyList<T>& list, Edge<T> edge) {
-    linkedListDeleteNthOccurrence(&list.edges, edge, 1);
+    linkedListDeleteNthOccurrence(&list.edges, edge, 1, edgeWeakEquality);
 }
 
 /**
@@ -120,8 +123,12 @@ void adjacencyListDeleteEdge(AdjacencyList<T>& list, Edge<T> edge) {
 template <typename T>
 LinkedList<Edge<T>>* adjacencyListGetEdge(
         AdjacencyList<T>& list, 
-        T data) {
-    return linkedListGetNthOccurrence(list.edges, Edge<T>(list.from, data), 1);
+        Edge<T> edge) {
+    return linkedListGetNthOccurrence(
+        list.edges, 
+        edge, 
+        1,
+        edgeWeakEquality);
 }
 
 /**
@@ -129,12 +136,15 @@ LinkedList<Edge<T>>* adjacencyListGetEdge(
  * 
  * @tparam T The type of the list's data
  * @param list The adjacency list to update
- * @param data The edge in the list to update
+ * @param edge The edge in the list to update
  * @param new_edge The new edge to set the info to
  */
 template <typename T>
-void adjacencyListUpdateEdge(AdjacencyList<T>& list, T data, Edge<T> new_edge) {
-    LinkedList<Edge<T>>* original_edge = adjacencyListGetEdge(list, data);
+void adjacencyListUpdateEdge(
+        AdjacencyList<T>& list, 
+        Edge<T> edge, 
+        Edge<T> new_edge) {
+    LinkedList<Edge<T>>* original_edge = adjacencyListGetEdge(list, edge);
     original_edge->data = new_edge;
 }
 

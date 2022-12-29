@@ -45,20 +45,20 @@ public:
     friend bool operator != (const Edge<T>& lhs, const Edge<T>& rhs) {
         return !(lhs == rhs);
     }
+};
 
-    // Utility Functions
-    
-    /**
-     * @brief Weak eqaulity check for two edges. Ignores differences in weight
-     * 
-     * @param lhs The left edge to check
-     * @param rhs The right edge to check
-     * @return true if the edges satisfy weak inequality, otherwise false
-     */
-    friend bool edgeWeakEquality(const Edge<T>& lhs, const Edge<T>& rhs) {
+/**
+ * @brief Weak eqaulity check for two edges. Ignores differences in weight
+ * 
+ * @tparam T The type of the edge's data
+ * @param lhs The left edge to check
+ * @param rhs The right edge to check
+ * @return true if the edges satisfy weak inequality, otherwise false
+ */
+template <typename T>
+bool edgeWeakEquality(const Edge<T>& lhs, const Edge<T>& rhs) {
         return lhs.from == rhs.from 
         && lhs.to == rhs.to;
-    }
-};
+}
 
 #endif
