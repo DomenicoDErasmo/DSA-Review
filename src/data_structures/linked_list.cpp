@@ -185,7 +185,8 @@ int linkedListPositionOfNthOccurrence(
     int result = -1, num_found = 0;
     LinkedList<T>* temp = head;
 
-    for (int i = 0; i < linkedListGetLength(head); i++) {
+    int length = linkedListGetLength(head);
+    for (int i = 0; i < length; i++) {
         bool equals = !equals_fn 
             ? temp->data == data 
             : equals_fn(temp->data, data);

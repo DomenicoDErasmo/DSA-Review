@@ -68,6 +68,8 @@ public:
     }
 };
 
+// TODO: consider how to add equality operators in
+
 /**
  * @brief Gets the adjacency list in the graph
  * 
@@ -81,7 +83,8 @@ LinkedList<AdjacencyList<T>>* graphGetNode(Graph<T>& graph, T data) {
     return linkedListGetNthOccurrence(
         graph.adjacency_matrix, 
         AdjacencyList<T>(data), 
-        1);
+        1,
+        adjacencyListWeakEquality);
 }
 
 /**
@@ -111,6 +114,14 @@ void graphAddNode(Graph<T>& graph, T data) {
     }
 }
 
+template <typename T>
+bool graphHasEdge(Graph<T>& graph, Edge<T> edge) {
+    LinkedList<AdjacencyList<T>>* adj_list = graphGetNode(graph, edge.from);
+
+    return adj_list != nullptr 
+        && linkedListGetNthOccurrence(adj_list->data.edges, edge, 1) != nullptr;
+}
+
 /**
  * @brief Adds an edge to the graph
  * 
@@ -120,26 +131,22 @@ void graphAddNode(Graph<T>& graph, T data) {
  */
 template <typename T>
 void graphAddEdge(Graph<T>& graph, Edge<T> edge) {
-    LinkedList<AdjacencyList<T>>* adj_list = graphGetNode(graph, edge.from);
-    if (!adj_list) {
+    if (!graphHasNode(graph, edge.from)) {
         throw std::logic_error("Can't add an edge if the graph doesn't exist.");
     }
 
-    LinkedList<Edge<T>>* found = linkedListGetNthOccurrence(
-        adj_list->data.edges, 
-        edge,
-        1);
-
-    if (found != nullptr) {
+    if (graphHasEdge(graph, edge)) {
         throw std::logic_error(
             "Can't add an edge if the edge already exists."
             "Instead use graphUpdateNode.");
     }
 
+    LinkedList<AdjacencyList<T>>* adj_list = graphGetNode(graph, edge.from);
     linkedListInsertAtTail(&adj_list->data.edges, edge);
 }
 
 // TODO: add many other ops - CRUD for adjacency lists and edges
+// has/add/get/delete/update for node/edge
 
 
 #endif

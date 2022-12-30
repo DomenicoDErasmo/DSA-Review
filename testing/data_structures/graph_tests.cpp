@@ -161,6 +161,24 @@ bool graphTestAddNode() {
     return result;
 }
 
+bool graphTestHasEdge() {
+    bool result = true;
+
+    Graph<int> missing_node;
+    result &= !graphHasEdge(missing_node, Edge<int>(4, 5));
+
+    Graph<int> missing_edge;
+    graphAddNode(missing_edge, 4);
+    result &= !graphHasEdge(missing_node, Edge<int>(4, 5));
+
+    Graph<int> has_edge;
+    graphAddNode(has_edge, 4);
+    graphAddEdge(has_edge, Edge<int>(4, 5));
+    result &= graphHasEdge(has_edge, Edge<int>(4, 5));
+
+    return result;
+}
+
 bool graphTestAddEdge() {
     bool result = true;
 
@@ -208,6 +226,7 @@ void graphTestRegisterTests(TestManager* test_manager) {
     testGroupAddTest(&test_group, UnitTest("get node", graphTestGetNode));
     testGroupAddTest(&test_group, UnitTest("has node", graphTestHasNode));
     testGroupAddTest(&test_group, UnitTest("add node", graphTestAddNode));
+    testGroupAddTest(&test_group, UnitTest("has edge", graphTestHasEdge));
     testGroupAddTest(&test_group, UnitTest("add edge", graphTestAddEdge));
 
     testManagerAddTestGroup(test_manager, test_group);
