@@ -1,6 +1,10 @@
 #ifndef GRAPH_CPP
 #define GRAPH_CPP
 
+#include <fstream>
+#include <sstream>
+#include <string>
+
 #include "linked_list.cpp"
 #include "adjacency_list.cpp"
 
@@ -12,6 +16,40 @@ public:
 
     // Constructors
     Graph(): adjacency_matrix(nullptr) {}
+
+    /**
+     * @brief Constructs a new Graph object from a filepath
+     * The filepath should be structred as follows:
+     * 
+     * First line has the number of nodes.
+     * Every subsequent line has "from to weight", where weight is optional.
+     * 
+     * This project stores its example graphs in the resources folder
+     * 
+     * @param filepath 
+     */
+    Graph(std::string filepath) {
+        std::ifstream reader(filepath);
+        int size;
+        reader >> size;
+        for (int i = 0; i < size; i++) {graphAddNode(this, i);}
+
+        int from, to;
+        double weight;
+        for (std::istringstream line; std::getline(reader, line);) {
+            std::string token;
+            double vals[3];
+            int i = 0;
+            while (std::getline(line, token, ' ')) {
+                vals[i] = std::stod(token);
+                i++;
+            }
+            if (i == 2) {graphAddEdge(graph, Edge(vals[0], vals[1]));} 
+            else {graphAddEdge(graph, Edge(vals[0], vals[1], vals[2]));}
+        }
+
+        while std::getline()
+    }
     Graph(const Graph<T>& other): 
         adjacency_matrix(new LinkedList<AdjacencyList<T>>(
             *other.adjacency_matrix)) {}
@@ -114,20 +152,51 @@ void graphAddNode(Graph<T>& graph, T data) {
     }
 }
 
+/**
+ * @brief Gets the edge from the list if it exists
+ * 
+ * @tparam T The type of the graph's data
+ * @param graph The graph to get the edge from
+ * @param edge The edge to search for. Only needs from and to values
+ * @return LinkedList<Edge<T>>* The edge in the graph, or null
+ */
+template <typename T>
+LinkedList<Edge<T>>* graphGetEdge(Graph<T>& graph, Edge<T> edge) {
+    if (!graphHasNode(graph, edge.from)) {
+        throw std::logic_error("Can't add an edge if the graph doesn't exist.");
+    }
+
+    LinkedList<AdjacencyList<T>>* adj_list = graphGetNode(graph, edge.from);
+    return linkedListGetNthOccurrence(
+        adj_list->data.edges, 
+        edge, 
+        1, 
+        edgeWeakEquality);
+}
+
+/**
+ * @brief Checks if the graph has the given edge
+ * 
+ * @tparam T The type of the graph's data
+ * @param graph The graph to get the edge from
+ * @param edge The edge to search for. Only needs from and to values
+ * @return true if the edge is in the graph, otherwise false
+ */
 template <typename T>
 bool graphHasEdge(Graph<T>& graph, Edge<T> edge) {
-    LinkedList<AdjacencyList<T>>* adj_list = graphGetNode(graph, edge.from);
-
-    return adj_list != nullptr 
-        && linkedListGetNthOccurrence(adj_list->data.edges, edge, 1) != nullptr;
+    try {
+        return graphGetEdge(graph, edge) != nullptr;
+    } catch (std::logic_error) {
+        return false;
+    }
 }
 
 /**
  * @brief Adds an edge to the graph
  * 
- * @tparam T 
- * @param graph 
- * @param edge 
+ * @tparam T The type of the graph's data
+ * @param graph The graph to add an edge to
+ * @param edge The edge to add
  */
 template <typename T>
 void graphAddEdge(Graph<T>& graph, Edge<T> edge) {

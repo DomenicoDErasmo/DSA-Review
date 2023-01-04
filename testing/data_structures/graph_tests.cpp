@@ -161,6 +161,31 @@ bool graphTestAddNode() {
     return result;
 }
 
+bool graphTestGetEdge() {
+    bool result = true;
+
+    Graph<int> adj_list_not_found;
+    try {
+        graphGetEdge(adj_list_not_found, Edge<int>(4, 3));
+    } catch (std::logic_error) {
+        result &= true;
+    } catch(...) {
+        result &= false;
+    }
+
+    Graph<int> has_edge;
+    graphAddNode(has_edge, 4);
+    LinkedList<AdjacencyList<int>>* adj_list = graphGetNode(has_edge, 4);
+    linkedListInsertAtTail(&adj_list->data.edges, Edge<int>(4, 5));
+    LinkedList<Edge<int>>* edge = graphGetEdge(has_edge, Edge<int>(4, 5));
+    result &= edge->data.to == 5;
+    result &= edge == adj_list->data.edges;
+    edge->data.to = 3;
+    result &= adj_list->data.edges->data.to == 3;
+
+    return result;
+}
+
 bool graphTestHasEdge() {
     bool result = true;
 
@@ -226,6 +251,7 @@ void graphTestRegisterTests(TestManager* test_manager) {
     testGroupAddTest(&test_group, UnitTest("get node", graphTestGetNode));
     testGroupAddTest(&test_group, UnitTest("has node", graphTestHasNode));
     testGroupAddTest(&test_group, UnitTest("add node", graphTestAddNode));
+    testGroupAddTest(&test_group, UnitTest("get edge", graphTestGetEdge));
     testGroupAddTest(&test_group, UnitTest("has edge", graphTestHasEdge));
     testGroupAddTest(&test_group, UnitTest("add edge", graphTestAddEdge));
 
