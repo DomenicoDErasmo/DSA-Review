@@ -10,7 +10,59 @@ bool graphTestDefaultConstructor() {
     return result;
 }
 
-// TODO: reimplement all of the below
+/**
+ * @brief Helper function for the file path constructor.
+ * 
+ * @param graph The graph to check
+ * @param node The node to check
+ * @param length The expected length of the node's adjacency list
+ * @param n The edge within the adjacency list to check
+ * @param to The expected to value of the nth edge
+ * @return true if all checks succeed, otherwise false 
+ */
+bool graphTestFilePathConstructorHelper(
+        const Graph<int>& graph,
+        int node,
+        int length,
+        int n,
+        int to) {
+    bool result = true;
+    AdjacencyList<int> adj_list = linkedListGetNthOccurrence(
+        graph.adjacency_matrix,
+        AdjacencyList<int>(node),
+        1,
+        adjacencyListWeakEquality)->data;
+    if (length == -1) {
+        result &= !adj_list.edges;
+    }
+    else {
+        result &= linkedListGetLength(adj_list.edges) == length;
+        result &= linkedListGetNthNode(adj_list.edges, n)->data.to == to;
+    }
+    return result;
+}
+
+bool graphTestFilePathConstructor() {
+    bool result = true;
+
+    Graph<int> directed("../resources/test_graph.txt", GRAPH_DIRECTED);
+    result &= linkedListGetLength(directed.adjacency_matrix) == 10;
+    result &= graphTestFilePathConstructorHelper(directed, 0, -1, 0, -1);
+    result &= graphTestFilePathConstructorHelper(directed, 1, 1, 0, 2);
+    result &= graphTestFilePathConstructorHelper(directed, 3, 2, 0, 4);
+    result &= graphTestFilePathConstructorHelper(directed, 3, 2, 1, 5);
+    result &= graphTestFilePathConstructorHelper(directed, 4, 1, 0, 5);
+    result &= graphTestFilePathConstructorHelper(directed, 6, 2, 0, 7);
+    result &= graphTestFilePathConstructorHelper(directed, 6, 2, 1, 9);
+    result &= graphTestFilePathConstructorHelper(directed, 8, 2, 0, 7);
+    result &= graphTestFilePathConstructorHelper(directed, 8, 2, 1, 9);
+
+    Graph<int> undirected("../resources/test_graph.txt", GRAPH_UNDIRECTED);
+    result &= graphTestFilePathConstructorHelper(undirected, 5, 2, 0, 3);
+    result &= graphTestFilePathConstructorHelper(undirected, 5, 2, 1, 4);
+
+    return result;
+}
 
 bool graphTestCopyConstructor() {
     bool result = true;
@@ -242,6 +294,8 @@ void graphTestRegisterTests(TestManager* test_manager) {
 
     testGroupAddTest(&test_group, UnitTest("default constructor", 
         graphTestDefaultConstructor));
+    testGroupAddTest(&test_group, UnitTest("file path constructor", 
+        graphTestFilePathConstructor));
     testGroupAddTest(&test_group, UnitTest("copy constructor", 
         graphTestCopyConstructor));
     testGroupAddTest(&test_group, UnitTest("assignment operator", 

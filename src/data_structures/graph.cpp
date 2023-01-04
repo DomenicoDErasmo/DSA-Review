@@ -8,6 +8,11 @@
 #include "linked_list.cpp"
 #include "adjacency_list.cpp"
 
+enum GraphDirection {
+    GRAPH_UNDIRECTED,
+    GRAPH_DIRECTED
+};
+
 template <typename T>
 struct Graph {
 public:
@@ -18,38 +23,42 @@ public:
     Graph(): adjacency_matrix(nullptr) {}
 
     /**
-     * @brief Constructs a new Graph object from a filepath
-     * The filepath should be structred as follows:
+     * @brief Constructs a new Graph object with zero-indexed nodes from a 
+     * filepath. The filepath should be structred as follows:
      * 
      * First line has the number of nodes.
      * Every subsequent line has "from to weight", where weight is optional.
      * 
      * This project stores its example graphs in the resources folder
      * 
-     * @param filepath 
+     * @param filepath The path of the text file detailing the graph
+     * @param is_directed A flag to determine if the graph is directed
      */
-    Graph(std::string filepath) {
+    Graph(std::string filepath, GraphDirection direction): 
+            adjacency_matrix(nullptr) {
         std::ifstream reader(filepath);
-        int size;
-        reader >> size;
-        for (int i = 0; i < size; i++) {graphAddNode(this, i);}
+        std::string line;
+        std::getline(reader, line);
+        int size = std::stoi(line);
+        for (int i = 0; i < size; i++) {graphAddNode(*this, i);}
 
-        int from, to;
-        double weight;
-        for (std::istringstream line; std::getline(reader, line);) {
+        while (std::getline(reader, line)) {
+            std::istringstream iss(line);
             std::string token;
-            double vals[3];
+            double vals[3] = {0, 0, 1};
             int i = 0;
-            while (std::getline(line, token, ' ')) {
+            while (std::getline(iss, token, ' ')) {
                 vals[i] = std::stod(token);
                 i++;
             }
-            if (i == 2) {graphAddEdge(graph, Edge(vals[0], vals[1]));} 
-            else {graphAddEdge(graph, Edge(vals[0], vals[1], vals[2]));}
+            graphAddEdge(*this, Edge<int>(vals[0], vals[1], vals[2]));
+            if (direction == GRAPH_UNDIRECTED) {
+                graphAddEdge(*this, Edge<int>(vals[1], vals[0], vals[2]));
+            }
         }
-
-        while std::getline()
+        reader.close();
     }
+
     Graph(const Graph<T>& other): 
         adjacency_matrix(new LinkedList<AdjacencyList<T>>(
             *other.adjacency_matrix)) {}
