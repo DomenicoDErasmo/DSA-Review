@@ -26,7 +26,7 @@ public:
      * @brief Constructs a new Graph object with zero-indexed nodes from a 
      * filepath. The filepath should be structred as follows:
      * 
-     * First line has the number of nodes.
+     * First line has the number of nodes + 1 (for zero-indexing).
      * Every subsequent line has "from to weight", where weight is optional.
      * 
      * This project stores its example graphs in the resources folder
@@ -39,7 +39,7 @@ public:
         std::ifstream reader(filepath);
         std::string line;
         std::getline(reader, line);
-        int size = std::stoi(line);
+        int size = std::stoi(line) + 1;
         for (int i = 0; i < size; i++) {graphAddNode(*this, i);}
 
         while (std::getline(reader, line)) {
