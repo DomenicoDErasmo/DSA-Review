@@ -31,6 +31,8 @@ public:
      * 
      * This project stores its example graphs in the resources folder
      * 
+     * Note: Only works with Graph<int> for now, TODO: make other types work
+     * 
      * @param filepath The path of the text file detailing the graph
      * @param is_directed A flag to determine if the graph is directed
      */

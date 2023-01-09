@@ -2,6 +2,7 @@
 #include <data_structures/graph.cpp>
 
 const std::string TESTING = "../resources/testing/";
+const std::string TESTING_EQUALS = TESTING + "equality_operator/";
 
 bool graphTestDefaultConstructor() {
     bool result = true;
@@ -70,7 +71,6 @@ bool graphTestFilePathConstructor() {
     return result;
 }
 
-// TODO: fix, breaking in graphAddNode
 bool graphTestCopyConstructor() {
     bool result = true;
 
@@ -79,45 +79,16 @@ bool graphTestCopyConstructor() {
     result &= (*copy.adjacency_matrix->data.edges 
     == *original.adjacency_matrix->data.edges);
 
-    /*
-    Graph<int> original;
-    linkedListInsertAtTail(&original.adjacency_matrix, AdjacencyList<int>(4));
-    linkedListInsertAtTail(&original.adjacency_matrix, AdjacencyList<int>(5));
-    adjacencyListAddEdge(
-        linkedListGetNthOccurrence(
-            original.adjacency_matrix, AdjacencyList<int>(4), 1)->data,
-        Edge<int>(5, 4));
-    Graph<int> copy(original);
-    LinkedList<AdjacencyList<int>>* original_adj_node = 
-        linkedListGetNthOccurrence(
-            original.adjacency_matrix, AdjacencyList<int>(5), 1);
-    LinkedList<AdjacencyList<int>>* copy_adj_node = 
-        linkedListGetNthOccurrence(
-            copy.adjacency_matrix, AdjacencyList<int>(5), 1);
-    result &= *copy_adj_node->data.edges == *original_adj_node->data.edges;
-    */
-
     return result;
 }
 
 bool graphTestAssignmentOperator() {
     bool result = true;
 
-    Graph<int> original;
-    linkedListInsertAtTail(&original.adjacency_matrix, AdjacencyList<int>(4));
-    linkedListInsertAtTail(&original.adjacency_matrix, AdjacencyList<int>(5));
-    adjacencyListAddEdge(
-        linkedListGetNthOccurrence(
-            original.adjacency_matrix, AdjacencyList<int>(4), 1)->data,
-        Edge<int>(5, 4));
-    Graph<int> copy = original;
-    LinkedList<AdjacencyList<int>>* original_adj_node = 
-        linkedListGetNthOccurrence(
-            original.adjacency_matrix, AdjacencyList<int>(5), 1);
-    LinkedList<AdjacencyList<int>>* copy_adj_node = 
-        linkedListGetNthOccurrence(
-            copy.adjacency_matrix, AdjacencyList<int>(5), 1);
-    result &= *copy_adj_node->data.edges == *original_adj_node->data.edges;
+    Graph<int> original(TESTING + "assignment_operator.txt", GRAPH_DIRECTED);
+    Graph<int> copy(original);
+    result &= (*copy.adjacency_matrix->data.edges 
+    == *original.adjacency_matrix->data.edges);
 
     return result;
 }
@@ -125,55 +96,14 @@ bool graphTestAssignmentOperator() {
 bool graphTestEqualityOperator() {
     bool result = true;
 
-    Graph<int> inequal_lhs;
-    linkedListInsertAtTail(
-        &inequal_lhs.adjacency_matrix, 
-        AdjacencyList<int>(4));
-    linkedListInsertAtTail(
-        &inequal_lhs.adjacency_matrix, 
-        AdjacencyList<int>(5));
-    adjacencyListAddEdge(
-        linkedListGetNthOccurrence(
-            inequal_lhs.adjacency_matrix, 
-            AdjacencyList<int>(4), 
-            1)->data,
-        Edge<int>(5, 4));
-    Graph<int> inequal_rhs;
-    linkedListInsertAtTail(
-        &inequal_rhs.adjacency_matrix, 
-        AdjacencyList<int>(4));
-    linkedListInsertAtTail(
-        &inequal_rhs.adjacency_matrix, 
-        AdjacencyList<int>(5));
-    adjacencyListAddEdge(
-        linkedListGetNthOccurrence(
-            inequal_rhs.adjacency_matrix, 
-            AdjacencyList<int>(4), 
-            1)->data,
-        Edge<int>(5, 4, 1.1));
+    Graph<int> inequal_lhs(TESTING_EQUALS + "inequal_lhs.txt", GRAPH_DIRECTED);
+    Graph<int> inequal_rhs(TESTING_EQUALS + "inequal_rhs.txt", GRAPH_DIRECTED);
     result &= !(inequal_lhs == inequal_rhs);
 
-    Graph<int> equal_lhs;
-    linkedListInsertAtTail(
-        &equal_lhs.adjacency_matrix, 
-        AdjacencyList<int>(4));
-    linkedListInsertAtTail(
-        &equal_lhs.adjacency_matrix, 
-        AdjacencyList<int>(5));
-    adjacencyListAddEdge(
-        linkedListGetNthOccurrence(
-            equal_lhs.adjacency_matrix, 
-            AdjacencyList<int>(4), 
-            1)->data,
-        Edge<int>(5, 4));
-    Graph<int> equal_rhs;
-    linkedListInsertAtTail(&equal_rhs.adjacency_matrix, AdjacencyList<int>(4));
-    linkedListInsertAtTail(&equal_rhs.adjacency_matrix, AdjacencyList<int>(5));
-    adjacencyListAddEdge(
-        linkedListGetNthOccurrence(
-            equal_rhs.adjacency_matrix, AdjacencyList<int>(4), 1)->data,
-        Edge<int>(5, 4));
+    Graph<int> equal_lhs(TESTING_EQUALS + "equal_lhs.txt", GRAPH_DIRECTED);
+    Graph<int> equal_rhs(TESTING_EQUALS + "equal_rhs.txt", GRAPH_DIRECTED);
     result &= equal_lhs == equal_rhs;
+
     return result;
 }
 
@@ -183,8 +113,7 @@ bool graphTestGetNode() {
     Graph<int> node_not_found;
     result &= !graphGetNode(node_not_found, 4);
 
-    Graph<int> node_found;
-    linkedListInsertAtTail(&node_found.adjacency_matrix, AdjacencyList<int>(5));
+    Graph<int> node_found(TESTING + "get_node.txt", GRAPH_DIRECTED);
     LinkedList<AdjacencyList<int>>* list = graphGetNode(node_found, 5);
     result &= list->data.from == 5;
 
@@ -197,11 +126,7 @@ bool graphTestHasNode() {
     Graph<int> node_not_found;
     result &= !graphHasNode(node_not_found, 5);
 
-    Graph<int> node_found;
-    result &= !node_found.adjacency_matrix;
-    linkedListInsertAtTail(
-        &node_found.adjacency_matrix, 
-        AdjacencyList<int>(5));
+    Graph<int> node_found(TESTING + "has_node.txt", GRAPH_UNDIRECTED);
     result &= graphHasNode(node_found, 5);
 
     return result;
