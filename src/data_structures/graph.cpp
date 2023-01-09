@@ -225,8 +225,7 @@ void graphAddEdge(Graph<T>& graph, Edge<T> edge) {
     linkedListInsertAtTail(&adj_list->data.edges, edge);
 }
 
-// TODO: add many other ops - CRUD for adjacency lists and edges
-// has/add/get/delete/update for node/edge
+// TODO: add delete/update for node/edge
 
 
 #endif
