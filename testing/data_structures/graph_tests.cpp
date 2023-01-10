@@ -2,7 +2,6 @@
 #include <data_structures/graph.cpp>
 
 const std::string TESTING = "../resources/testing/";
-const std::string TESTING_EQUALS = TESTING + "equality_operator/";
 
 bool graphTestDefaultConstructor() {
     bool result = true;
@@ -12,8 +11,6 @@ bool graphTestDefaultConstructor() {
 
     return result;
 }
-
-// TODO: rewrite test cases using file path constructor
 
 /**
  * @brief Helper function for the file path constructor.
@@ -94,15 +91,25 @@ bool graphTestAssignmentOperator() {
 }
 
 bool graphTestEqualityOperator() {
+    const std::string directory = TESTING + "equality_operator/";
     bool result = true;
 
-    Graph<int> inequal_lhs(TESTING_EQUALS + "inequal_lhs.txt", GRAPH_DIRECTED);
-    Graph<int> inequal_rhs(TESTING_EQUALS + "inequal_rhs.txt", GRAPH_DIRECTED);
+    Graph<int> inequal_lhs(directory + "inequal_lhs.txt", GRAPH_DIRECTED);
+    Graph<int> inequal_rhs(directory + "inequal_rhs.txt", GRAPH_DIRECTED);
     result &= !(inequal_lhs == inequal_rhs);
 
-    Graph<int> equal_lhs(TESTING_EQUALS + "equal_lhs.txt", GRAPH_DIRECTED);
-    Graph<int> equal_rhs(TESTING_EQUALS + "equal_rhs.txt", GRAPH_DIRECTED);
+    Graph<int> equal_lhs(directory + "equal_lhs.txt", GRAPH_DIRECTED);
+    Graph<int> equal_rhs(directory + "equal_rhs.txt", GRAPH_DIRECTED);
     result &= equal_lhs == equal_rhs;
+
+    return result;
+}
+
+bool graphTestGetNumNodes() {
+    bool result = true;
+
+    Graph<int> graph(TESTING + "get_num_nodes_7.txt", GRAPH_DIRECTED);
+    result &= graphGetNumNodes(graph) == 7;
 
     return result;
 }
@@ -148,6 +155,47 @@ bool graphTestAddNode() {
     result &= linkedListGetLength(already_found.adjacency_matrix) == 1;
     graphAddNode(already_found, 5);
     result &= linkedListGetLength(already_found.adjacency_matrix) == 1;
+
+    return result;
+}
+
+bool graphTestUpdateNode() {
+    std::string directory = TESTING + "update_node/";
+    bool result = true;
+
+    Graph<int> node_not_found(
+        directory + "node_not_found.txt", 
+        GRAPH_UNDIRECTED);
+    graphUpdateNode(node_not_found, 1, 4);
+    result &= graphHasNode(node_not_found, 4);
+
+    Graph<int> node_found(directory + "node_found.txt", GRAPH_UNDIRECTED);
+    try {
+        graphUpdateNode(node_found, 1, 3);
+    } catch (std::logic_error) {
+        result &= true;
+    } catch (...) {
+        result &= false;
+    }
+
+    return result;
+}
+
+// TODO: fix graphDeleteNode bug - deleting wrong value and deleting two nodes!
+bool graphTestDeleteNode() {
+    bool result = true;
+    std::string directory = TESTING + "delete_node/";
+
+    Graph<int> node_found(directory + "node_found.txt", GRAPH_DIRECTED);
+    result &= graphGetNumNodes(node_found) == 5;
+    graphDeleteNode(node_found, 2);
+    result &= graphGetNumNodes(node_found) == 4;
+
+
+    Graph<int> node_not_found(directory + "node_found.txt", GRAPH_DIRECTED);
+    result &= graphGetNumNodes(node_not_found) == 4;
+    graphDeleteNode(node_not_found, 4);
+    result &= graphGetNumNodes(node_not_found) == 4;
 
     return result;
 }
@@ -241,9 +289,13 @@ void graphTestRegisterTests(TestManager* test_manager) {
         graphTestAssignmentOperator));
     testGroupAddTest(&test_group, UnitTest("equality operator", 
         graphTestEqualityOperator));
+    testGroupAddTest(&test_group, UnitTest("get num nodes", 
+        graphTestGetNumNodes));
     testGroupAddTest(&test_group, UnitTest("get node", graphTestGetNode));
     testGroupAddTest(&test_group, UnitTest("has node", graphTestHasNode));
     testGroupAddTest(&test_group, UnitTest("add node", graphTestAddNode));
+    testGroupAddTest(&test_group, UnitTest("update node", graphTestUpdateNode));
+    testGroupAddTest(&test_group, UnitTest("delete node", graphTestDeleteNode));
     testGroupAddTest(&test_group, UnitTest("get edge", graphTestGetEdge));
     testGroupAddTest(&test_group, UnitTest("has edge", graphTestHasEdge));
     testGroupAddTest(&test_group, UnitTest("add edge", graphTestAddEdge));

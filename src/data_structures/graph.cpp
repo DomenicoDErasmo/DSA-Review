@@ -31,7 +31,8 @@ public:
      * 
      * This project stores its example graphs in the resources folder
      * 
-     * Note: Only works with Graph<int> for now, TODO: make other types work
+     * Note: Only works with Graph<int> for now
+     * TODO: make other types work
      * 
      * @param filepath The path of the text file detailing the graph
      * @param is_directed A flag to determine if the graph is directed
@@ -117,7 +118,17 @@ public:
     }
 };
 
-// TODO: consider how to add equality operators in
+/**
+ * @brief Gets the number of nodes in the graph
+ * 
+ * @tparam T The type of the graph's data
+ * @param graph The graph
+ * @return int The number of nodes in the graph
+ */
+template <typename T>
+int graphGetNumNodes(Graph<T>& graph) {
+    return linkedListGetLength(graph.adjacency_matrix);
+}
 
 /**
  * @brief Gets the adjacency list in the graph
@@ -161,6 +172,38 @@ void graphAddNode(Graph<T>& graph, T data) {
     if (!graphHasNode(graph, data)) {
         linkedListInsertAtTail(&graph.adjacency_matrix, AdjacencyList<T>(data));
     }
+}
+
+/**
+ * @brief Updates the old_id node in graph to the value of new_id
+ * 
+ * @tparam T The type of the graph's data
+ * @param graph The graph to update
+ * @param old_id The node in the graph to update
+ * @param new_id The new value to set the node to
+ */
+template <typename T>
+void graphUpdateNode(Graph<T>& graph, T old_id, T new_id) {
+    if (graphHasNode(graph, new_id)) {
+        throw std::logic_error("Can't update a node to an existing node.");
+    }
+    graphGetNode(graph, old_id)->data.from = new_id;
+}
+
+/**
+ * @brief Attempts to delete a node from the graph
+ * 
+ * @tparam T The type of the graph's data
+ * @param graph The graph to delete from
+ * @param to_delete The value to delete
+ */
+template <typename T>
+void graphDeleteNode(Graph<T>& graph, T to_delete) {
+    linkedListDeleteNthOccurrence(
+        &graph.adjacency_matrix, 
+        AdjacencyList<T>(to_delete),
+        1,
+        adjacencyListWeakEquality);
 }
 
 /**
