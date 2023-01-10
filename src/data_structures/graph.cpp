@@ -13,6 +13,15 @@ enum GraphDirection {
     GRAPH_DIRECTED
 };
 
+/**
+ * @brief Implementation of graphs
+ * 
+ * @tparam T The type of the graph's data. Assumes the type implements an
+ * equality operator. 
+ * 
+ * TODO: is there a way to explicitly filter types passed
+ * in to only allow for those that have implemented this operator?
+ */
 template <typename T>
 struct Graph {
 public:
