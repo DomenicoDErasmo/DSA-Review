@@ -29,9 +29,15 @@ public:
      * First line has the number of nodes + 1 (for zero-indexing).
      * Every subsequent line has "from to weight", where weight is optional.
      * 
+     * Example File:
+     * 4
+     * 1 2 4.3
+     * 2 1
+     * 3 0 1.12
+     * 
      * This project stores its example graphs in the resources folder
      * 
-     * Note: Only works with Graph<int> for now
+     * Note: Only works with Graph<int> for now due to relying on std::stoi
      * TODO: make other types work
      * 
      * @param filepath The path of the text file detailing the graph
