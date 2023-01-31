@@ -235,9 +235,8 @@ LinkedList<Edge<T>>* graphGetEdge(Graph<T>& graph, Edge<T> edge) {
         throw std::logic_error("Can't add an edge if the graph doesn't exist.");
     }
 
-    LinkedList<AdjacencyList<T>>* adj_list = graphGetNode(graph, edge.from);
     return linkedListGetNthOccurrence(
-        adj_list->data.edges, 
+        graphGetNode(graph, edge.from)->data.edges, 
         edge, 
         1, 
         edgeWeakEquality);
@@ -282,8 +281,33 @@ void graphAddEdge(Graph<T>& graph, Edge<T> edge) {
     LinkedList<AdjacencyList<T>>* adj_list = graphGetNode(graph, edge.from);
     linkedListInsertAtTail(&adj_list->data.edges, edge);
 }
+/**
+ * @brief Updates an edge to a new edge if the new edge doesn't exist already
+ * 
+ * @tparam T The type of the graph's data
+ * @param graph The graph whose edge to update
+ * @param original The original edge to update
+ * @param new_edge The new edge to update to
+ */
+template <typename T>
+void graphUpdateEdge(Graph<T>& graph, Edge<T> original, Edge<T> new_edge) {
+    if (graphHasEdge(graph, new_edge)) {
+        throw std::logic_error("Can't update an edge to an existing edge.");
+    }
+    *graphGetEdge(graph, original) = new_edge;
+}
 
-// TODO: add delete/update for node/edge
+// TODO: add delete for edge
+
+
+template <typename T>
+void graphDeleteEdge(Graph<T>& graph, Edge<T> to_delete) {
+    linkedListDeleteNthOccurrence(
+        graphGetNode(graph, to_delete.from)->data.edges,
+        to_delete,
+        1,
+        edgeWeakEquality);
+}
 
 
 #endif

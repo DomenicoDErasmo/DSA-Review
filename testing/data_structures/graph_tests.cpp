@@ -160,8 +160,8 @@ bool graphTestAddNode() {
 }
 
 bool graphTestUpdateNode() {
-    std::string directory = TESTING + "update_node/";
     bool result = true;
+    std::string directory = TESTING + "update_node/";
 
     Graph<int> node_not_found(
         directory + "node_not_found.txt", 
@@ -274,6 +274,39 @@ bool graphTestAddEdge() {
     return result;
 }
 
+bool graphTestUpdateEdge() {
+    bool result = true;
+
+    std::string directory = TESTING + "update_edge/";
+    Graph<int> edge_found(directory + "edge_found.txt", GRAPH_DIRECTED);
+    try {
+        graphUpdateEdge(edge_found, {1, 2, 5}, {1, 3, 6});
+    } catch (std::logic_error) {
+        result &= true;
+    } catch(...) {
+        result &= false;
+    }
+
+    Graph<int> edge_not_found(
+        directory + "edge_not_found.txt", 
+        GRAPH_UNDIRECTED);
+    graphUpdateEdge(edge_not_found, {1, 2, 5}, {1, 4, 6});
+    result &= graphHasEdge(edge_not_found, {1, 4, 6});
+    result &= !graphHasEdge(edge_not_found, {1, 2, 5});
+
+    return result;
+}
+
+bool graphTestDeleteEdge() {
+    bool result = true;
+
+    std::string directory = TESTING + "delete_edge/";
+    Graph<int> edge_found(directory + "edge_found.txt", GRAPH_DIRECTED);
+    
+
+    return result;
+}
+
 void graphTestRegisterTests(TestManager* test_manager) {
     TestGroup test_group("graph");
 
@@ -297,6 +330,8 @@ void graphTestRegisterTests(TestManager* test_manager) {
     testGroupAddTest(&test_group, UnitTest("get edge", graphTestGetEdge));
     testGroupAddTest(&test_group, UnitTest("has edge", graphTestHasEdge));
     testGroupAddTest(&test_group, UnitTest("add edge", graphTestAddEdge));
+    testGroupAddTest(&test_group, UnitTest("update edge", graphTestUpdateEdge));
+    testGroupAddTest(&test_group, UnitTest("delete edge", graphTestDeleteEdge));
 
     testManagerAddTestGroup(test_manager, test_group);
 }
