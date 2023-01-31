@@ -181,7 +181,6 @@ bool graphTestUpdateNode() {
     return result;
 }
 
-// TODO: fix graphDeleteNode bug - deleting wrong value and deleting two nodes!
 bool graphTestDeleteNode() {
     bool result = true;
     std::string directory = TESTING + "delete_node/";
@@ -191,8 +190,7 @@ bool graphTestDeleteNode() {
     graphDeleteNode(node_found, 2);
     result &= graphGetNumNodes(node_found) == 4;
 
-
-    Graph<int> node_not_found(directory + "node_found.txt", GRAPH_DIRECTED);
+    Graph<int> node_not_found(directory + "node_not_found.txt", GRAPH_DIRECTED);
     result &= graphGetNumNodes(node_not_found) == 4;
     graphDeleteNode(node_not_found, 4);
     result &= graphGetNumNodes(node_not_found) == 4;

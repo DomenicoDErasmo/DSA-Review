@@ -20,7 +20,7 @@ enum GraphDirection {
  * equality operator. 
  * 
  * TODO: is there a way to explicitly filter types passed
- * in to only allow for those that have implemented this operator?
+ * in to only allow for those that have implemented this operator? via concepts?
  */
 template <typename T>
 struct Graph {

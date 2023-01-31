@@ -275,21 +275,21 @@ void linkedListDeleteNthOccurrence(
         int n,
         bool (*equals_fn)(const T& lhs, const T& rhs) = nullptr) {
     int position = linkedListPositionOfNthOccurrence(*head, data, n, equals_fn);
-    if (position == -1) {return;}
+    if (position == -1 || !*head) {return;}
+    LinkedList<T>* prev = *head;
 
-    // no need to make separate cases for head and not head
-    LinkedList<T> *dummy = new LinkedList<T>(T(), *head), *prev = dummy;
-    for (int i = 0; i < position - 1; i++) {prev = prev->next;}
-
-    LinkedList<T> *temp = prev->next;
-    prev->next = temp->next;
-    temp->next = nullptr;
-    delete temp;
-
-    // need to delete dummy down here because for case of head, prev = dummy
-    *head = prev->next;
-    dummy->next = nullptr;
-    delete dummy;
+    if (position == 0) {
+        LinkedList<T> *to_delete = *head;
+        *head = (*head)->next;
+        to_delete->next = nullptr;
+        delete to_delete;
+    } else {
+        for (int i = 0; i < position - 1; i++) {prev = prev->next;}
+        LinkedList<T> *temp = prev->next;
+        prev->next = temp->next;
+        temp->next = nullptr;
+        delete temp;
+    }
 }
 
 /**
