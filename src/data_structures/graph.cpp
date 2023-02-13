@@ -297,6 +297,13 @@ void graphUpdateEdge(Graph<T>& graph, Edge<T> original, Edge<T> new_edge) {
     *graphGetEdge(graph, original) = new_edge;
 }
 
+/**
+ * @brief Deletes an edge from the grpah, if it exists
+ * 
+ * @tparam T The type of the graph's data
+ * @param graph The graph whose edge to delete
+ * @param to_delete The edge to delete from the graph
+ */
 template <typename T>
 void graphDeleteEdge(Graph<T>& graph, Edge<T> to_delete) {
     LinkedList<AdjacencyList<T>>* adj_list = graphGetNode(
