@@ -302,7 +302,12 @@ bool graphTestDeleteEdge() {
 
     std::string directory = TESTING + "delete_edge/";
     Graph<int> edge_found(directory + "edge_found.txt", GRAPH_DIRECTED);
-    
+    graphDeleteEdge(edge_found, {1, 2});
+    result &= !graphHasEdge(edge_found, {1, 2, 5});
+
+    Graph<int> edge_not_found(directory + "edge_not_found.txt", GRAPH_DIRECTED);
+    graphDeleteEdge(edge_not_found, {3, 4});
+    result &= !graphHasEdge(edge_not_found, {3, 4, 5});
 
     return result;
 }

@@ -297,17 +297,31 @@ void graphUpdateEdge(Graph<T>& graph, Edge<T> original, Edge<T> new_edge) {
     *graphGetEdge(graph, original) = new_edge;
 }
 
-// TODO: add delete for edge
-
-
 template <typename T>
 void graphDeleteEdge(Graph<T>& graph, Edge<T> to_delete) {
+    LinkedList<AdjacencyList<T>>* adj_list = graphGetNode(
+        graph, 
+        to_delete.from);
     linkedListDeleteNthOccurrence(
-        graphGetNode(graph, to_delete.from)->data.edges,
+        &adj_list->data.edges,
         to_delete,
         1,
         edgeWeakEquality);
 }
+
+// TODO: DFS Iterator class, BFS Iterator class
+/** 
+ * TODO: Implement algorithms:
+ * Topological Sort
+ * Kahn's Algorithm
+ * Dijkstra's Algorithm
+ * Bellman Ford Algorithm
+ * Floyd Warshall Algorithm
+ * Prim's Algorithm
+ * Kruskal's Algorithm
+ * Kosaraju's Algorithm
+ * Tarjan's Algorithm
+ */
 
 
 #endif
